@@ -3,6 +3,8 @@
 import { useQueryState } from 'nuqs';
 import { Suspense } from 'react';
 import AgeSelection from '@/components/organisms/AgeSelection';
+import WeetellLogo from '@/components/molecules/WeetellLogo';
+import { Menu } from 'lucide-react';
 
 // Step components (will add more as implemented)
 import BodyMapSelection from '@/components/organisms/BodyMapSelection';
@@ -49,8 +51,16 @@ function CheckupWizard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 p-6 pt-12 pb-20">
-       <div className="w-full max-w-2xl mx-auto h-full flex-1 flex flex-col justify-center">
+    <div className="min-h-screen bg-white flex flex-col">
+       {/* Header */}
+       <div className="flex justify-between items-center px-6 pt-8 pb-4">
+         <WeetellLogo />
+         <button className="text-yellow-500 hover:text-yellow-600 transition-colors">
+             <Menu size={32} strokeWidth={3} />
+         </button>
+       </div>
+
+       <div className="w-full max-w-2xl mx-auto flex-1 flex flex-col justify-center p-6">
          {renderStep()}
        </div>
     </div>
