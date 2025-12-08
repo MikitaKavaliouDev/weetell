@@ -2,7 +2,7 @@ Technical Architecture and Implementation Report: Weetell Digital Health Platfor
 1. Executive Summary
 1.1 Project Vision and Objectives
 The Weetell initiative represents a strategic effort to transform a high-fidelity interface design, originally conceptualized in Framer, into a robust, production-grade web application. The core objective is to replicate the fluid user experience (UX) and sophisticated micro-interactions of the prototype while leveraging the performance, scalability, and maintainability of a modern engineering stack. The target platform is a "Digital Health Interface"—a symptom checker and triage tool—that guides users through a series of diagnostic steps to appropriate care resources.1
-The client’s requirements stipulate a specific deployment strategy utilizing subdomains (e.g., app.weetell.media), a static-first data architecture for immediate performance, and a strict adherence to the visual language established in the provided design assets. This report serves as a comprehensive technical blueprint, detailing the architectural decisions, technology stack (centered on Next.js 15/16), and implementation roadmap required to bridge the gap between design intent and engineering reality.
+The client’s requirements stipulate a specific deployment strategy utilizing subdomains (e.g., app.weetell.media), a static-first data architecture for immediate performance, and a strict adherence to the visual language established in the provided design assets. This report serves as a comprehensive technical blueprint, detailing the architectural decisions, technology stack (centered on Next.js 16), and implementation roadmap required to bridge the gap between design intent and engineering reality.
 1.2 Architectural Philosophy
 The proposed architecture is built on the principle of "Static Shell, Dynamic Core." Given the request for static data, the application will leverage Next.js’s advanced static generation capabilities to deliver near-instantaneous load times—a critical metric for digital health tools where user anxiety is a factor.1 However, to maintain the "app-like" feel of the Framer prototype, the client-side architecture will utilize heavy hydration of interactive islands, powered by React Server Components (RSC) and a sophisticated state management layer using Zustand.3
 This hybrid approach ensures that while the content (questions, logic trees, doctor directories) is statically baked into the application for performance and SEO, the user journey feels alive, responsive, and deeply interactive. The use of Framer Motion will ensure that every transition—from selecting a body part to filtering doctor availability—is physically modeled, providing the tactile feedback that distinguishes premium digital products.4
@@ -44,18 +44,18 @@ Screen 9, 10, 11: Service Selection (Hospital, Pharmacy, Telehealth)
 Visual Elements: Icons for a hospital bed, map location marker, pill bottle, video camera, and in-person consultation.
 Functional Intent: The "Action" phase. Users choose how they want to receive care (Telemedicine vs. Visit).
 Routing Logic: Selecting "Map" triggers a geolocation flow. Selecting "Video" might trigger a scheduling flow.
-3. Core Technology Ecosystem: Next.js 15 & React 19
-To satisfy the requirement for the "latest version of next.js" and the "best performant strategy," the application will be architected on the bleeding edge of the React ecosystem. Next.js 15 (and the upcoming v16 features) introduces paradigm shifts that fundamentally benefit this type of static, interactive application.7
+3. Core Technology Ecosystem: Next.js 16 & React 19
+To satisfy the requirement for the "latest version of next.js" and the "best performant strategy," the application will be architected on the bleeding edge of the React ecosystem. Next.js 16 (and the upcoming v16 features) introduces paradigm shifts that fundamentally benefit this type of static, interactive application.7
 3.1 The App Router Paradigm
 We will exclusively use the App Router (app/ directory) architecture. Unlike the Page Router, the App Router defaults to React Server Components (RSC).
 Benefit for Weetell: The static content (the questions, the SVG paths for the body, the logic trees) remains on the server (or is generated at build time). It is not included in the client-side JavaScript bundle. Only the interactive islands (the buttons, the state-tracking logic) are sent to the browser. This results in a minimal "First Load JS" footprint, essential for mobile performance on 3G networks.9
 3.2 React Compiler (The "Forget" Project)
-Next.js 15 includes support for the React Compiler. We will enable this experimental feature to automatically optimize rendering performance.
+Next.js 16 includes support for the React Compiler. We will enable this experimental feature to automatically optimize rendering performance.
 Why it matters: In complex wizard forms with animations, developers historically spent hours manually optimizing with useMemo and useCallback to prevent unnecessary re-renders that cause animation jank. The React Compiler handles this automatically, ensuring that when a user toggles a symptom, only the affected UI elements update, maintaining 60fps (or 120fps) animation smoothness without manual overhead.7
 3.3 Turbopack for Rapid Iteration
 The development environment will leverage Turbopack. As we are tasked with replicating "micro-interactions," the development loop involves tweaking animation spring constants (e.g., stiffness: 300, damping: 20) hundreds of times. Turbopack’s sub-second Hot Module Replacement (HMR) allows developers to see these changes instantly, significantly reducing the "tuning" time compared to Webpack.7
 3.4 Partial Pre-Rendering (PPR)
-Although the client requested static data, we will architect for Partial Pre-Rendering. This Next.js 15 feature allows us to statically generate the "Shell" of the application (the logo, the layout, the navigation) while keeping the "Content" (the dynamic wizard step) capable of being streamed or suspended if we move to dynamic data later. This future-proofs the app without sacrificing current static speed.7
+Although the client requested static data, we will architect for Partial Pre-Rendering. This Next.js 16 feature allows us to statically generate the "Shell" of the application (the logo, the layout, the navigation) while keeping the "Content" (the dynamic wizard step) capable of being streamed or suspended if we move to dynamic data later. This future-proofs the app without sacrificing current static speed.7
 4. Technical Architecture: Frontend & Component Design
 The application will follow an Atomic Design methodology, modified for the Next.js App Router context.
 4.1 Component Hierarchy
@@ -91,7 +91,7 @@ State styling: We can pass the activeRegion prop to the SVG component. If active
 5. Static Data Strategy & Graph Architecture
 The client’s request for "static data" requires a sophisticated approach to data modeling. We are not just hardcoding text; we are building a static database within the codebase.
 5.1 TypeScript Constants vs. JSON
-While JSON is the standard for data exchange, TypeScript Constants are the superior choice for internal static data in Next.js 15.
+While JSON is the standard for data exchange, TypeScript Constants are the superior choice for internal static data in Next.js 16.
 Comparative Analysis:
 Type Safety: A TypeScript constant (const DATA: Step = [...]) is validated at compile time. If a developer typos a "nextStepId", the build fails immediately. A JSON file would only fail at runtime, potentially leading to broken links in the wizard flow.14
 Tree Shaking: Modern bundlers (Turbopack) are excellent at "tree-shaking" (removing unused code). If we export a massive data object but only use the "Baby" branch on a specific page, the bundler can theoretically exclude the "Adult" branch code from that chunk. JSON files are often bundled in their entirety.
@@ -127,7 +127,7 @@ The "Weetell" brand relies on a friendly, animated personality. Replicating the 
 In Framer, animations often use "Spring" physics (mass, stiffness, damping) rather than duration (0.5s ease-in-out). Spring physics feel more natural because they carry momentum.
 Global Configuration: We will define a standard spring config:
 TypeScript
-export const SPRING_BOUNCY = { type: "spring", stiffness: 400, damping: 15 };
+export const SPRING_BOUNCY = { type: "spring", stiffness: 400, damping: 16 };
 export const SPRING_SMOOTH = { type: "spring", stiffness: 200, damping: 20 };
 
 Every interaction in the app will use one of these two presets to ensure consistency.16
@@ -135,7 +135,7 @@ Every interaction in the app will use one of these two presets to ensure consist
 Navigating between wizard steps needs to feel like a continuous journey, not a series of page reloads.
 Challenge: Next.js App Router's layout.tsx does not re-render on navigation, but page.tsx does. This makes exit animations (the old page sliding out) difficult.
 Solution: We will use template.tsx. In Next.js, a template is similar to a layout but creates a new instance for each route.
-Implementation: We wrap the template.tsx children in an <AnimatePresence mode="wait"> (from Framer Motion). We use a FrozenRouter context to hold the "old" page in the DOM while it animates out, even after the URL has changed. This is the only robust way to achieve cinema-quality page transitions in Next.js 15.17
+Implementation: We wrap the template.tsx children in an <AnimatePresence mode="wait"> (from Framer Motion). We use a FrozenRouter context to hold the "old" page in the DOM while it animates out, even after the URL has changed. This is the only robust way to achieve cinema-quality page transitions in Next.js 16.17
 6.3 Specialized Interactions
 The Globe (Screen 2): We will use react-spring or framer-motion 3D transforms to create a parallax effect on the globe as the mouse moves, giving it depth.
 The Thermometer (Screen 6): We will map the slider input value (37-41) to the SVG viewBox or path of the face mouth. As the value increases, the mouth curve interpolates from "neutral" to "frown" using useTransform hooks.4
@@ -236,7 +236,7 @@ Geolocation/Map view.
 StaticMapImage (placeholder), LocationPin
 
 2. Technical Stack Specification
-Core: next@latest (v15+), react@rc (v19).
+Core: next@latest (v16+), react@rc (v19).
 Language: typescript@5.x (Strict mode enabled).
 Styling: tailwindcss@3.4, clsx, tailwind-merge (for dynamic class logic).
 Animation: framer-motion@11 (Critical for micro-interactions).
@@ -284,7 +284,7 @@ INP < 200ms
 Static Generation: The app must export as a static build where possible, or use Edge Runtime for the Middleware routing.
 Bundle Analysis: Vendor chunks must be split. Heavy libraries (like Lottie players, if used) must be lazy-loaded using next/dynamic.
 12. Conclusion
-The translation of the Weetell Framer concept into a functional Next.js application is a sophisticated engineering task that balances the competing demands of rich interactivity and static performance. By selecting Next.js 15, we gain access to the App Router and React Compiler, which fundamentally solve the performance bottlenecks associated with complex, animated interfaces.
+The translation of the Weetell Framer concept into a functional Next.js application is a sophisticated engineering task that balances the competing demands of rich interactivity and static performance. By selecting Next.js 16, we gain access to the App Router and React Compiler, which fundamentally solve the performance bottlenecks associated with complex, animated interfaces.
 The decision to use TypeScript Constants for the data layer transforms the application's content into a type-safe, compile-time validated structure, eliminating a defined class of runtime errors common in JSON-based CMS setups. Meanwhile, the Zustand + Nuqs state architecture provides a robust, resilient user session that survives browser refreshes and enables deep-linking—a significant UX upgrade over the prototype.
 Finally, the detailed attention to Micro-interactions via Framer Motion ensures that the "soul" of the design—the playful, reassuring feedback loops defined in the original Framer visuals—is not lost in translation, but rather enhanced by the precision of a native code implementation. This report provides the roadmap to deliver not just a website, but a premier Digital Health Interface.
 Cytowane prace
@@ -305,9 +305,9 @@ Configuration: TypeScript - Next.js, otwierano: grudnia 8, 2025, https://nextjs.
 Angular: whether to use *.constant.ts or .constant.json for storing constants and configs - Stack Overflow, otwierano: grudnia 8, 2025, https://stackoverflow.com/questions/58197183/angular-whether-to-use-constant-ts-or-constant-json-for-storing-constants-an
 A Beginner's Guide to Framer Motion in React & Next.js | by Ciril P Thomas | Medium, otwierano: grudnia 8, 2025, https://medium.com/@cirilptomass/a-beginners-guide-to-framer-motion-in-react-next-js-2378c7c1b20d
 How to make a page transition with Framer Motion and Next.js 14? - Stack Overflow, otwierano: grudnia 8, 2025, https://stackoverflow.com/questions/77603249/how-to-make-a-page-transition-with-framer-motion-and-next-js-14
-Been going crazy for the last few hours. Is it even possible with Next 15 + app router + Framer-motion to have page transitions with enter + exit animations ? : r/nextjs - Reddit, otwierano: grudnia 8, 2025, https://www.reddit.com/r/nextjs/comments/1jp74fz/been_going_crazy_for_the_last_few_hours_is_it/
+Been going crazy for the last few hours. Is it even possible with Next 16 + app router + Framer-motion to have page transitions with enter + exit animations ? : r/nextjs - Reddit, otwierano: grudnia 8, 2025, https://www.reddit.com/r/nextjs/comments/1jp74fz/been_going_crazy_for_the_last_few_hours_is_it/
 Advanced page transitions with Next.js and Framer Motion - devblogs.sh, otwierano: grudnia 8, 2025, https://devblogs.sh/posts/advanced-page-transitions-with-nextjs-and-framer-motion
-How To Use Zustand With Next Js 15 | Blog, otwierano: grudnia 8, 2025, https://www.dimasroger.com/blog/how-to-use-zustand-with-next-js-15
+How To Use Zustand With Next Js 16 | Blog, otwierano: grudnia 8, 2025, https://www.dimasroger.com/blog/how-to-use-zustand-with-next-js-16
 Confused about Zustand usage within Next : r/nextjs - Reddit, otwierano: grudnia 8, 2025, https://www.reddit.com/r/nextjs/comments/1bs7513/confused_about_zustand_usage_within_next/
 Subdomains in Next.js 14 — How to Structure a Scalable Multitenant Frontend Application, otwierano: grudnia 8, 2025, https://trillionclues.medium.com/subdomains-in-next-js-14-how-to-structure-a-scalable-multitenant-frontend-application-f68edc526a60
 Dynamic Subdomain Routing With NextJS - Stack Overflow, otwierano: grudnia 8, 2025, https://stackoverflow.com/questions/62590811/dynamic-subdomain-routing-with-nextjs
