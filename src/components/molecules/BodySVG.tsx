@@ -46,6 +46,7 @@ const SILHOUETTE_PATH = `
 `;
 
 // simplified zones that lay over the body for clicking
+
 const ZONES = [
   { id: 'head', d: 'M150 40 C 90 40 80 100 85 130 C 85 160 215 160 215 130 C 220 100 210 40 150 40 Z' },
   { id: 'chest', d: 'M120 162 L 180 162 L 180 220 L 120 220 Z' },
@@ -56,28 +57,49 @@ const ZONES = [
 
 export default function BodySVG({ view, ageGroup, selectedPart, onPartClick }: BodySVGProps) {
   // We ignore 'view' and 'ageGroup' for the visual match as per screenshot (which shows one generic child)
-  // If needed, we could swap paths based on them later.
   
   return (
-    <svg viewBox="0 0 300 420" className="w-full h-full max-h-[70vh] drop-shadow-sm overflow-visible">
+    <svg viewBox="0 0 300 420" className="w-[80%] max-h-[60vh] drop-shadow-sm overflow-visible mx-auto">
       <defs>
-        <filter id="glow-gold" x="-20%" y="-20%" width="140%" height="140%">
-          <feGaussianBlur stdDeviation="4" result="blur" />
-          <feComposite in="SourceGraphic" in2="blur" operator="over" />
+         <filter id="texture-noise">
+            <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" result="noise" />
+            <feColorMatrix type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.5 0" in="noise" result="coloredNoise" />
+            <feComposite operator="in" in="coloredNoise" in2="SourceGraphic" result="composite" />
+            <feMerge>
+                <feMergeNode in="SourceGraphic" />
+                <feMergeNode in="composite" />
+            </feMerge>
+        </filter>
+        <filter id="rough-edge">
+             <feTurbulence type="fractalNoise" baseFrequency="0.05" numOctaves="2" result="noise" />
+             <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
         </filter>
       </defs>
 
-      {/* 1. The Main Clean Silhouette (Visual) */}
+      {/* 1. The Main Clean Silhouette (Visual) - Dark Charcoal with Rough Edges */}
       <motion.path
         d={SILHOUETTE_PATH}
-        fill="#ffffff"
-        stroke="#eab308" // Tailwind yellow-500
-        strokeWidth="3.5"
+        fill="none"
+        stroke="#4a4a40" // Dark charcoal/olive tone
+        strokeWidth="6"
         strokeLinecap="round"
         strokeLinejoin="round"
+        filter="url(#rough-edge)"
         initial={{ opacity: 0, scale: 0.95 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 0.5, ease: "easeOut" }}
+      />
+      
+      {/* Texture Overlay Pass */}
+      <motion.path
+        d={SILHOUETTE_PATH}
+        fill="none"
+        stroke="#4a4a40"
+        strokeWidth="6"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        filter="url(#texture-noise)"
+        className="opacity-50"
       />
 
       {/* 2. Interactive Zones (Invisible but clickable) */}
@@ -88,11 +110,11 @@ export default function BodySVG({ view, ageGroup, selectedPart, onPartClick }: B
             key={zone.id}
             d={zone.d}
             onClick={() => onPartClick(zone.id)}
-            fill={isSelected ? '#3b82f6' : 'transparent'} // Blue highlight when selected, otherwise transparent
+            fill={isSelected ? '#3b82f6' : 'transparent'}
             stroke="none"
             initial={false}
             animate={{ 
-              opacity: isSelected ? 0.3 : 0, // Visible overlap when selected
+              opacity: isSelected ? 0.3 : 0, 
             }}
             whileHover={{ 
               opacity: 0.2,
