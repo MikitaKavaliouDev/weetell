@@ -3,31 +3,56 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-  
-  /* Weetell Palette */
+
+  /* Weetell Palette - Refined */
   --wee-blue: #3b82f6;
+  /* Material Blue 500 - Primary Brand */
+  --wee-blue-dark: #2563eb;
+  /* Blue 600 - Hover States */
   --alert-red: #ef4444;
-  --light-blue: #dbeafe;
-  --light-grey: #e5e7eb;
+  /* Material Red 500 - Errors/High Temp */
+  --light-blue: #eff6ff;
+  /* Blue 50 - Backgrounds */
+  --soft-blue: #dbeafe;
+  /* Blue 100 - Secondary Backgrounds */
+  --light-grey: #f3f4f6;
+  /* Gray 100 - Neutral Backgrounds */
+  --medium-grey: #9ca3af;
+  /* Gray 400 - Secondary Text */
+  --dark-grey: #1f2937;
+  /* Gray 800 - Primary Text */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --font-sans: var(--font-quicksand), sans-serif;
-  
+
   --color-wee-blue: var(--wee-blue);
+  --color-wee-blue-dark: var(--wee-blue-dark);
   --color-alert-red: var(--alert-red);
   --color-light-blue: var(--light-blue);
+  --color-soft-blue: var(--soft-blue);
   --color-light-grey: var(--light-grey);
+  --color-medium-grey: var(--medium-grey);
+  --color-dark-grey: var(--dark-grey);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer utilities {
+  .glass-panel {
+    @apply bg-white/80 backdrop-blur-md border border-white/20 shadow-xl;
+  }
+
+  .soft-shadow {
+    box-shadow: 0 10px 40px -10px rgba(59, 130, 246, 0.15);
+  }
+
+  .inner-glow {
+    box-shadow: inset 0 2px 4px 0 rgba(255, 255, 255, 0.3);
   }
 }
+
+
 
 body {
   background: var(--background);

@@ -25,16 +25,16 @@ export default function ServicePage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-neutral-950 p-6 pt-16 flex flex-col items-center">
+    <div className="min-h-screen bg-slate-50 p-6 pt-16 flex flex-col items-center">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
         className="text-center mb-8"
       >
-        <h1 className="text-2xl font-bold text-neutral-800 dark:text-neutral-200">
+        <h1 className="text-2xl font-bold text-neutral-800">
           Choose Service
         </h1>
-        <p className="text-neutral-500 dark:text-neutral-400">
+        <p className="text-neutral-500">
           How would you like to proceed?
         </p>
       </motion.div>
@@ -49,7 +49,7 @@ export default function ServicePage() {
             <div className={`p-4 rounded-full ${service.bg} ${service.color}`}>
               <service.icon size={32} />
             </div>
-            <span className="font-semibold text-neutral-700 dark:text-neutral-300">
+            <span className="font-semibold text-neutral-700">
               {service.label}
             </span>
           </InteractiveCard>

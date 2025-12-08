@@ -24,6 +24,8 @@ function CheckupWizard() {
     switch (step) {
       case STEPS.AGE:
         return <AgeSelection onNext={() => setStep(STEPS.BODY)} />;
+      case STEPS.BODY:
+        return <BodyMapSelection onNext={() => setStep(STEPS.SYMPTOM)} />;
       case STEPS.SYMPTOM:
         return <SymptomSelection onNext={() => setStep(STEPS.SEVERITY)} />;
       case STEPS.SEVERITY:
@@ -47,7 +49,7 @@ function CheckupWizard() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-neutral-950 p-6 flex flex-col pt-16">
+    <div className="min-h-screen bg-slate-50 p-6 pt-12 pb-20">
        <div className="w-full max-w-2xl mx-auto h-full flex-1 flex flex-col justify-center">
          {renderStep()}
        </div>

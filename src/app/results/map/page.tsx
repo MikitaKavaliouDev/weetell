@@ -5,7 +5,7 @@ import { MapPin, Navigation } from 'lucide-react';
 
 export default function MapPage() {
   return (
-    <div className="relative min-h-screen bg-slate-200 dark:bg-slate-900 w-full overflow-hidden">
+    <div className="relative min-h-screen bg-slate-200 w-full overflow-hidden">
        {/* Mock Map Background Layer */}
        <div className="absolute inset-0 opacity-20" 
             style={{ 
@@ -16,7 +16,7 @@ export default function MapPage() {
        
        {/* UI Overlay */}
        <div className="absolute top-4 left-4 right-4 z-10">
-          <div className="bg-white dark:bg-neutral-900 p-4 rounded-xl shadow-lg flex items-center gap-3">
+          <div className="bg-white p-4 rounded-xl shadow-lg flex items-center gap-3">
              <div className="bg-blue-100 text-blue-500 p-2 rounded-lg">
                 <Navigation size={20} />
              </div>

@@ -4,7 +4,7 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import BodySVG from '@/components/molecules/BodySVG';
-import { RotateCcw } from 'lucide-react';
+import { Rotate3D } from 'lucide-react'; // Better icon name than RotateCcw for this context
 
 interface BodyMapSelectionProps {
   onNext: () => void;
@@ -18,26 +18,28 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
 
   const handlePartClick = (partId: string) => {
     setBodyPart(partId);
-    // Optional: Zoom animation here?
-    setTimeout(onNext, 300);
+    setTimeout(onNext, 400);
   };
 
   return (
-    <div className="flex flex-col items-center justify-between h-full pt-4 pb-8">
+    <div className="flex flex-col items-center h-full pt-8 pb-10 px-6 gap-6">
       <motion.div
         initial={{ opacity: 0, y: -20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="text-center space-y-2"
+        className="text-center space-y-2 z-10"
       >
-        <h2 className="text-2xl font-bold text-neutral-800 dark:text-neutral-200">
+        <h2 className="text-3xl font-bold text-neutral-800">
           Where does it hurt?
         </h2>
-        <p className="text-neutral-500 dark:text-neutral-400">
+        <p className="text-neutral-500 font-medium">
           Tap the area on the {ageGroup || 'body'}
         </p>
       </motion.div>
 
-      <div className="relative w-full flex-1 flex items-center justify-center">
+      <div className="relative w-full flex-1 flex items-center justify-center max-h-[600px]">
+        {/* Background glow for premium feel */}
+        <div className="absolute inset-0 bg-blue-500/5 blur-[100px] rounded-full pointer-events-none" />
+        
         <BodySVG 
           view={view} 
           ageGroup={ageGroup} 
@@ -45,30 +47,36 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
           onPartClick={handlePartClick} 
         />
         
-        {/* Helper Tip or Label */}
+        {/* Floating Label for selection feedback */}
         {selectedPart && (
            <motion.div
-             initial={{ opacity: 0, y: 10 }}
-             animate={{ opacity: 1, y: 0 }}
-             className="absolute bottom-10 bg-black/80 text-white px-4 py-2 rounded-full text-sm font-medium"
+             initial={{ opacity: 0, scale: 0.8, y: 20 }}
+             animate={{ opacity: 1, scale: 1, y: 0 }}
+             className="absolute bottom-4 bg-white text-neutral-800 px-6 py-2 rounded-full shadow-lg border border-slate-100 font-bold capitalize text-lg"
            >
-             Selected: {selectedPart.charAt(0).toUpperCase() + selectedPart.slice(1)}
+             {selectedPart}
            </motion.div>
         )}
       </div>
 
-      {/* Controls */}
-      <div className="flex gap-4">
+      {/* Controls - Floating Card Style */}
+      <motion.div 
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        className="z-10"
+      >
         <button
           onClick={() => setView(v => v === 'front' ? 'back' : 'front')}
-          className="flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-neutral-900 border border-slate-200 dark:border-slate-800 shadow-sm hover:shadow-md transition-all active:scale-95"
+          className="flex items-center gap-3 px-6 py-3 rounded-full bg-white border border-slate-200 shadow-lg hover:shadow-xl transition-all active:scale-95 group"
         >
-          <RotateCcw size={20} className="text-wee-blue" />
-          <span className="font-medium text-neutral-700 dark:text-neutral-300">
-            Turn Around
+          <div className="bg-blue-50 p-2 rounded-full text-wee-blue group-hover:bg-blue-100 transition-colors">
+            <Rotate3D size={20} />
+          </div>
+          <span className="font-bold text-neutral-700">
+            Turn {view === 'front' ? 'Back' : 'Front'}
           </span>
         </button>
-      </div>
+      </motion.div>
     </div>
   );
 }

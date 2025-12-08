@@ -3,7 +3,6 @@
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import Logo from '@/components/atoms/Logo';
 
 export default function SplashPage() {
   const router = useRouter();
@@ -16,32 +15,17 @@ export default function SplashPage() {
   }, [router]);
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-white dark:bg-neutral-950 p-6">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-white relative overflow-hidden">
       <motion.div
         initial={{ scale: 0.8, opacity: 0 }}
-        animate={{
-          scale: [0.8, 1.1, 1],
-          opacity: 1,
-        }}
-        transition={{
-          duration: 1.5,
-          ease: "backOut",
-          times: [0, 0.6, 1]
-        }}
-        className="flex flex-col items-center gap-4"
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ duration: 1.2, type: "spring", bounce: 0.3 }}
+        className="relative z-10 flex items-center"
       >
-        <div className="relative">
-          <Logo className="w-48 h-auto text-wee-blue" />
-          
-          <motion.div
-            initial={{ opacity: 0, y: 10, scale: 0.8 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            transition={{ delay: 0.8, duration: 0.5, type: "spring" }}
-            className="absolute -top-12 -right-12 bg-light-blue text-wee-blue px-4 py-2 rounded-2xl rounded-bl-none shadow-sm"
-          >
-            <span className="font-bold text-lg">Weetell?</span>
-          </motion.div>
-        </div>
+        {/* Large "Wee" Text - Brand Blue */}
+        <h1 className="text-[120px] leading-none font-bold text-wee-blue tracking-tighter drop-shadow-sm" style={{ fontFamily: 'var(--font-quicksand)' }}>
+          Wee
+        </h1>
       </motion.div>
     </div>
   );
