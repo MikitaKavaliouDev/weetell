@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 
-export default function ServicePage() {
+export default function ConsultPage() {
   const router = useRouter();
 
   return (
@@ -24,27 +24,24 @@ export default function ServicePage() {
          animate={{ opacity: 1, y: 0 }}
          className="flex-1 flex items-center justify-center gap-6"
        >
-          {/* Location Button */}
-          <button 
-            onClick={() => router.push('/results/consult')}
-            className="w-40 h-40 rounded-full border-[6px] border-[#4A90E2] flex items-center justify-center p-8 bg-white hover:scale-105 transition-transform"
-          >
+          {/* Chair/Waiting Button */}
+          <button className="w-40 h-40 rounded-full border-[6px] border-[#E8A530] bg-[#FFF8E6] flex items-center justify-center p-6 hover:scale-105 transition-transform overflow-hidden">
             <div className="relative w-full h-full">
                 <Image 
-                    src="/location.png" 
-                    alt="Location" 
+                    src="/chair.png" 
+                    alt="Waiting Room" 
                     fill
                     className="object-contain"
                 />
             </div>
           </button>
 
-          {/* Medicine Button */}
-          <button className="w-40 h-40 rounded-full bg-[#6B8E23] flex items-center justify-center p-8 hover:scale-105 transition-transform">
+          {/* Doctor Button */}
+          <button className="w-40 h-40 rounded-full flex items-center justify-center p-0 hover:scale-105 transition-transform overflow-hidden">
              <div className="relative w-full h-full">
                 <Image 
-                    src="/medicine.png" 
-                    alt="Medicine" 
+                    src="/doctor.png" 
+                    alt="Doctor" 
                     fill
                     className="object-contain"
                 />
