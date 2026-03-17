@@ -5,14 +5,16 @@ export type AgeGroup = 'baby' | 'child' | 'teen' | null;
 export type Locale = 'de' | 'es' | 'tr' | 'en';
 export type BodyPart = string | null;
 export type ActionDecision = 'wait' | 'doctor' | null;
+export type UrgencyLevel = 'routine' | 'urgent' | 'emergency' | null;
 
 interface AssessmentState {
   locale: Locale;
   ageGroup: AgeGroup;
   bodyPart: BodyPart;
-  symptoms: string[];
+  symptom: string | null;
   severity: number | null;
   actionDecision: ActionDecision;
+  urgencyLevel: UrgencyLevel;
   currentSubtitle: string;
   showTextLabels: boolean;
   showSubtitles: boolean;
@@ -21,9 +23,10 @@ interface AssessmentState {
   setLocale: (locale: Locale) => void;
   setAgeGroup: (group: AgeGroup) => void;
   setBodyPart: (part: BodyPart) => void;
-  toggleSymptom: (symptomId: string) => void;
+  setSymptom: (symptomId: string | null) => void;
   setSeverity: (severity: number | null) => void;
   setActionDecision: (decision: ActionDecision) => void;
+  setUrgencyLevel: (level: UrgencyLevel) => void;
   setCurrentSubtitle: (subtitle: string) => void;
   clearSubtitle: () => void;
   toggleTextLabels: () => void;
@@ -37,9 +40,10 @@ export const useAssessmentStore = create<AssessmentState>()(
       locale: 'en',
       ageGroup: null,
       bodyPart: null,
-      symptoms: [],
+      symptom: null,
       severity: null,
       actionDecision: null,
+      urgencyLevel: null,
       currentSubtitle: '',
       showTextLabels: true,
       showSubtitles: true,
@@ -47,17 +51,10 @@ export const useAssessmentStore = create<AssessmentState>()(
       setLocale: (locale) => set({ locale }),
       setAgeGroup: (ageGroup) => set({ ageGroup }),
       setBodyPart: (bodyPart) => set({ bodyPart }),
-      toggleSymptom: (symptomId) =>
-        set((state) => {
-          const exists = state.symptoms.includes(symptomId);
-          return {
-            symptoms: exists
-              ? state.symptoms.filter((id) => id !== symptomId)
-              : [...state.symptoms, symptomId],
-          };
-        }),
+      setSymptom: (symptomId) => set({ symptom: symptomId }),
       setSeverity: (severity) => set({ severity }),
       setActionDecision: (actionDecision) => set({ actionDecision }),
+      setUrgencyLevel: (urgencyLevel) => set({ urgencyLevel }),
       setCurrentSubtitle: (subtitle) => set({ currentSubtitle: subtitle }),
       clearSubtitle: () => set({ currentSubtitle: '' }),
       toggleTextLabels: () => set((state) => ({ showTextLabels: !state.showTextLabels })),
@@ -65,9 +62,10 @@ export const useAssessmentStore = create<AssessmentState>()(
       resetAssessment: () => set({
         ageGroup: null,
         bodyPart: null,
-        symptoms: [],
+        symptom: null,
         severity: null,
         actionDecision: null,
+        urgencyLevel: null,
         // Intentionally not resetting accessibility settings
       }),
     }),
@@ -78,9 +76,10 @@ export const useAssessmentStore = create<AssessmentState>()(
         locale: state.locale, 
         ageGroup: state.ageGroup,
         bodyPart: state.bodyPart,
-        symptoms: state.symptoms,
+        symptom: state.symptom,
         severity: state.severity,
         actionDecision: state.actionDecision,
+        urgencyLevel: state.urgencyLevel,
         showTextLabels: state.showTextLabels,
         showSubtitles: state.showSubtitles 
       }),

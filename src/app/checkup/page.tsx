@@ -14,6 +14,7 @@ import BodyMapSelection from '@/components/organisms/BodyMapSelection';
 import SymptomSelection from '@/components/organisms/SymptomSelection';
 import SeveritySelection from '@/components/organisms/SeveritySelection';
 import ActionDecision from '@/components/organisms/ActionDecision';
+import UrgencySelection from '@/components/organisms/UrgencySelection';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 
 const STEPS = {
@@ -22,6 +23,7 @@ const STEPS = {
   SYMPTOM: 'symptom',
   SEVERITY: 'severity',
   ACTION: 'action',
+  URGENCY: 'urgency',
   RESULTS: 'results',
 };
 
@@ -40,7 +42,7 @@ function CheckupWizard() {
     if (actionDecision === 'wait') {
       router.push('/results/home-care');
     } else {
-      setStep(STEPS.RESULTS);
+      setStep(STEPS.URGENCY);
     }
   };
 
@@ -56,6 +58,8 @@ function CheckupWizard() {
         return <SeveritySelection onNext={() => setStep(STEPS.ACTION)} />;
       case STEPS.ACTION:
         return <ActionDecision onNext={handleActionNext} />;
+      case STEPS.URGENCY:
+        return <UrgencySelection onNext={() => setStep(STEPS.RESULTS)} />;
       case STEPS.RESULTS:
         return <div className="flex justify-center p-10">Taking you to results...</div>;
       default:

@@ -46,7 +46,10 @@ export default function ServicePage() {
           </button>
 
           {/* Medicine Button */}
-          <button className="w-40 h-40 rounded-full bg-[#6B8E23] flex items-center justify-center p-8 hover:scale-105 transition-transform">
+          <button 
+            onClick={() => router.push('/results/pharmacy')}
+            className="w-40 h-40 rounded-full bg-[#6B8E23] flex items-center justify-center p-8 hover:scale-105 transition-transform"
+          >
              <div className="relative w-full h-full">
                 <Image 
                     src="/medicine.png" 

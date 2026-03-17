@@ -1,10 +1,11 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import { useState, useEffect } from 'react';
 import FeverChildSVG from '../molecules/FeverChildSVG';
 import ThermometerSVG from '../molecules/ThermometerSVG';
+import VideoPlayer from '../molecules/VideoPlayer';
 import { Play } from 'lucide-react';
 import { audioManager } from '@/lib/audio';
 
@@ -21,6 +22,7 @@ const TEMPERATURES = [
 export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   const setSeverity = useAssessmentStore((state) => state.setSeverity);
   const [selectedTemp, setSelectedTemp] = useState<number | null>(null);
+  const [showVideo, setShowVideo] = useState(false);
   const locale = useAssessmentStore((state) => state.locale);
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
 
@@ -40,77 +42,105 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
     }, 400);
   };
 
+  const handleWatchVideo = () => {
+    audioManager.playSound('click');
+    setShowVideo(true);
+  };
+
+  const handleVideoEnded = () => {
+    setShowVideo(false);
+  };
+
   return (
     <div className="flex flex-col items-center justify-between h-full pt-4 pb-8 relative">
-      <div className="flex-1 w-full flex items-center justify-center relative">
-        {/* Main Illustration Area */}
-        <div className="relative w-full max-w-[320px] h-[400px]"> 
-          {/* Child Illustration */}
-          <div className="absolute inset-0 flex items-center justify-center pr-16 mt-8">
-             <div className="w-72 h-80">
-                <FeverChildSVG />
-             </div>
-          </div>
+      <AnimatePresence mode="wait">
+        {showVideo ? (
+          <motion.div
+            key="video"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="w-full max-w-md"
+          >
+            <VideoPlayer 
+              src="/videos/fever-guide.mp4" 
+              locale={locale}
+              onEnded={handleVideoEnded}
+            />
+          </motion.div>
+        ) : (
+          <motion.div
+            key="selector"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="flex-1 w-full flex items-center justify-center relative"
+          >
+            <div className="relative w-full max-w-[320px] h-[400px]"> 
+              <div className="absolute inset-0 flex items-center justify-center pr-16 mt-8">
+                <div className="w-72 h-80">
+                  <FeverChildSVG />
+                </div>
+              </div>
 
-          {/* Thermometer & Numbers Group */}
-          <div className="absolute top-10 right-0 flex flex-col items-center">
-            {/* Thermometer Icon */}
-            <div className="mb-2 -mr-6">
-              <ThermometerSVG />
-            </div>
-            
-            {/* Temperature List */}
-            <div className="flex flex-col gap-2 items-end mt-2">
-              {TEMPERATURES.map((temp) => (
-                <motion.button
-                  key={temp.value}
-                  onClick={() => handleSelect(temp.value)}
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  className={`text-5xl font-bold tracking-tight bg-transparent border-none p-1 transition-colors duration-300 ${
-                    selectedTemp === temp.value ? 'text-rose-500' : 'text-[#4a4a40]'
-                  }`}
-                  style={{ fontFamily: 'inherit' }}
-                >
-                  <span className="relative font-handwritten">
-                    {temp.label}
-                    {temp.unit && (
-                      <span className="absolute top-0 -right-5 text-3xl align-top">
-                        °{temp.unit}
+              <div className="absolute top-10 right-0 flex flex-col items-center">
+                <div className="mb-2 -mr-6">
+                  <ThermometerSVG />
+                </div>
+                
+                <div className="flex flex-col gap-2 items-end mt-2">
+                  {TEMPERATURES.map((temp) => (
+                    <motion.button
+                      key={temp.value}
+                      onClick={() => handleSelect(temp.value)}
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.95 }}
+                      className={`text-5xl font-bold tracking-tight bg-transparent border-none p-1 transition-colors duration-300 ${
+                        selectedTemp === temp.value ? 'text-rose-500' : 'text-[#4a4a40]'
+                      }`}
+                      style={{ fontFamily: 'inherit' }}
+                    >
+                      <span className="relative font-handwritten">
+                        {temp.label}
+                        {temp.unit && (
+                          <span className="absolute top-0 -right-5 text-3xl align-top">
+                            °{temp.unit}
+                          </span>
+                        )}
                       </span>
-                    )}
-                  </span>
-                </motion.button>
-              ))}
+                    </motion.button>
+                  ))}
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
-      </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
-      {/* Bottom Controls */}
-      <div className="w-full px-6 flex justify-between items-end">
-         {/* Video/Play Button (Bottom Left) */}
-         <motion.button
+      {!showVideo && (
+        <div className="w-full px-6 flex justify-between items-end">
+          <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
+            onClick={handleWatchVideo}
             className="w-16 h-12 border-2 border-yellow-400 rounded-md flex items-center justify-center text-yellow-500 bg-white relative overflow-hidden"
-         >
-             <div className="absolute left-1.5 top-0 bottom-0 flex flex-col justify-between py-1">
-                 <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
-                 <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
-                 <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
-                 <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
-             </div>
-              <div className="absolute right-1.5 top-0 bottom-0 flex flex-col justify-between py-1">
-                 <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
-                 <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
-                 <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
-                 <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
-             </div>
-
+          >
+            <div className="absolute left-1.5 top-0 bottom-0 flex flex-col justify-between py-1">
+              <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
+              <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
+              <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
+              <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
+            </div>
+            <div className="absolute right-1.5 top-0 bottom-0 flex flex-col justify-between py-1">
+              <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
+              <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
+              <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
+              <div className="w-1 h-1 bg-yellow-400 rounded-full"></div>
+            </div>
             <Play fill="currentColor" size={20} className="ml-0.5" />
-         </motion.button>
-      </div>
+          </motion.button>
+        </div>
+      )}
     </div>
   );
 }

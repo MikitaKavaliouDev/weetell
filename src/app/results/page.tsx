@@ -23,12 +23,12 @@ export default function ResultsPage() {
         {/* Header */}
         <header className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-4">
-                <button onClick={() => router.back()} className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-100 text-neutral-500 hover:bg-slate-50 transition-colors">
+                <button onClick={() => router.back()} className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-100 text-neutral-500 hover:bg-slate-50 transition-colors">
                     <ArrowLeft size={20} />
                 </button>
                 <ArztAuskunftLogo className="h-8 w-auto" />
             </div>
-            <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-100 hover:bg-slate-50 transition-colors">
+            <button className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-100 hover:bg-slate-50 transition-colors">
                 <MenuIcon className="w-5 h-5" />
             </button>
         </header>

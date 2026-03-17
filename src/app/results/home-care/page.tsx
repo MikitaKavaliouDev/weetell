@@ -1,13 +1,17 @@
 'use client';
 
-import { motion } from 'framer-motion';
+import { useState } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Play, CheckCircle, Clock, Thermometer, Droplets } from 'lucide-react';
+import { ArrowLeft, Play, CheckCircle, Clock, Thermometer, Droplets, X } from 'lucide-react';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
+import VideoPlayer from '@/components/molecules/VideoPlayer';
 
 export default function HomeCarePage() {
   const router = useRouter();
   const severity = useAssessmentStore((state) => state.severity);
+  const locale = useAssessmentStore((state) => state.locale);
+  const [showVideo, setShowVideo] = useState(false);
 
   const careTips = [
     { icon: Thermometer, title: 'Monitor Temperature', desc: 'Check temperature every 4 hours' },
@@ -18,12 +22,36 @@ export default function HomeCarePage() {
 
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col">
-      {/* Header */}
+      <AnimatePresence>
+        {showVideo && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4"
+          >
+            <div className="w-full max-w-lg">
+              <button
+                onClick={() => setShowVideo(false)}
+                className="absolute top-4 right-4 w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30"
+              >
+                <X size={24} />
+              </button>
+              <VideoPlayer
+                src="/videos/fever-guide.mp4"
+                locale={locale}
+                onEnded={() => setShowVideo(false)}
+              />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <div className="bg-[#10B981] rounded-b-[40px] px-6 py-6">
         <div className="flex items-center gap-4 mb-4">
           <button 
             onClick={() => router.back()} 
-            className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center text-white"
+            className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white"
           >
             <ArrowLeft size={20} />
           </button>
@@ -33,7 +61,6 @@ export default function HomeCarePage() {
       </div>
 
       <div className="flex-1 px-6 py-8 max-w-md mx-auto w-full">
-        {/* Temperature Display */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -52,7 +79,6 @@ export default function HomeCarePage() {
           </div>
         </motion.div>
 
-        {/* Care Tips */}
         <h2 className="text-lg font-bold text-neutral-800 mb-4">Care Instructions</h2>
         <div className="space-y-3 mb-8">
           {careTips.map((tip, index) => (
@@ -74,17 +100,16 @@ export default function HomeCarePage() {
           ))}
         </div>
 
-        {/* Video Button */}
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
+          onClick={() => setShowVideo(true)}
           className="w-full bg-[#10B981] text-white rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold shadow-lg shadow-green-500/30"
         >
           <Play fill="currentColor" size={20} />
           Watch Care Video
         </motion.button>
 
-        {/* Re-assess Button */}
         <button
           onClick={() => router.push('/checkup?step=age')}
           className="w-full mt-4 text-neutral-500 text-sm"
