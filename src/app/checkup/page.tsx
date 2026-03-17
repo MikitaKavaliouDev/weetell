@@ -13,24 +13,36 @@ import SettingsMenu from '@/components/molecules/SettingsMenu';
 import BodyMapSelection from '@/components/organisms/BodyMapSelection';
 import SymptomSelection from '@/components/organisms/SymptomSelection';
 import SeveritySelection from '@/components/organisms/SeveritySelection';
+import ActionDecision from '@/components/organisms/ActionDecision';
+import { useAssessmentStore } from '@/stores/useAssessmentStore';
 
 const STEPS = {
   AGE: 'age',
   BODY: 'body',
   SYMPTOM: 'symptom',
   SEVERITY: 'severity',
+  ACTION: 'action',
   RESULTS: 'results',
 };
 
 function CheckupWizard() {
   const [step, setStep] = useQueryState('step', { defaultValue: STEPS.AGE });
   const router = useRouter();
+  const actionDecision = useAssessmentStore((state) => state.actionDecision);
 
   useEffect(() => {
     if (step === STEPS.RESULTS) {
       router.push('/results');
     }
   }, [step, router]);
+
+  const handleActionNext = () => {
+    if (actionDecision === 'wait') {
+      router.push('/results/home-care');
+    } else {
+      setStep(STEPS.RESULTS);
+    }
+  };
 
   const renderStep = () => {
     switch (step) {
@@ -41,7 +53,9 @@ function CheckupWizard() {
       case STEPS.SYMPTOM:
         return <SymptomSelection onNext={() => setStep(STEPS.SEVERITY)} />;
       case STEPS.SEVERITY:
-        return <SeveritySelection onNext={() => setStep(STEPS.RESULTS)} />;
+        return <SeveritySelection onNext={() => setStep(STEPS.ACTION)} />;
+      case STEPS.ACTION:
+        return <ActionDecision onNext={handleActionNext} />;
       case STEPS.RESULTS:
         return <div className="flex justify-center p-10">Taking you to results...</div>;
       default:

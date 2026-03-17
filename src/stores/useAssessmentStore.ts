@@ -4,13 +4,15 @@ import { persist, createJSONStorage } from 'zustand/middleware';
 export type AgeGroup = 'baby' | 'child' | 'teen' | null;
 export type Locale = 'de' | 'es' | 'tr' | 'en';
 export type BodyPart = string | null;
+export type ActionDecision = 'wait' | 'doctor' | null;
 
 interface AssessmentState {
   locale: Locale;
   ageGroup: AgeGroup;
   bodyPart: BodyPart;
   symptoms: string[];
-  severity: number | null; // 0-10 or temperature
+  severity: number | null;
+  actionDecision: ActionDecision;
   showTextLabels: boolean;
   showSubtitles: boolean;
   
@@ -20,6 +22,7 @@ interface AssessmentState {
   setBodyPart: (part: BodyPart) => void;
   toggleSymptom: (symptomId: string) => void;
   setSeverity: (severity: number | null) => void;
+  setActionDecision: (decision: ActionDecision) => void;
   toggleTextLabels: () => void;
   toggleSubtitles: () => void;
   resetAssessment: () => void;
@@ -33,6 +36,7 @@ export const useAssessmentStore = create<AssessmentState>()(
       bodyPart: null,
       symptoms: [],
       severity: null,
+      actionDecision: null,
       showTextLabels: true,
       showSubtitles: true,
 
@@ -49,13 +53,15 @@ export const useAssessmentStore = create<AssessmentState>()(
           };
         }),
       setSeverity: (severity) => set({ severity }),
+      setActionDecision: (actionDecision) => set({ actionDecision }),
       toggleTextLabels: () => set((state) => ({ showTextLabels: !state.showTextLabels })),
       toggleSubtitles: () => set((state) => ({ showSubtitles: !state.showSubtitles })),
       resetAssessment: () => set({
         ageGroup: null,
         bodyPart: null,
         symptoms: [],
-        severity: null
+        severity: null,
+        actionDecision: null,
         // Intentionally not resetting accessibility settings
       }),
     }),
@@ -68,6 +74,7 @@ export const useAssessmentStore = create<AssessmentState>()(
         bodyPart: state.bodyPart,
         symptoms: state.symptoms,
         severity: state.severity,
+        actionDecision: state.actionDecision,
         showTextLabels: state.showTextLabels,
         showSubtitles: state.showSubtitles 
       }),
