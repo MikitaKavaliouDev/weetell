@@ -128,9 +128,10 @@ jest.mock('next/navigation', () => ({
 
 // Mock next/image - Fix for React 19 boolean attribute warnings
 jest.mock('next/image', () => {
-  const MockImage = ({ fill, priority, ...props }) => {
+  const MockImage = (props) => {
+    // This is a test mock - using img instead of Next Image component
     // eslint-disable-next-line @next/next/no-img-element
-    return <img {...props} />;
+    return <img alt="" {...props} />;
   };
   MockImage.displayName = 'MockImage';
   return MockImage;
@@ -138,10 +139,13 @@ jest.mock('next/image', () => {
 
 // Mock lucide-react - Ensures icons render as components with accessible names
 jest.mock('lucide-react', () => {
-  // eslint-disable-next-line react/jsx-props-no-spreading
-  const createIconMock = (name) => (props) => (
-    <div data-testid={`icon-${name}`} role="img" aria-label={name} {...props} />
-  );
+  const createIconMock = (name) => {
+    const IconMock = (props) => (
+      <div data-testid={`icon-${name}`} role="img" aria-label={name} {...props} />
+    );
+    IconMock.displayName = `Mock${name}`;
+    return IconMock;
+  };
   
   return {
     __esModule: true,
