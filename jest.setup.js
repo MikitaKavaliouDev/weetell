@@ -58,6 +58,20 @@ Object.defineProperty(window, 'speechSynthesis', {
   },
 })
 
+// Mock SpeechSynthesisUtterance
+function MockSpeechSynthesisUtterance(text) {
+  this.text = text
+  this.lang = 'en'
+  this.rate = 1
+  this.pitch = 1
+  this.voice = null
+}
+
+Object.defineProperty(window, 'SpeechSynthesisUtterance', {
+  writable: true,
+  value: MockSpeechSynthesisUtterance,
+})
+
 // Mock localStorage
 const localStorageMock = {
   getItem: () => null,
@@ -112,14 +126,52 @@ jest.mock('next/navigation', () => ({
   useSearchParams: () => new URLSearchParams(),
 }))
 
-// Mock next/image
+// Mock next/image - Fix for React 19 boolean attribute warnings
 jest.mock('next/image', () => {
-  const MockImage = (props) => {
-    return <img {...props} />
-  }
-  MockImage.displayName = 'MockImage'
-  return MockImage
-})
+  const MockImage = ({ fill, priority, ...props }) => {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img {...props} />;
+  };
+  MockImage.displayName = 'MockImage';
+  return MockImage;
+});
+
+// Mock lucide-react - Ensures icons render as components with accessible names
+jest.mock('lucide-react', () => {
+  // eslint-disable-next-line react/jsx-props-no-spreading
+  const createIconMock = (name) => (props) => (
+    <div data-testid={`icon-${name}`} role="img" aria-label={name} {...props} />
+  );
+  
+  return {
+    __esModule: true,
+    Play: createIconMock('Play'),
+    Pause: createIconMock('Pause'),
+    Volume2: createIconMock('Volume'),
+    VolumeX: createIconMock('Volume'),
+    Maximize: createIconMock('Maximize'),
+    Captions: createIconMock('Captions'),
+    X: createIconMock('Close'),
+    Smartphone: createIconMock('Smartphone'),
+    Copy: createIconMock('Copy'),
+    Check: createIconMock('Check'),
+    Clock: createIconMock('Clock'),
+    AlertTriangle: createIconMock('Alert'),
+    Siren: createIconMock('Siren'),
+    MapPin: createIconMock('Location'),
+    Stethoscope: createIconMock('Doctor'),
+    Home: createIconMock('Home'),
+    GraduationCap: createIconMock('Education'),
+    Settings: createIconMock('Settings'),
+    Thermometer: createIconMock('Thermometer'),
+    Rotate3D: createIconMock('Rotate'),
+    Crosshair: createIconMock('Crosshair'),
+    ArrowRight: createIconMock('Arrow Right'),
+    ChevronLeft: createIconMock('Previous'),
+    ChevronRight: createIconMock('Next'),
+    ArrowLeft: createIconMock('Back'),
+  };
+});
 
 // Mock framer-motion
 jest.mock('framer-motion', () => ({
