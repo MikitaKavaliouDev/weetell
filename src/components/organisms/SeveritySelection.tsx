@@ -74,7 +74,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
             className="w-full max-w-md"
           >
             <VideoPlayer 
-              src={videoUrl || '/videos/fever-guide.mp4'}
+              src={videoUrl || '/videos/high_fever_en.mp4'}
               locale={locale}
               onEnded={handleVideoEnded}
             />

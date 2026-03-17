@@ -35,12 +35,12 @@ const FEVER_DATA: Symptom = {
   label: 'Fever',
   labelDe: 'Fieber',
   icon: 'thermometer',
-  videoUrl: '/videos/fever-guide.mp4',
-  videoUrlDe: '/videos/fever-guide.mp4',
+  videoUrl: '/videos/high_fever_en.mp4',
+  videoUrlDe: '/videos/high_fever_de.mp4',
   temperatureRanges: [
-    { maxTemp: 37.5, videoUrl: '/videos/fever-low.mp4', videoUrlDe: '/videos/fever-low.mp4', urgency: 'routine' },
-    { maxTemp: 39.0, videoUrl: '/videos/fever-medium.mp4', videoUrlDe: '/videos/fever-medium.mp4', urgency: 'routine' },
-    { maxTemp: 40.0, videoUrl: '/videos/fever-high.mp4', videoUrlDe: '/videos/fever-high.mp4', urgency: 'urgent' },
+    { maxTemp: 37.5, videoUrl: '/videos/low_fever_en.mp4', videoUrlDe: '/videos/low_fever_de.mp4', urgency: 'routine' },
+    { maxTemp: 39.0, videoUrl: '/videos/medium_fever_en.mp4', videoUrlDe: '/videos/medium_fever_de.mp4', urgency: 'routine' },
+    { maxTemp: 40.0, videoUrl: '/videos/high_fever_en.mp4', videoUrlDe: '/videos/high_fever_de.mp4', urgency: 'urgent' },
   ],
   waitGuidance: {
     title: 'Fever Care',
@@ -122,7 +122,7 @@ export function getVideoForTemperature(bodyPart: string, ageGroup: AgeGroup, sym
   if (!symptom) return '';
   
   const range = symptom.temperatureRanges.find(r => temperature <= r.maxTemp);
-  if (!range) return symptom.videoUrl;
+  if (!range) return locale === 'de' ? symptom.videoUrlDe : symptom.videoUrl;
   
   return locale === 'de' ? range.videoUrlDe : range.videoUrl;
 }

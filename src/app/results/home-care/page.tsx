@@ -45,7 +45,7 @@ export default function HomeCarePage() {
                 <X size={24} />
               </button>
               <VideoPlayer
-                src="/videos/fever-guide.mp4"
+                src="/videos/high_fever_en.mp4"
                 locale={locale}
                 onEnded={() => setShowVideo(false)}
               />
