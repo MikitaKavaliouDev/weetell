@@ -4,6 +4,7 @@ import { WeeHeaderLogo, MenuBurgerIcon, VideoPlayIcon } from '@/components/atoms
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
+import { ArrowLeft } from 'lucide-react';
 
 export default function ServicePage() {
   const router = useRouter();
@@ -12,7 +13,12 @@ export default function ServicePage() {
     <div className="min-h-screen bg-white flex flex-col p-6">
        {/* Header */}
        <header className="flex justify-between items-center mb-12">
-           <WeeHeaderLogo className="w-24 h-12" />
+           <div className="flex items-center gap-4">
+               <button onClick={() => router.back()} className="p-2 text-neutral-500 hover:text-neutral-800 transition-colors">
+                   <ArrowLeft size={32} strokeWidth={2.5} />
+               </button>
+               <WeeHeaderLogo className="w-24 h-12" />
+           </div>
            <button className="p-2">
                <MenuBurgerIcon className="w-8 h-8" />
            </button>

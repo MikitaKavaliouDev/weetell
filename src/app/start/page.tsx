@@ -7,6 +7,7 @@ import CartoonGlobe from '@/components/molecules/CartoonGlobe';
 import WeetellLogo from '@/components/molecules/WeetellLogo';
 import { LOCALES } from '@/data/locales';
 import { Menu } from 'lucide-react';
+import SettingsMenu from '@/components/molecules/SettingsMenu';
 
 export default function StartPage() {
   const router = useRouter();
@@ -30,9 +31,12 @@ export default function StartPage() {
       {/* Header */}
       <div className="flex justify-between items-center p-6 pt-8 z-10">
         <WeetellLogo />
-        <button className="text-yellow-500 hover:text-yellow-600 transition-colors">
-            <Menu size={32} strokeWidth={3} />
-        </button>
+        <div className="flex items-center gap-2">
+            <SettingsMenu />
+            <button className="text-yellow-500 hover:text-yellow-600 transition-colors">
+                <Menu size={32} strokeWidth={3} />
+            </button>
+        </div>
       </div>
 
       {/* Main Content */}

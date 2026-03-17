@@ -15,6 +15,7 @@ export default function SymptomSelection({ onNext }: SymptomSelectionProps) {
   const bodyPart = useAssessmentStore((state) => state.bodyPart);
   const selectedSymptoms = useAssessmentStore((state) => state.symptoms);
   const toggleSymptom = useAssessmentStore((state) => state.toggleSymptom);
+  const showTextLabels = useAssessmentStore((state) => state.showTextLabels);
 
   // Fallback if body part not selected (should redirect, but for dev we default)
   const currentPart = bodyPart || 'head';
@@ -43,9 +44,11 @@ export default function SymptomSelection({ onNext }: SymptomSelectionProps) {
                </div>
               
                {/* Label (Optional: visible or tooltip? Screenshot showed only icons mostly, but text is good for UX) */}
-               <span className={`text-xs font-bold text-center w-20 leading-tight ${isSelected ? 'text-neutral-900' : 'text-neutral-500'}`}>
-                   {symptom.label}
-               </span>
+               {showTextLabels && (
+                  <span className={`text-xs font-bold text-center w-20 leading-tight ${isSelected ? 'text-neutral-900' : 'text-neutral-500'}`}>
+                      {symptom.label}
+                  </span>
+                )}
 
                {isSelected && (
                   <motion.div 
@@ -61,8 +64,8 @@ export default function SymptomSelection({ onNext }: SymptomSelectionProps) {
       </div>
 
       {/* 2. Specific Body Part Illustration */}
-      <div className="flex-1 w-full flex items-end justify-center pb-0 overflow-hidden relative -z-0">
-          <div className="w-full max-w-[350px] transform scale-110 mb-[-2rem]">
+      <div className="flex-1 w-full flex items-end justify-center pb-0 overflow-hidden relative z-0">
+          <div className="w-full max-w-[350px] transform scale-110 -mb-8">
             <BodyPartIllustration part={currentPart} />
           </div>
       </div>

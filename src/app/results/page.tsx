@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { ArztAuskunftLogo, MenuIcon, SearchIcon, GeneralPracticeIcon, GynecologyIcon, OrthopedicsIcon } from '@/components/atoms/ResultsIcons';
 import { DOCTORS } from '@/data/doctors';
-import { Star, MapPin, Calendar } from 'lucide-react';
+import { Star, MapPin, ArrowLeft } from 'lucide-react';
 
 export default function ResultsPage() {
   const router = useRouter();
@@ -19,14 +19,19 @@ export default function ResultsPage() {
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
       {/* Dynamic Header Background */}
       <div className={`transition-all duration-500 ease-in-out ${showResults ? 'bg-white shadow-sm' : 'bg-[#E6F0FF] rounded-b-[40px]'} relative z-20`}>
-        <div className="max-w-md mx-auto px-6 py-6">
-            {/* Header */}
-            <header className="flex justify-between items-center mb-6">
-                <ArztAuskunftLogo className="h-8 w-auto" />
-                <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-100">
-                    <MenuIcon className="w-5 h-5" />
+    <div className="max-w-md mx-auto px-6 py-6">
+        {/* Header */}
+        <header className="flex justify-between items-center mb-6">
+            <div className="flex items-center gap-4">
+                <button onClick={() => router.back()} className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-100 text-neutral-500 hover:bg-slate-50 transition-colors">
+                    <ArrowLeft size={20} />
                 </button>
-            </header>
+                <ArztAuskunftLogo className="h-8 w-auto" />
+            </div>
+            <button className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-100 hover:bg-slate-50 transition-colors">
+                <MenuIcon className="w-5 h-5" />
+            </button>
+        </header>
 
             <AnimatePresence>
                 {!showResults && (

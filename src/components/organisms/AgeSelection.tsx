@@ -10,8 +10,7 @@ interface AgeSelectionProps {
 
 export default function AgeSelection({ onNext }: AgeSelectionProps) {
   const setAgeGroup = useAssessmentStore((state) => state.setAgeGroup);
-  // We can track selection if needed for visual feedback, though the transition is fast
-  const selectedAgeGroup = useAssessmentStore((state) => state.ageGroup);
+  const showTextLabels = useAssessmentStore((state) => state.showTextLabels);
 
   const handleSelect = (age: AgeGroup) => {
     setAgeGroup(age);
@@ -36,7 +35,7 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
                 priority
              />
           </div>
-          <span className="text-3xl font-bold text-[#C5A880]">0-3</span>
+          {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">0-3</span>}
         </motion.div>
 
         {/* Child Option */}
@@ -54,7 +53,25 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
                 priority
              />
           </div>
-          <span className="text-3xl font-bold text-[#C5A880]">3+</span>
+          {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">3+</span>}
+        </motion.div>
+
+        {/* Teen Option */}
+        <motion.div
+          whileTap={{ scale: 0.95 }}
+          onClick={() => handleSelect('teen')}
+          className="cursor-pointer flex flex-col items-center gap-4"
+        >
+          <div className="relative w-40 h-56 md:w-48 md:h-64">
+             <Image 
+                src="/teen.png" 
+                alt="Teen 12-21 years" 
+                fill 
+                className="object-contain object-bottom"
+                priority
+             />
+          </div>
+          {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">12-21</span>}
         </motion.div>
     </div>
   );

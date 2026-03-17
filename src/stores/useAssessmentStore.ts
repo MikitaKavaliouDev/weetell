@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
-export type AgeGroup = 'baby' | 'child' | null;
+export type AgeGroup = 'baby' | 'child' | 'teen' | null;
 export type Locale = 'de' | 'es' | 'tr' | 'en';
 export type BodyPart = string | null;
 
@@ -11,6 +11,8 @@ interface AssessmentState {
   bodyPart: BodyPart;
   symptoms: string[];
   severity: number | null; // 0-10 or temperature
+  showTextLabels: boolean;
+  showSubtitles: boolean;
   
   // Actions
   setLocale: (locale: Locale) => void;
@@ -18,6 +20,8 @@ interface AssessmentState {
   setBodyPart: (part: BodyPart) => void;
   toggleSymptom: (symptomId: string) => void;
   setSeverity: (severity: number | null) => void;
+  toggleTextLabels: () => void;
+  toggleSubtitles: () => void;
   resetAssessment: () => void;
 }
 
@@ -29,6 +33,8 @@ export const useAssessmentStore = create<AssessmentState>()(
       bodyPart: null,
       symptoms: [],
       severity: null,
+      showTextLabels: true,
+      showSubtitles: true,
 
       setLocale: (locale) => set({ locale }),
       setAgeGroup: (ageGroup) => set({ ageGroup }),
@@ -43,11 +49,14 @@ export const useAssessmentStore = create<AssessmentState>()(
           };
         }),
       setSeverity: (severity) => set({ severity }),
+      toggleTextLabels: () => set((state) => ({ showTextLabels: !state.showTextLabels })),
+      toggleSubtitles: () => set((state) => ({ showSubtitles: !state.showSubtitles })),
       resetAssessment: () => set({
         ageGroup: null,
         bodyPart: null,
         symptoms: [],
         severity: null
+        // Intentionally not resetting accessibility settings
       }),
     }),
     {
@@ -58,7 +67,9 @@ export const useAssessmentStore = create<AssessmentState>()(
         ageGroup: state.ageGroup,
         bodyPart: state.bodyPart,
         symptoms: state.symptoms,
-        severity: state.severity 
+        severity: state.severity,
+        showTextLabels: state.showTextLabels,
+        showSubtitles: state.showSubtitles 
       }),
     }
   )

@@ -4,9 +4,12 @@ import { useQueryState } from 'nuqs';
 import { Suspense } from 'react';
 import AgeSelection from '@/components/organisms/AgeSelection';
 import WeetellLogo from '@/components/molecules/WeetellLogo';
-import { Menu } from 'lucide-react';
+import { Menu, ArrowLeft } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { useEffect } from 'react';
+import SettingsMenu from '@/components/molecules/SettingsMenu';
 
-// Step components (will add more as implemented)
+// Step components
 import BodyMapSelection from '@/components/organisms/BodyMapSelection';
 import SymptomSelection from '@/components/organisms/SymptomSelection';
 import SeveritySelection from '@/components/organisms/SeveritySelection';
@@ -21,6 +24,13 @@ const STEPS = {
 
 function CheckupWizard() {
   const [step, setStep] = useQueryState('step', { defaultValue: STEPS.AGE });
+  const router = useRouter();
+
+  useEffect(() => {
+    if (step === STEPS.RESULTS) {
+      router.push('/results');
+    }
+  }, [step, router]);
 
   const renderStep = () => {
     switch (step) {
@@ -33,11 +43,6 @@ function CheckupWizard() {
       case STEPS.SEVERITY:
         return <SeveritySelection onNext={() => setStep(STEPS.RESULTS)} />;
       case STEPS.RESULTS:
-        // Redirect to results page
-        if (typeof window !== 'undefined') {
-             window.location.href = '/results'; 
-             // using window.location for hard nav or router.push in useEffect
-        }
         return <div className="flex justify-center p-10">Taking you to results...</div>;
       default:
         // Fallback or 404
@@ -54,10 +59,18 @@ function CheckupWizard() {
     <div className="min-h-screen bg-white flex flex-col">
        {/* Header */}
        <div className="flex justify-between items-center px-6 pt-8 pb-4">
-         <WeetellLogo />
-         <button className="text-yellow-500 hover:text-yellow-600 transition-colors">
-             <Menu size={32} strokeWidth={3} />
-         </button>
+         <div className="flex items-center gap-4">
+             <button onClick={() => router.back()} className="text-neutral-400 hover:text-neutral-600 transition-colors">
+                 <ArrowLeft size={32} strokeWidth={2.5} />
+             </button>
+             <WeetellLogo />
+         </div>
+         <div className="flex items-center gap-2">
+             <SettingsMenu />
+             <button className="text-yellow-500 hover:text-yellow-600 transition-colors">
+                 <Menu size={32} strokeWidth={3} />
+             </button>
+         </div>
        </div>
 
        <div className="w-full max-w-2xl mx-auto flex-1 flex flex-col justify-center p-6">
