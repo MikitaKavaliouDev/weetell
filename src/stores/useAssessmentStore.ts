@@ -13,6 +13,7 @@ interface AssessmentState {
   symptoms: string[];
   severity: number | null;
   actionDecision: ActionDecision;
+  currentSubtitle: string;
   showTextLabels: boolean;
   showSubtitles: boolean;
   
@@ -23,6 +24,8 @@ interface AssessmentState {
   toggleSymptom: (symptomId: string) => void;
   setSeverity: (severity: number | null) => void;
   setActionDecision: (decision: ActionDecision) => void;
+  setCurrentSubtitle: (subtitle: string) => void;
+  clearSubtitle: () => void;
   toggleTextLabels: () => void;
   toggleSubtitles: () => void;
   resetAssessment: () => void;
@@ -37,6 +40,7 @@ export const useAssessmentStore = create<AssessmentState>()(
       symptoms: [],
       severity: null,
       actionDecision: null,
+      currentSubtitle: '',
       showTextLabels: true,
       showSubtitles: true,
 
@@ -54,6 +58,8 @@ export const useAssessmentStore = create<AssessmentState>()(
         }),
       setSeverity: (severity) => set({ severity }),
       setActionDecision: (actionDecision) => set({ actionDecision }),
+      setCurrentSubtitle: (subtitle) => set({ currentSubtitle: subtitle }),
+      clearSubtitle: () => set({ currentSubtitle: '' }),
       toggleTextLabels: () => set((state) => ({ showTextLabels: !state.showTextLabels })),
       toggleSubtitles: () => set((state) => ({ showSubtitles: !state.showSubtitles })),
       resetAssessment: () => set({

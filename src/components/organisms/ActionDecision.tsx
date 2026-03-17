@@ -4,6 +4,8 @@ import { motion } from 'framer-motion';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import type { ActionDecision as ActionDecisionType } from '@/stores/useAssessmentStore';
 import { Clock, Stethoscope, Home, GraduationCap } from 'lucide-react';
+import { audioManager } from '@/lib/audio';
+import { useEffect } from 'react';
 
 interface ActionDecisionProps {
   onNext: () => void;
@@ -11,8 +13,18 @@ interface ActionDecisionProps {
 
 export default function ActionDecision({ onNext }: ActionDecisionProps) {
   const setActionDecision = useAssessmentStore((state) => state.setActionDecision);
+  const locale = useAssessmentStore((state) => state.locale);
+  const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
+
+  useEffect(() => {
+    const subtitle = locale === 'de' ? 'Was möchten Sie tun?' : 'What would you like to do?';
+    setCurrentSubtitle(subtitle);
+    audioManager.playSound('narrative');
+    return () => setCurrentSubtitle('');
+  }, [locale, setCurrentSubtitle]);
 
   const handleSelect = (decision: ActionDecisionType) => {
+    audioManager.playSound('success');
     setActionDecision(decision);
     setTimeout(onNext, 300);
   };

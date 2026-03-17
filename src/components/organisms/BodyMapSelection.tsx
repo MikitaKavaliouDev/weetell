@@ -1,10 +1,11 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import BodySVG from '@/components/molecules/BodySVG';
-import { Rotate3D } from 'lucide-react'; // Better icon name than RotateCcw for this context
+import { Rotate3D } from 'lucide-react';
+import { audioManager } from '@/lib/audio';
 
 interface BodyMapSelectionProps {
   onNext: () => void;
@@ -15,14 +16,27 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
   const setBodyPart = useAssessmentStore((state) => state.setBodyPart);
   const selectedPart = useAssessmentStore((state) => state.bodyPart);
   const ageGroup = useAssessmentStore((state) => state.ageGroup);
+  const locale = useAssessmentStore((state) => state.locale);
+  const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
+
+  useEffect(() => {
+    const subtitle = locale === 'de' ? 'Wo tut es weh?' : 'Where does it hurt?';
+    setCurrentSubtitle(subtitle);
+    audioManager.playSound('narrative');
+    return () => setCurrentSubtitle('');
+  }, [locale, setCurrentSubtitle]);
 
   const handlePartClick = (partId: string) => {
+    audioManager.playSound('click');
     setBodyPart(partId);
     setTimeout(onNext, 400);
   };
 
   return (
     <div className="flex flex-col items-center justify-center h-full pt-4 pb-4 px-6">
+      <h2 className="text-2xl font-bold text-[#4a4a40] mb-4 text-center">
+        {locale === 'de' ? 'Wo tut es weh?' : 'Where does it hurt?'}
+      </h2>
       
       <div className="relative w-full flex-1 flex items-center justify-center max-h-[600px]">
         {/* Background glow for premium feel - kept gentle */}

@@ -6,6 +6,8 @@ import { SYMPTOM_GRAPH } from '@/data/symptom-graph';
 import BodyPartIllustration from '@/components/atoms/BodyPartIllustrations';
 import SymptomIcon from '@/components/atoms/SymptomIcons';
 import { Check, ArrowRight } from 'lucide-react';
+import { audioManager } from '@/lib/audio';
+import { useEffect } from 'react';
 
 interface SymptomSelectionProps {
   onNext: () => void;
@@ -16,6 +18,20 @@ export default function SymptomSelection({ onNext }: SymptomSelectionProps) {
   const selectedSymptoms = useAssessmentStore((state) => state.symptoms);
   const toggleSymptom = useAssessmentStore((state) => state.toggleSymptom);
   const showTextLabels = useAssessmentStore((state) => state.showTextLabels);
+  const locale = useAssessmentStore((state) => state.locale);
+  const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
+
+  useEffect(() => {
+    const subtitle = locale === 'de' ? 'Welche Symptome?' : 'What symptoms?';
+    setCurrentSubtitle(subtitle);
+    audioManager.playSound('narrative');
+    return () => setCurrentSubtitle('');
+  }, [locale, setCurrentSubtitle]);
+
+  const handleToggleSymptom = (symptomId: string) => {
+    audioManager.playSound('click');
+    toggleSymptom(symptomId);
+  };
 
   // Fallback if body part not selected (should redirect, but for dev we default)
   const currentPart = bodyPart || 'head';
@@ -35,7 +51,7 @@ export default function SymptomSelection({ onNext }: SymptomSelectionProps) {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: index * 0.05 }}
-              onClick={() => toggleSymptom(symptom.id)}
+              onClick={() => handleToggleSymptom(symptom.id)}
               whileTap={{ scale: 0.9 }}
               className={`relative group cursor-pointer flex flex-col items-center gap-1`}
             >

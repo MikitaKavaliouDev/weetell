@@ -26,7 +26,7 @@
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-quicksand), sans-serif;
+  --font-sans: 'Helvetica Neue', Helvetica, 'Segoe UI', Arial, sans-serif;
 
   --color-wee-blue: var(--wee-blue);
   --color-wee-blue-dark: var(--wee-blue-dark);
@@ -61,5 +61,5 @@
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: var(--font-quicksand), sans-serif;
+  font-family: 'Helvetica Neue', Helvetica, 'Segoe UI', Arial, sans-serif;
 }

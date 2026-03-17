@@ -3,6 +3,8 @@
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useAssessmentStore, AgeGroup } from '@/stores/useAssessmentStore';
+import { audioManager } from '@/lib/audio';
+import { useEffect } from 'react';
 
 interface AgeSelectionProps {
   onNext: () => void;
@@ -11,10 +13,19 @@ interface AgeSelectionProps {
 export default function AgeSelection({ onNext }: AgeSelectionProps) {
   const setAgeGroup = useAssessmentStore((state) => state.setAgeGroup);
   const showTextLabels = useAssessmentStore((state) => state.showTextLabels);
+  const locale = useAssessmentStore((state) => state.locale);
+  const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
+
+  useEffect(() => {
+    const subtitle = locale === 'de' ? 'Wie alt ist das Kind?' : 'How old is the child?';
+    setCurrentSubtitle(subtitle);
+    audioManager.playSound('narrative');
+    return () => setCurrentSubtitle('');
+  }, [locale, setCurrentSubtitle]);
 
   const handleSelect = (age: AgeGroup) => {
+    audioManager.playSound('success');
     setAgeGroup(age);
-    // slight delay to show selection feedback if any
     setTimeout(onNext, 200); 
   };
 

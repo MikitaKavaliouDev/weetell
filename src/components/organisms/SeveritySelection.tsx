@@ -2,10 +2,11 @@
 
 import { motion } from 'framer-motion';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import FeverChildSVG from '../molecules/FeverChildSVG';
 import ThermometerSVG from '../molecules/ThermometerSVG';
 import { Play } from 'lucide-react';
+import { audioManager } from '@/lib/audio';
 
 interface SeveritySelectionProps {
   onNext: () => void;
@@ -14,17 +15,26 @@ interface SeveritySelectionProps {
 const TEMPERATURES = [
   { value: 37.5, label: '37,5' },
   { value: 38.0, label: '38' },
-  { value: 40.0, label: '40', unit: 'c' }, // The superscript c handling
+  { value: 40.0, label: '40', unit: 'c' },
 ];
 
 export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   const setSeverity = useAssessmentStore((state) => state.setSeverity);
   const [selectedTemp, setSelectedTemp] = useState<number | null>(null);
+  const locale = useAssessmentStore((state) => state.locale);
+  const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
+
+  useEffect(() => {
+    const subtitle = locale === 'de' ? 'Wie hoch ist das Fieber?' : 'How high is the fever?';
+    setCurrentSubtitle(subtitle);
+    audioManager.playSound('narrative');
+    return () => setCurrentSubtitle('');
+  }, [locale, setCurrentSubtitle]);
 
   const handleSelect = (val: number) => {
+    audioManager.playSound('click');
     setSelectedTemp(val);
     setSeverity(val);
-    // Auto-advance after selection to mimic simple interaction
     setTimeout(() => {
         onNext();
     }, 400);
