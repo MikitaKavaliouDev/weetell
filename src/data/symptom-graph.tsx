@@ -1,3 +1,10 @@
+export type TemperatureRange = {
+  maxTemp: number;
+  videoUrl: string;
+  videoUrlDe: string;
+  urgency: 'routine' | 'urgent' | 'emergency';
+};
+
 export type Symptom = {
   id: string;
   label: string;
@@ -5,6 +12,7 @@ export type Symptom = {
   icon?: string;
   videoUrl: string;
   videoUrlDe: string;
+  temperatureRanges: TemperatureRange[];
   waitGuidance: {
     title: string;
     titleDe: string;
@@ -29,6 +37,11 @@ export const SYMPTOM_GRAPH: Record<string, Symptom[]> = {
       icon: 'thermometer',
       videoUrl: '/videos/fever-guide.mp4',
       videoUrlDe: '/videos/fever-guide.mp4',
+      temperatureRanges: [
+        { maxTemp: 37.5, videoUrl: '/videos/fever-low.mp4', videoUrlDe: '/videos/fever-low.mp4', urgency: 'routine' },
+        { maxTemp: 39.0, videoUrl: '/videos/fever-medium.mp4', videoUrlDe: '/videos/fever-medium.mp4', urgency: 'routine' },
+        { maxTemp: 40.0, videoUrl: '/videos/fever-high.mp4', videoUrlDe: '/videos/fever-high.mp4', urgency: 'urgent' },
+      ],
       waitGuidance: {
         title: 'Fever Care',
         titleDe: 'Fieberpflege',
@@ -57,6 +70,11 @@ export const SYMPTOM_GRAPH: Record<string, Symptom[]> = {
       icon: 'thermometer',
       videoUrl: '/videos/fever-guide.mp4',
       videoUrlDe: '/videos/fever-guide.mp4',
+      temperatureRanges: [
+        { maxTemp: 37.5, videoUrl: '/videos/fever-low.mp4', videoUrlDe: '/videos/fever-low.mp4', urgency: 'routine' },
+        { maxTemp: 39.0, videoUrl: '/videos/fever-medium.mp4', videoUrlDe: '/videos/fever-medium.mp4', urgency: 'routine' },
+        { maxTemp: 40.0, videoUrl: '/videos/fever-high.mp4', videoUrlDe: '/videos/fever-high.mp4', urgency: 'urgent' },
+      ],
       waitGuidance: {
         title: 'Fever Care',
         titleDe: 'Fieberpflege',
@@ -88,4 +106,22 @@ export function getLocalizedSymptom(bodyPart: string, symptomId: string, locale:
   const symptom = getSymptomById(bodyPart, symptomId);
   if (!symptom) return '';
   return locale === 'de' ? symptom.labelDe : symptom.label;
+}
+
+export function getVideoForTemperature(bodyPart: string, symptomId: string, temperature: number, locale: string): string {
+  const symptom = getSymptomById(bodyPart, symptomId);
+  if (!symptom) return '';
+  
+  const range = symptom.temperatureRanges.find(r => temperature <= r.maxTemp);
+  if (!range) return symptom.videoUrl;
+  
+  return locale === 'de' ? range.videoUrlDe : range.videoUrl;
+}
+
+export function getUrgencyForTemperature(bodyPart: string, symptomId: string, temperature: number): 'routine' | 'urgent' | 'emergency' {
+  const symptom = getSymptomById(bodyPart, symptomId);
+  if (!symptom) return 'routine';
+  
+  const range = symptom.temperatureRanges.find(r => temperature <= r.maxTemp);
+  return range?.urgency || 'routine';
 }

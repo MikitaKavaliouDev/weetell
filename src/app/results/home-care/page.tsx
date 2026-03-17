@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Play, CheckCircle, Clock, Thermometer, Droplets, X } from 'lucide-react';
+import { ArrowLeft, Play, CheckCircle, Clock, Thermometer, Droplets, X, Pill } from 'lucide-react';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import VideoPlayer from '@/components/molecules/VideoPlayer';
 
@@ -108,6 +108,16 @@ export default function HomeCarePage() {
         >
           <Play fill="currentColor" size={20} />
           Watch Care Video
+        </motion.button>
+
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={() => router.push('/results/pharmacy')}
+          className="w-full mt-4 bg-white border-2 border-[#6B8E23] text-[#6B8E23] rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold"
+        >
+          <Pill size={20} />
+          {locale === 'de' ? 'Apotheken-Beratung' : 'Pharmacy Advice'}
         </motion.button>
 
         <button

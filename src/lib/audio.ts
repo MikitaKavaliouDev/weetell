@@ -1,8 +1,11 @@
 type SoundType = 'click' | 'success' | 'error' | 'hover' | 'narrative';
 
+type Locale = 'en' | 'de' | 'es' | 'tr';
+
 class AudioManager {
   private audioContext: AudioContext | null = null;
   private enabled: boolean = true;
+  private currentLocale: Locale = 'en';
 
   private getContext(): AudioContext {
     if (!this.audioContext) {
@@ -13,6 +16,37 @@ class AudioManager {
 
   setEnabled(enabled: boolean) {
     this.enabled = enabled;
+  }
+
+  setLocale(locale: Locale) {
+    this.currentLocale = locale;
+  }
+
+  narrate(text: string, locale?: Locale) {
+    if (!this.enabled) return;
+    
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+      
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = locale || this.currentLocale;
+      utterance.rate = 0.9;
+      utterance.pitch = 1;
+      
+      const voices = window.speechSynthesis.getVoices();
+      const preferredVoice = voices.find(v => v.lang.startsWith(locale || this.currentLocale));
+      if (preferredVoice) {
+        utterance.voice = preferredVoice;
+      }
+      
+      window.speechSynthesis.speak(utterance);
+    }
+  }
+
+  stopNarration() {
+    if ('speechSynthesis' in window) {
+      window.speechSynthesis.cancel();
+    }
   }
 
   playTone(frequency: number, duration: number, type: OscillatorType = 'sine', volume: number = 0.3) {

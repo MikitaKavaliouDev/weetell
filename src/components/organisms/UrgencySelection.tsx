@@ -15,6 +15,7 @@ export default function UrgencySelection({ onNext }: UrgencySelectionProps) {
   const setUrgencyLevel = useAssessmentStore((state) => state.setUrgencyLevel);
   const locale = useAssessmentStore((state) => state.locale);
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
+  const showTextLabels = useAssessmentStore((state) => state.showTextLabels);
 
   useEffect(() => {
     const subtitle = locale === 'de' ? 'Wie dringend ist es?' : 'How urgent is it?';
@@ -75,7 +76,7 @@ export default function UrgencySelection({ onNext }: UrgencySelectionProps) {
             </div>
             <div className="flex-1">
               <h3 className={`text-lg font-bold ${option.color}`}>{option.title}</h3>
-              <p className="text-sm text-neutral-500 mt-0.5">{option.desc}</p>
+              {showTextLabels && <p className="text-sm text-neutral-500 mt-0.5">{option.desc}</p>}
             </div>
           </motion.div>
         ))}

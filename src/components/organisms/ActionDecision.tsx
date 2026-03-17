@@ -15,6 +15,7 @@ export default function ActionDecision({ onNext }: ActionDecisionProps) {
   const setActionDecision = useAssessmentStore((state) => state.setActionDecision);
   const locale = useAssessmentStore((state) => state.locale);
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
+  const showTextLabels = useAssessmentStore((state) => state.showTextLabels);
 
   useEffect(() => {
     const subtitle = locale === 'de' ? 'Was möchten Sie tun?' : 'What would you like to do?';
@@ -47,9 +48,9 @@ export default function ActionDecision({ onNext }: ActionDecisionProps) {
           </div>
           <div className="flex-1">
             <h3 className="text-xl font-bold text-[#10B981]">Wait & Monitor</h3>
-            <p className="text-sm text-neutral-500 mt-1">
+            {showTextLabels && <p className="text-sm text-neutral-500 mt-1">
               Home care instructions & video guide
-            </p>
+            </p>}
           </div>
           <Clock className="w-6 h-6 text-[#10B981]" />
         </motion.div>
@@ -65,9 +66,9 @@ export default function ActionDecision({ onNext }: ActionDecisionProps) {
           </div>
           <div className="flex-1">
             <h3 className="text-xl font-bold text-[#EF4444]">See a Doctor</h3>
-            <p className="text-sm text-neutral-500 mt-1">
+            {showTextLabels && <p className="text-sm text-neutral-500 mt-1">
               Find medical help nearby
-            </p>
+            </p>}
           </div>
           <GraduationCap className="w-6 h-6 text-[#EF4444]" />
         </motion.div>
