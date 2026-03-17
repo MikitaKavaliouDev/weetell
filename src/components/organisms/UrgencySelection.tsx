@@ -3,22 +3,32 @@
 import { motion } from 'framer-motion';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import type { UrgencyLevel } from '@/stores/useAssessmentStore';
-import { Clock, AlertTriangle, Siren, GraduationCap } from 'lucide-react';
+import { Clock, AlertTriangle, Siren, Check, MapPin } from 'lucide-react';
 import { audioManager } from '@/lib/audio';
 import { useEffect } from 'react';
+import { getUrgencyForTemperature } from '@/data/symptom-graph';
+import { useRouter } from 'next/navigation';
 
-interface UrgencySelectionProps {
+interface UrgencyRecommendationProps {
   onNext: () => void;
 }
 
-export default function UrgencySelection({ onNext }: UrgencySelectionProps) {
-  const setUrgencyLevel = useAssessmentStore((state) => state.setUrgencyLevel);
+export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationProps) {
+  const router = useRouter();
+  const severity = useAssessmentStore((state) => state.severity);
+  const bodyPart = useAssessmentStore((state) => state.bodyPart);
+  const ageGroup = useAssessmentStore((state) => state.ageGroup);
+  const symptom = useAssessmentStore((state) => state.symptom);
   const locale = useAssessmentStore((state) => state.locale);
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
   const showTextLabels = useAssessmentStore((state) => state.showTextLabels);
 
+  const urgencyLevel = getUrgencyForTemperature(bodyPart || 'head', ageGroup || 'child', symptom || 'fever', severity || 37.5);
+
   useEffect(() => {
-    const subtitle = locale === 'de' ? 'Wie dringend ist es?' : 'How urgent is it?';
+    const subtitle = locale === 'de' 
+      ? 'Empfohlene Dringlichkeitsstufe basierend auf Ihrer Temperatur'
+      : 'Recommended urgency level based on your temperature';
     setCurrentSubtitle(subtitle);
     audioManager.narrate(subtitle, locale);
     return () => {
@@ -27,62 +37,109 @@ export default function UrgencySelection({ onNext }: UrgencySelectionProps) {
     };
   }, [locale, setCurrentSubtitle]);
 
-  const handleSelect = (level: UrgencyLevel) => {
-    audioManager.playSound('success');
-    setUrgencyLevel(level);
-    setTimeout(onNext, 300);
-  };
-
-  const urgencyOptions: { level: UrgencyLevel; icon: typeof Clock; color: string; bgColor: string; title: string; desc: string }[] = [
-    {
-      level: 'routine',
+  const urgencyConfig: Record<string, { icon: typeof Clock; color: string; bgColor: string; title: string; titleDe: string; desc: string; descDe: string }> = {
+    routine: {
       icon: Clock,
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
-      title: locale === 'de' ? 'Routine' : 'Routine',
-      desc: locale === 'de' ? 'Termin in den nächsten Tagen' : 'Appointment within days',
+      title: 'Routine',
+      titleDe: 'Routine',
+      desc: 'Schedule an appointment within 2-3 days',
+      descDe: 'Vereinbaren Sie einen Termin in 2-3 Tagen',
     },
-    {
-      level: 'urgent',
+    urgent: {
       icon: AlertTriangle,
       color: 'text-amber-600',
       bgColor: 'bg-amber-50',
-      title: locale === 'de' ? 'Dringend' : 'Urgent',
-      desc: locale === 'de' ? 'Heute noch behandeln lassen' : 'Seek care today',
+      title: 'Urgent',
+      titleDe: 'Dringend',
+      desc: 'Seek medical attention today',
+      descDe: 'Suchen Sie noch heute medizinische Hilfe',
     },
-    {
-      level: 'emergency',
+    emergency: {
       icon: Siren,
       color: 'text-red-600',
       bgColor: 'bg-red-50',
-      title: locale === 'de' ? 'Notfall' : 'Emergency',
-      desc: locale === 'de' ? 'Sofortige medizinische Hilfe' : 'Immediate medical attention',
+      title: 'Emergency',
+      titleDe: 'Notfall',
+      desc: 'Seek immediate medical attention',
+      descDe: 'Sofortige medizinische Hilfe erforderlich',
     },
-  ];
+  };
+
+  const config = urgencyConfig[urgencyLevel];
+
+  const handleProceed = () => {
+    audioManager.playSound('success');
+    onNext();
+  };
+
+  const handleFindDoctor = () => {
+    audioManager.playSound('click');
+    router.push('/results');
+  };
 
   return (
     <div className="flex flex-col items-center justify-center h-full pt-4 pb-8 px-6">
-      <h2 className="text-2xl font-bold text-[#4a4a40] mb-8 text-center">
-        {locale === 'de' ? 'Wie dringend ist es?' : 'How urgent is it?'}
+      <h2 className="text-2xl font-bold text-[#4a4a40] mb-2 text-center">
+        {locale === 'de' ? 'Empfohlene Stufe' : 'Recommended Level'}
       </h2>
 
-      <div className="flex flex-col gap-4 w-full max-w-md">
-        {urgencyOptions.map((option) => (
-          <motion.div
-            key={option.level}
-            whileTap={{ scale: 0.98 }}
-            onClick={() => handleSelect(option.level)}
-            className={`cursor-pointer bg-white border-2 ${option.level === 'emergency' ? 'border-red-500' : option.level === 'urgent' ? 'border-amber-500' : 'border-blue-500'} rounded-3xl p-5 flex items-center gap-4 shadow-sm`}
-          >
-            <div className={`w-14 h-14 ${option.bgColor} rounded-2xl flex items-center justify-center`}>
-              <option.icon className={`w-7 h-7 ${option.color}`} />
-            </div>
-            <div className="flex-1">
-              <h3 className={`text-lg font-bold ${option.color}`}>{option.title}</h3>
-              {showTextLabels && <p className="text-sm text-neutral-500 mt-0.5">{option.desc}</p>}
-            </div>
-          </motion.div>
-        ))}
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.2 }}
+        className={`w-full max-w-md border-2 ${urgencyLevel === 'emergency' ? 'border-red-500' : urgencyLevel === 'urgent' ? 'border-amber-500' : 'border-blue-500'} bg-white rounded-3xl p-6 shadow-lg mb-6`}
+      >
+        <div className="flex items-center gap-5">
+          <div className={`w-20 h-20 ${config.bgColor} rounded-2xl flex items-center justify-center`}>
+            <config.icon className={`w-10 h-10 ${config.color}`} />
+          </div>
+          <div className="flex-1">
+            <h3 className={`text-2xl font-bold ${config.color}`}>
+              {locale === 'de' ? config.titleDe : config.title}
+            </h3>
+            {showTextLabels && (
+              <p className="text-neutral-500 mt-1">
+                {locale === 'de' ? config.descDe : config.desc}
+              </p>
+            )}
+          </div>
+          <div className={`w-12 h-12 ${config.bgColor} rounded-full flex items-center justify-center`}>
+            <Check className={`w-6 h-6 ${config.color}`} />
+          </div>
+        </div>
+      </motion.div>
+
+      {severity && (
+        <div className="text-center mb-6">
+          <p className="text-neutral-500 text-sm">
+            {locale === 'de' ? 'Basierend auf' : 'Based on'} 
+            <span className="font-bold text-neutral-800"> {severity}°C </span>
+            {locale === 'de' ? 'Fieber' : 'fever'}
+          </p>
+        </div>
+      )}
+
+      <div className="flex flex-col gap-3 w-full max-w-md">
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={handleProceed}
+          className="w-full bg-[#4a4a40] text-white rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold shadow-lg"
+        >
+          <MapPin size={20} />
+          {locale === 'de' ? 'Arzt finden' : 'Find a Doctor'}
+        </motion.button>
+
+        <motion.button
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          onClick={handleFindDoctor}
+          className="w-full bg-white border-2 border-neutral-200 text-neutral-700 rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold"
+        >
+          {locale === 'de' ? 'Zur Karte' : 'View Map'}
+        </motion.button>
       </div>
     </div>
   );

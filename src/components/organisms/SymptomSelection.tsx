@@ -2,7 +2,7 @@
 
 import { motion } from 'framer-motion';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
-import { SYMPTOM_GRAPH } from '@/data/symptom-graph';
+import { getSymptomsForBodyAndAge } from '@/data/symptom-graph';
 import BodyPartIllustration from '@/components/atoms/BodyPartIllustrations';
 import { Check, Thermometer } from 'lucide-react';
 import { audioManager } from '@/lib/audio';
@@ -18,6 +18,7 @@ const SYMPTOM_ICONS: Record<string, React.ComponentType<{ className?: string }>>
 
 export default function SymptomSelection({ onNext }: SymptomSelectionProps) {
   const bodyPart = useAssessmentStore((state) => state.bodyPart);
+  const ageGroup = useAssessmentStore((state) => state.ageGroup);
   const symptom = useAssessmentStore((state) => state.symptom);
   const setSymptom = useAssessmentStore((state) => state.setSymptom);
   const locale = useAssessmentStore((state) => state.locale);
@@ -25,7 +26,8 @@ export default function SymptomSelection({ onNext }: SymptomSelectionProps) {
   const showTextLabels = useAssessmentStore((state) => state.showTextLabels);
 
   const currentPart = bodyPart || 'head';
-  const symptoms = SYMPTOM_GRAPH[currentPart] || [];
+  const currentAgeGroup = ageGroup || 'child';
+  const symptoms = getSymptomsForBodyAndAge(currentPart, currentAgeGroup);
 
   useEffect(() => {
     const subtitle = locale === 'de' ? 'Welche Symptome?' : 'What symptoms?';

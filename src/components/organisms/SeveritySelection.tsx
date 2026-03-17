@@ -8,6 +8,7 @@ import ThermometerSVG from '../molecules/ThermometerSVG';
 import VideoPlayer from '../molecules/VideoPlayer';
 import { Play } from 'lucide-react';
 import { audioManager } from '@/lib/audio';
+import { getVideoForTemperature } from '@/data/symptom-graph';
 
 interface SeveritySelectionProps {
   onNext: () => void;
@@ -21,6 +22,9 @@ const TEMPERATURES = [
 
 export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   const setSeverity = useAssessmentStore((state) => state.setSeverity);
+  const severity = useAssessmentStore((state) => state.severity);
+  const bodyPart = useAssessmentStore((state) => state.bodyPart);
+  const symptom = useAssessmentStore((state) => state.symptom);
   const [selectedTemp, setSelectedTemp] = useState<number | null>(null);
   const [showVideo, setShowVideo] = useState(false);
   const locale = useAssessmentStore((state) => state.locale);
@@ -54,6 +58,10 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
     setShowVideo(false);
   };
 
+  const currentTemp = selectedTemp || severity;
+  const ageGroup = useAssessmentStore((state) => state.ageGroup);
+  const videoUrl = getVideoForTemperature(bodyPart || 'head', ageGroup || 'child', symptom || 'fever', currentTemp || 37.5, locale);
+
   return (
     <div className="flex flex-col items-center justify-between h-full pt-4 pb-8 relative">
       <AnimatePresence mode="wait">
@@ -66,7 +74,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
             className="w-full max-w-md"
           >
             <VideoPlayer 
-              src="/videos/fever-guide.mp4" 
+              src={videoUrl || '/videos/fever-guide.mp4'}
               locale={locale}
               onEnded={handleVideoEnded}
             />

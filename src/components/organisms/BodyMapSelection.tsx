@@ -1,18 +1,29 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import BodySVG from '@/components/molecules/BodySVG';
-import { Rotate3D, Crosshair } from 'lucide-react';
+import { Rotate3D, Crosshair, Check, ArrowRight } from 'lucide-react';
 import { audioManager } from '@/lib/audio';
 
 interface BodyMapSelectionProps {
   onNext: () => void;
 }
 
+const BODY_PART_NAMES: Record<string, { en: string; de: string }> = {
+  head: { en: 'Head', de: 'Kopf' },
+  chest: { en: 'Chest', de: 'Brust' },
+  stomach: { en: 'Abdomen', de: 'Bauch' },
+  arms: { en: 'Arms', de: 'Arme' },
+  legs: { en: 'Legs', de: 'Beine' },
+  back: { en: 'Back', de: 'Rücken' },
+  skin: { en: 'Skin', de: 'Haut' },
+};
+
 export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
   const [view, setView] = useState<'front' | 'back'>('front');
+  const [selectedPartId, setSelectedPartId] = useState<string | null>(null);
   const setBodyPart = useAssessmentStore((state) => state.setBodyPart);
   const selectedPart = useAssessmentStore((state) => state.bodyPart);
   const ageGroup = useAssessmentStore((state) => state.ageGroup);
@@ -31,8 +42,22 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
 
   const handlePartClick = (partId: string) => {
     audioManager.playSound('click');
-    setBodyPart(partId);
-    setTimeout(onNext, 400);
+    setSelectedPartId(partId);
+    
+    const partName = locale === 'de' ? BODY_PART_NAMES[partId]?.de : BODY_PART_NAMES[partId]?.en;
+    const confirmationText = locale === 'de' 
+      ? `${partName} ausgewählt` 
+      : `${partName} selected`;
+    
+    setCurrentSubtitle(confirmationText);
+  };
+
+  const handleConfirm = () => {
+    if (selectedPartId) {
+      audioManager.playSound('success');
+      setBodyPart(selectedPartId);
+      onNext();
+    }
   };
 
   return (
@@ -45,8 +70,6 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
       </div>
       
       <div className="relative w-full flex-1 flex items-center justify-center max-h-[600px]">
-        {/* Background glow for premium feel - kept gentle */}
-        
         <BodySVG 
           view={view} 
           ageGroup={ageGroup} 
@@ -55,7 +78,36 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
         />
       </div>
 
-      {/* Back toggle button */}
+      <AnimatePresence>
+        {selectedPartId && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="absolute bottom-32 left-0 right-0 flex flex-col items-center gap-3"
+          >
+            <div className="bg-wee-blue text-white px-8 py-4 rounded-2xl flex items-center gap-3 shadow-lg">
+              <Check size={24} />
+              <span className="font-bold text-lg">
+                {locale === 'de' 
+                  ? BODY_PART_NAMES[selectedPartId]?.de 
+                  : BODY_PART_NAMES[selectedPartId]?.en}
+              </span>
+            </div>
+            
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleConfirm}
+              className="bg-[#4a4a40] text-white px-8 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg"
+            >
+              {locale === 'de' ? 'Bestätigen' : 'Confirm'}
+              <ArrowRight size={20} />
+            </motion.button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <motion.button
         onClick={() => setView(view === 'front' ? 'back' : 'front')}
         className="mt-4 flex items-center gap-2 px-6 py-3 bg-[#C5A880] text-white rounded-full font-semibold shadow-md"
