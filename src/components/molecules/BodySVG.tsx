@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 
 interface BodySVGProps {
   view: 'front' | 'back';
-  ageGroup: 'baby' | 'child' | null;
+  ageGroup: 'baby' | 'child' | 'teen' | null;
   selectedPart: string | null;
   onPartClick: (partId: string) => void;
 }
@@ -47,16 +47,25 @@ const SILHOUETTE_PATH = `
 
 // simplified zones that lay over the body for clicking
 
-const ZONES = [
+const FRONT_ZONES = [
   { id: 'head', d: 'M150 40 C 90 40 80 100 85 130 C 85 160 215 160 215 130 C 220 100 210 40 150 40 Z' },
   { id: 'chest', d: 'M120 162 L 180 162 L 180 220 L 120 220 Z' },
   { id: 'stomach', d: 'M120 220 L 180 220 L 180 280 L 120 280 Z' },
   { id: 'arms', d: 'M120 162 Q 90 170 70 200 Q 50 230 55 250 L 75 250 Q 85 240 95 210 L 95 210 L 120 190 Z M180 162 Q 210 170 230 200 Q 250 230 245 250 L 225 250 Q 215 240 205 210 L 205 210 L 180 190 Z' },
-  { id: 'legs', d: 'M120 280 L 180 280 L 180 290 L 195 380 L 225 380 L 220 360 L 205 280 L 205 280 L 95 280 L 95 280 L 80 360 L 75 380 L 105 380 L 120 290 Z' }
+  { id: 'legs', d: 'M120 280 L 180 280 L 180 290 L 195 380 L 225 380 L 220 360 L 205 280 L 205 280 L 95 280 L 95 280 L 80 360 L 75 380 L 105 380 L 120 290 Z' },
+  { id: 'skin', d: 'M120 162 L 180 162 L 180 280 L 120 280 Z' },
+];
+
+const BACK_ZONES = [
+  { id: 'head', d: 'M150 40 C 90 40 80 100 85 130 C 85 160 215 160 215 130 C 220 100 210 40 150 40 Z' },
+  { id: 'back', d: 'M120 162 L 180 162 L 180 280 L 120 280 Z' },
+  { id: 'arms', d: 'M120 162 Q 90 170 70 200 Q 50 230 55 250 L 75 250 Q 85 240 95 210 L 95 210 L 120 190 Z M180 162 Q 210 170 230 200 Q 250 230 245 250 L 225 250 Q 215 240 205 210 L 205 210 L 180 190 Z' },
+  { id: 'legs', d: 'M120 280 L 180 280 L 180 290 L 195 380 L 225 380 L 220 360 L 205 280 L 205 280 L 95 280 L 95 280 L 80 360 L 75 380 L 105 380 L 120 290 Z' },
+  { id: 'skin', d: 'M85 130 C 85 100 115 40 150 40 C 185 40 215 100 215 130 C 215 160 85 160 85 130 Z M120 162 L 180 162 L 180 280 L 120 280 Z' },
 ];
 
 export default function BodySVG({ view, ageGroup, selectedPart, onPartClick }: BodySVGProps) {
-  // We ignore 'view' and 'ageGroup' for the visual match as per screenshot (which shows one generic child)
+  const zones = view === 'back' ? BACK_ZONES : FRONT_ZONES;
   
   return (
     <svg viewBox="0 0 300 420" className="w-[80%] max-h-[60vh] drop-shadow-sm overflow-visible mx-auto">
@@ -103,7 +112,7 @@ export default function BodySVG({ view, ageGroup, selectedPart, onPartClick }: B
       />
 
       {/* 2. Interactive Zones (Invisible but clickable) */}
-      {ZONES.map((zone) => {
+      {zones.map((zone) => {
         const isSelected = selectedPart === zone.id;
         return (
           <motion.path

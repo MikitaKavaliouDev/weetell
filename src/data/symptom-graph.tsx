@@ -33,4 +33,16 @@ export const SYMPTOM_GRAPH: Record<string, Symptom[]> = {
     { id: 'numbness', label: 'Numbness' },
     { id: 'rash_arms', label: 'Rash' },
   ],
+  back: [
+    { id: 'back_pain', label: 'Back Pain' },
+    { id: 'stiffness', label: 'Stiffness' },
+    { id: 'rash_back', label: 'Rash' },
+  ],
+  skin: [
+    { id: 'rash', label: 'Rash' },
+    { id: 'itching', label: 'Itching' },
+    { id: 'hives', label: 'Hives' },
+    { id: 'bumps', label: 'Bumps' },
+    { id: 'discoloration', label: 'Discoloration' },
+  ],
 };

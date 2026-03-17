@@ -34,6 +34,17 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
           onPartClick={handlePartClick} 
         />
       </div>
+
+      {/* Back toggle button */}
+      <motion.button
+        onClick={() => setView(view === 'front' ? 'back' : 'front')}
+        className="mt-4 flex items-center gap-2 px-6 py-3 bg-[#C5A880] text-white rounded-full font-semibold shadow-md"
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+      >
+        <Rotate3D className="w-5 h-5" />
+        {view === 'front' ? 'Show Back' : 'Show Front'}
+      </motion.button>
     </div>
   );
 }
