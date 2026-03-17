@@ -4,7 +4,7 @@ import { useQueryState } from 'nuqs';
 import { Suspense } from 'react';
 import AgeSelection from '@/components/organisms/AgeSelection';
 import WeetellLogo from '@/components/molecules/WeetellLogo';
-import { Menu, ArrowLeft } from 'lucide-react';
+import { Menu, ArrowLeft, Home } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import SettingsMenu from '@/components/molecules/SettingsMenu';
@@ -31,6 +31,12 @@ function CheckupWizard() {
   const [step, setStep] = useQueryState('step', { defaultValue: STEPS.AGE });
   const router = useRouter();
   const actionDecision = useAssessmentStore((state) => state.actionDecision);
+  const resetAssessment = useAssessmentStore((state) => state.resetAssessment);
+
+  const handleRestart = () => {
+    resetAssessment();
+    router.push('/start');
+  };
 
   useEffect(() => {
     if (step === STEPS.RESULTS) {
@@ -77,12 +83,15 @@ function CheckupWizard() {
     <div className="min-h-screen bg-white flex flex-col">
        {/* Header */}
        <div className="flex justify-between items-center px-6 pt-8 pb-4">
-         <div className="flex items-center gap-4">
-             <button onClick={() => router.back()} className="text-neutral-400 hover:text-neutral-600 transition-colors">
-                 <ArrowLeft size={32} strokeWidth={2.5} />
-             </button>
-             <WeetellLogo />
-         </div>
+          <div className="flex items-center gap-4">
+              <button onClick={() => router.back()} className="text-neutral-400 hover:text-neutral-600 transition-colors">
+                  <ArrowLeft size={32} strokeWidth={2.5} />
+              </button>
+              <WeetellLogo />
+              <button onClick={handleRestart} className="text-neutral-400 hover:text-neutral-600 transition-colors" title="Restart">
+                  <Home size={28} strokeWidth={2.5} />
+              </button>
+          </div>
          <div className="flex items-center gap-2">
              <SettingsMenu />
              <button className="text-yellow-500 hover:text-yellow-600 transition-colors">

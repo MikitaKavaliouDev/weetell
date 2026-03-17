@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Play, CheckCircle, Clock, Thermometer, Droplets, X, Pill } from 'lucide-react';
+import { ArrowLeft, Play, CheckCircle, Clock, Thermometer, Droplets, X, Pill, AlertTriangle, Phone } from 'lucide-react';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import VideoPlayer from '@/components/molecules/VideoPlayer';
 
@@ -14,10 +14,17 @@ export default function HomeCarePage() {
   const [showVideo, setShowVideo] = useState(false);
 
   const careTips = [
-    { icon: Thermometer, title: 'Monitor Temperature', desc: 'Check temperature every 4 hours' },
-    { icon: Droplets, title: 'Stay Hydrated', desc: 'Give plenty of fluids' },
-    { icon: Clock, title: 'Rest', desc: 'Ensure adequate sleep and rest' },
-    { icon: CheckCircle, title: 'Medication', desc: 'Use fever reducer if needed' },
+    { icon: Thermometer, title: 'Monitor Temperature', titleDe: 'Temperatur messen', desc: 'Check temperature every 4 hours', descDe: 'Temperatur alle 4 Stunden messen' },
+    { icon: Droplets, title: 'Stay Hydrated', titleDe: 'Flüssigkeit geben', desc: 'Give plenty of fluids', descDe: 'Kind mit Flüssigkeiten versorgen' },
+    { icon: Clock, title: 'Rest', titleDe: 'Ruhe', desc: 'Ensure adequate sleep and rest', descDe: 'Für ausreichend Ruhe sorgen' },
+    { icon: CheckCircle, title: 'Medication', titleDe: 'Medikamente', desc: 'Use fever reducer if needed', descDe: 'Fiebersenkende Medikamente bei Bedarf' },
+  ];
+
+  const warningSigns = [
+    { text: 'Stiff neck or severe headache', textDe: 'Nackensteife oder starke Kopfschmerzen' },
+    { text: 'Difficulty breathing', textDe: 'Atemnot' },
+    { text: 'Rash that doesn\'t fade', textDe: 'Ausschlag, der nicht verblasst' },
+    { text: 'Seizures or convulsions', textDe: 'Krampfanfälle' },
   ];
 
   return (
@@ -79,8 +86,8 @@ export default function HomeCarePage() {
           </div>
         </motion.div>
 
-        <h2 className="text-lg font-bold text-neutral-800 mb-4">Care Instructions</h2>
-        <div className="space-y-3 mb-8">
+        <h2 className="text-lg font-bold text-neutral-800 mb-4">{locale === 'de' ? 'Pflegeanleitung' : 'Care Instructions'}</h2>
+        <div className="space-y-3 mb-6">
           {careTips.map((tip, index) => (
             <motion.div
               key={tip.title}
@@ -93,11 +100,34 @@ export default function HomeCarePage() {
                 <tip.icon className="w-6 h-6 text-[#10B981]" />
               </div>
               <div>
-                <h3 className="font-bold text-neutral-800">{tip.title}</h3>
-                <p className="text-sm text-neutral-500">{tip.desc}</p>
+                <h3 className="font-bold text-neutral-800">{locale === 'de' ? tip.titleDe : tip.title}</h3>
+                <p className="text-sm text-neutral-500">{locale === 'de' ? tip.descDe : tip.desc}</p>
               </div>
             </motion.div>
           ))}
+        </div>
+
+        {/* Warning Signs Section */}
+        <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6">
+          <div className="flex items-center gap-2 mb-3">
+            <AlertTriangle className="w-5 h-5 text-amber-600" />
+            <h3 className="font-bold text-amber-800">{locale === 'de' ? 'Warnzeichen - Arzt rufen' : 'Warning Signs - Seek Medical Help'}</h3>
+          </div>
+          <ul className="space-y-2">
+            {warningSigns.map((warning) => (
+              <li key={warning.text} className="flex items-start gap-2 text-sm text-amber-900">
+                <span className="text-amber-600 mt-0.5">•</span>
+                {locale === 'de' ? warning.textDe : warning.text}
+              </li>
+            ))}
+          </ul>
+          <button
+            onClick={() => router.push('/results')}
+            className="mt-3 w-full flex items-center justify-center gap-2 bg-amber-100 hover:bg-amber-200 text-amber-800 rounded-xl py-2 text-sm font-medium transition-colors"
+          >
+            <Phone size={16} />
+            {locale === 'de' ? 'Jetzt Arzt suchen' : 'Find a Doctor Now'}
+          </button>
         </div>
 
         <motion.button

@@ -38,15 +38,15 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
           className="cursor-pointer flex flex-col items-center gap-4"
         >
           <div className="relative w-32 h-32 md:w-40 md:h-40">
-             <Image 
-                src="/baby.png" 
-                alt="Baby 0-3 years" 
-                fill 
-                className="object-contain object-bottom"
-                priority
-             />
-          </div>
-          {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">0-3</span>}
+              <Image 
+                 src="/baby.png" 
+                 alt={locale === 'de' ? 'Baby 0-3 Jahre' : 'Baby 0-3 years'} 
+                 fill 
+                 className="object-contain object-bottom"
+                 priority
+              />
+           </div>
+          {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">{locale === 'de' ? '0-3' : '0-3'}</span>}
         </motion.div>
 
         {/* Child Option */}
@@ -56,15 +56,15 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
           className="cursor-pointer flex flex-col items-center gap-4"
         >
           <div className="relative w-40 h-56 md:w-48 md:h-64">
-             <Image 
+              <Image 
                 src="/child.png" 
-                alt="Child 3+ years" 
+                alt={locale === 'de' ? 'Kind 3-11 Jahre' : 'Child 3-11 years'} 
                 fill 
                 className="object-contain object-bottom"
                 priority
-             />
+              />
           </div>
-          {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">3+</span>}
+          {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">{locale === 'de' ? '3-11' : '3-11'}</span>}
         </motion.div>
 
         {/* Teen Option */}
@@ -74,15 +74,15 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
           className="cursor-pointer flex flex-col items-center gap-4"
         >
           <div className="relative w-40 h-56 md:w-48 md:h-64">
-             <Image 
+              <Image 
                 src="/teen.png" 
-                alt="Teen 12-21 years" 
+                alt={locale === 'de' ? 'Teenager 12-21 Jahre' : 'Teen 12-21 years'} 
                 fill 
                 className="object-contain object-bottom"
                 priority
-             />
+              />
           </div>
-          {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">12-21</span>}
+          {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">{locale === 'de' ? '12-21' : '12-21'}</span>}
         </motion.div>
     </div>
   );
