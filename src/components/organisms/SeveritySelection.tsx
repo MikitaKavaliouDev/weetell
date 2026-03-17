@@ -29,8 +29,11 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   useEffect(() => {
     const subtitle = locale === 'de' ? 'Wie hoch ist das Fieber?' : 'How high is the fever?';
     setCurrentSubtitle(subtitle);
-    audioManager.playSound('narrative');
-    return () => setCurrentSubtitle('');
+    audioManager.narrate(subtitle, locale);
+    return () => {
+      setCurrentSubtitle('');
+      audioManager.stopNarration();
+    };
   }, [locale, setCurrentSubtitle]);
 
   const handleSelect = (val: number) => {
@@ -100,7 +103,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                       }`}
                       style={{ fontFamily: 'inherit' }}
                     >
-                      <span className="relative font-handwritten">
+                      <span className="relative font-bold">
                         {temp.label}
                         {temp.unit && (
                           <span className="absolute top-0 -right-5 text-3xl align-top">

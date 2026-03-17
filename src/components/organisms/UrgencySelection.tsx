@@ -20,8 +20,11 @@ export default function UrgencySelection({ onNext }: UrgencySelectionProps) {
   useEffect(() => {
     const subtitle = locale === 'de' ? 'Wie dringend ist es?' : 'How urgent is it?';
     setCurrentSubtitle(subtitle);
-    audioManager.playSound('narrative');
-    return () => setCurrentSubtitle('');
+    audioManager.narrate(subtitle, locale);
+    return () => {
+      setCurrentSubtitle('');
+      audioManager.stopNarration();
+    };
   }, [locale, setCurrentSubtitle]);
 
   const handleSelect = (level: UrgencyLevel) => {

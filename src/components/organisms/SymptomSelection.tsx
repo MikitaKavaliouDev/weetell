@@ -4,9 +4,9 @@ import { motion } from 'framer-motion';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import { SYMPTOM_GRAPH } from '@/data/symptom-graph';
 import BodyPartIllustration from '@/components/atoms/BodyPartIllustrations';
-import { Check, Thermometer, Droplets, Wind, Activity } from 'lucide-react';
+import { Check, Thermometer } from 'lucide-react';
 import { audioManager } from '@/lib/audio';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 
 interface SymptomSelectionProps {
   onNext: () => void;
@@ -14,9 +14,6 @@ interface SymptomSelectionProps {
 
 const SYMPTOM_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   fever: Thermometer,
-  sweating: Droplets,
-  chills: Wind,
-  flushed: Activity,
 };
 
 export default function SymptomSelection({ onNext }: SymptomSelectionProps) {
@@ -33,8 +30,11 @@ export default function SymptomSelection({ onNext }: SymptomSelectionProps) {
   useEffect(() => {
     const subtitle = locale === 'de' ? 'Welche Symptome?' : 'What symptoms?';
     setCurrentSubtitle(subtitle);
-    audioManager.playSound('narrative');
-    return () => setCurrentSubtitle('');
+    audioManager.narrate(subtitle, locale);
+    return () => {
+      setCurrentSubtitle('');
+      audioManager.stopNarration();
+    };
   }, [locale, setCurrentSubtitle]);
 
   const handleSelectSymptom = (symptomId: string) => {

@@ -1,13 +1,14 @@
 'use client';
 
 import { useQueryState } from 'nuqs';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import AgeSelection from '@/components/organisms/AgeSelection';
 import WeetellLogo from '@/components/molecules/WeetellLogo';
-import { Menu, ArrowLeft, Home } from 'lucide-react';
+import { Menu, ArrowLeft, Home, Smartphone } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import SettingsMenu from '@/components/molecules/SettingsMenu';
+import QRCodeModal from '@/components/molecules/QRCodeModal';
 
 // Step components
 import BodyMapSelection from '@/components/organisms/BodyMapSelection';
@@ -29,6 +30,7 @@ const STEPS = {
 
 function CheckupWizard() {
   const [step, setStep] = useQueryState('step', { defaultValue: STEPS.AGE });
+  const [showQR, setShowQR] = useState(false);
   const router = useRouter();
   const actionDecision = useAssessmentStore((state) => state.actionDecision);
   const resetAssessment = useAssessmentStore((state) => state.resetAssessment);
@@ -92,13 +94,18 @@ function CheckupWizard() {
                   <Home size={28} strokeWidth={2.5} />
               </button>
           </div>
-         <div className="flex items-center gap-2">
-             <SettingsMenu />
-             <button className="text-yellow-500 hover:text-yellow-600 transition-colors">
-                 <Menu size={32} strokeWidth={3} />
-             </button>
-         </div>
-       </div>
+          <div className="flex items-center gap-2">
+              <button onClick={() => setShowQR(true)} className="text-neutral-400 hover:text-neutral-600 transition-colors" title="Open on Mobile">
+                  <Smartphone size={28} strokeWidth={2.5} />
+              </button>
+              <SettingsMenu />
+              <button className="text-yellow-500 hover:text-yellow-600 transition-colors">
+                  <Menu size={32} strokeWidth={3} />
+              </button>
+          </div>
+        </div>
+
+        <QRCodeModal isOpen={showQR} onClose={() => setShowQR(false)} />
 
        <div className="w-full max-w-2xl mx-auto flex-1 flex flex-col justify-center p-6">
          {renderStep()}

@@ -23,7 +23,7 @@ export default function SplashPage() {
         className="relative z-10 flex items-center"
       >
         {/* Large "Wee" Text - Brand Blue */}
-        <h1 className="text-[120px] leading-none font-bold text-wee-blue tracking-tighter drop-shadow-sm" style={{ fontFamily: 'var(--font-quicksand)' }}>
+        <h1 className="text-[120px] leading-none font-bold text-wee-blue tracking-tighter drop-shadow-sm">
           Wee
         </h1>
       </motion.div>

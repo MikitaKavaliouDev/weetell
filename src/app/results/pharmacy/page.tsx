@@ -18,8 +18,11 @@ export default function PharmacyPage() {
       ? 'Ihr Apotheker kann Sie zu altersgerechten Medikamenten beraten.' 
       : 'Your pharmacist can advise you on age-appropriate medications.';
     setCurrentSubtitle(narrative);
-    audioManager.playSound('narrative');
-    return () => setCurrentSubtitle('');
+    audioManager.narrate(narrative, locale);
+    return () => {
+      setCurrentSubtitle('');
+      audioManager.stopNarration();
+    };
   }, [locale, setCurrentSubtitle]);
 
   return (

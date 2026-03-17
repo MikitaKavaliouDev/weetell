@@ -22,8 +22,11 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
   useEffect(() => {
     const subtitle = locale === 'de' ? 'Wo tut es weh?' : 'Where does it hurt?';
     setCurrentSubtitle(subtitle);
-    audioManager.playSound('narrative');
-    return () => setCurrentSubtitle('');
+    audioManager.narrate(subtitle, locale);
+    return () => {
+      setCurrentSubtitle('');
+      audioManager.stopNarration();
+    };
   }, [locale, setCurrentSubtitle]);
 
   const handlePartClick = (partId: string) => {

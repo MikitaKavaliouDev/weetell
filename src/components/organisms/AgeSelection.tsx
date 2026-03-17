@@ -19,8 +19,11 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
   useEffect(() => {
     const subtitle = locale === 'de' ? 'Wie alt ist das Kind?' : 'How old is the child?';
     setCurrentSubtitle(subtitle);
-    audioManager.playSound('narrative');
-    return () => setCurrentSubtitle('');
+    audioManager.narrate(subtitle, locale);
+    return () => {
+      setCurrentSubtitle('');
+      audioManager.stopNarration();
+    };
   }, [locale, setCurrentSubtitle]);
 
   const handleSelect = (age: AgeGroup) => {

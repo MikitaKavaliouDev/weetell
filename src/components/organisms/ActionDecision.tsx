@@ -20,8 +20,11 @@ export default function ActionDecision({ onNext }: ActionDecisionProps) {
   useEffect(() => {
     const subtitle = locale === 'de' ? 'Was möchten Sie tun?' : 'What would you like to do?';
     setCurrentSubtitle(subtitle);
-    audioManager.playSound('narrative');
-    return () => setCurrentSubtitle('');
+    audioManager.narrate(subtitle, locale);
+    return () => {
+      setCurrentSubtitle('');
+      audioManager.stopNarration();
+    };
   }, [locale, setCurrentSubtitle]);
 
   const handleSelect = (decision: ActionDecisionType) => {
