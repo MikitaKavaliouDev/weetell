@@ -61,15 +61,15 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-full pt-4 pb-4 px-6">
-      <div className="flex items-center gap-3 mb-4">
+    <div className="flex flex-col items-center h-full pt-4 pb-28 px-6 w-full">
+      <div className="flex items-center gap-3 mb-4 shrink-0">
         <Crosshair className="w-8 h-8 text-[#C5A880]" />
         <h2 className="text-2xl font-bold text-[#4a4a40]">
           {locale === 'de' ? 'Wo tut es weh?' : 'Where does it hurt?'}
         </h2>
       </div>
       
-      <div className="relative w-full flex-1 flex items-center justify-center max-h-[600px]">
+      <div className="relative w-full flex-1 flex items-center justify-center min-h-0 max-h-[600px]">
         <BodySVG 
           view={view} 
           ageGroup={ageGroup} 
@@ -78,45 +78,48 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
         />
       </div>
 
-      <AnimatePresence>
-        {selectedPartId && (
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 20 }}
-            className="absolute bottom-32 left-0 right-0 flex flex-col items-center gap-3"
-          >
-            <div className="bg-wee-blue text-white px-8 py-4 rounded-2xl flex items-center gap-3 shadow-lg">
-              <Check size={24} />
-              <span className="font-bold text-lg">
-                {locale === 'de' 
-                  ? BODY_PART_NAMES[selectedPartId]?.de 
-                  : BODY_PART_NAMES[selectedPartId]?.en}
-              </span>
-            </div>
-            
-            <motion.button
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-              onClick={handleConfirm}
-              className="bg-[#4a4a40] text-white px-8 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg"
+      <div className="shrink-0 flex flex-col items-center w-full gap-3 mt-4">
+        <AnimatePresence>
+          {selectedPartId && (
+            <motion.div
+              initial={{ opacity: 0, height: 0, overflow: 'hidden' }}
+              animate={{ opacity: 1, height: 'auto', overflow: 'visible' }}
+              exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
+              className="flex flex-col items-center gap-3 w-full"
             >
-              {locale === 'de' ? 'Bestätigen' : 'Confirm'}
-              <ArrowRight size={20} />
-            </motion.button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              <div className="bg-wee-blue text-white px-8 py-3 rounded-2xl flex items-center gap-3 shadow-lg mt-2">
+                <Check size={24} />
+                <span className="font-bold text-lg">
+                  {locale === 'de' 
+                    ? BODY_PART_NAMES[selectedPartId]?.de 
+                    : BODY_PART_NAMES[selectedPartId]?.en}
+                </span>
+              </div>
+              
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={handleConfirm}
+                className="bg-[#4a4a40] text-white px-8 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg mb-1"
+              >
+                {locale === 'de' ? 'Bestätigen' : 'Confirm'}
+                <ArrowRight size={20} />
+              </motion.button>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
-      <motion.button
-        onClick={() => setView(view === 'front' ? 'back' : 'front')}
-        className="mt-4 flex items-center gap-2 px-6 py-3 bg-[#C5A880] text-white rounded-full font-semibold shadow-md"
-        whileHover={{ scale: 1.05 }}
-        whileTap={{ scale: 0.95 }}
-      >
-        <Rotate3D className="w-5 h-5" />
-        {view === 'front' ? 'Show Back' : 'Show Front'}
-      </motion.button>
+        <motion.button
+          layout
+          onClick={() => setView(view === 'front' ? 'back' : 'front')}
+          className="flex items-center gap-2 px-6 py-3 bg-[#C5A880] text-white rounded-full font-semibold shadow-md"
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+        >
+          <Rotate3D className="w-5 h-5" />
+          {view === 'front' ? 'Show Back' : 'Show Front'}
+        </motion.button>
+      </div>
     </div>
   );
 }

@@ -107,7 +107,7 @@ function CheckupWizard() {
 
         <QRCodeModal isOpen={showQR} onClose={() => setShowQR(false)} />
 
-       <div className="w-full max-w-2xl mx-auto flex-1 flex flex-col justify-center p-6">
+       <div className="w-full max-w-2xl mx-auto flex-1 flex flex-col  p-6">
          {renderStep()}
        </div>
     </div>
