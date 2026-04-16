@@ -5,6 +5,7 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { audioManager } from '@/lib/audio';
 import { Volume2, VolumeX, Check } from 'lucide-react';
+import Image from 'next/image';
 
 export default function SplashPage() {
   const router = useRouter();
@@ -37,19 +38,13 @@ export default function SplashPage() {
       >
         {/* Logo Area */}
         <div className="flex items-center justify-center mb-16 relative w-full">
-          <h1 
-            className="text-[100px] leading-none font-bold text-[#0088cc] tracking-tighter pr-12" 
-            style={{ fontFamily: 'cursive, sans-serif', fontStyle: 'italic' }}
-          >
-            Wee
-          </h1>
-          <div className="absolute right-12 top-2">
-            <div className="bg-[#ffcc00] text-white rounded-3xl px-4 py-1.5 text-2xl font-bold relative">
-              child
-              {/* Speech bubble tail */}
-              <div className="absolute bottom-0 left-2 w-4 h-4 bg-[#ffcc00] transform rotate-45 rounded-sm -z-10 translate-y-1 -translate-x-1"></div>
-            </div>
-          </div>
+          <Image
+            src="/WEEtell_Logo.svg"
+            alt="Weetell"
+            width={400}
+            height={267}
+            priority
+          />
         </div>
 
         {/* Checkbox Area */}
