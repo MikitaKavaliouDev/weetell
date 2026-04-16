@@ -70,7 +70,7 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
           {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">{locale === 'de' ? '3-11' : '3-11'}</span>}
         </motion.div>
 
-        {/* Teen Option */}
+        {/* Teen Option - Commented out for now
         <motion.div
           whileTap={{ scale: 0.95 }}
           onClick={() => handleSelect('teen')}
@@ -87,6 +87,7 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
           </div>
           {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">{locale === 'de' ? '12-21' : '12-21'}</span>}
         </motion.div>
+        */}
     </div>
   );
 }
