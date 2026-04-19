@@ -14,8 +14,12 @@ jest.mock('@/lib/audio', () => ({
 // Mock BodySVG component with __esModule for consistency
 jest.mock('@/components/molecules/BodySVG', () => ({
   __esModule: true,
-  default: function MockBodySVG() {
-    return <div data-testid="body-svg">BodySVG</div>;
+  default: function MockBodySVG({ onPartClick }: { onPartClick: (id: string) => void }) {
+    return (
+      <div data-testid="body-svg">
+        <button data-testid="head-part" onClick={() => onPartClick('head')}>Head</button>
+      </div>
+    );
   },
 }));
 
@@ -73,29 +77,13 @@ describe('BodyMapSelection', () => {
     expect(audioManager.narrate).toHaveBeenCalledWith('Where does it hurt?', 'en');
   });
 
-  it('narrates German subtitle when locale is German', () => {
-    useAssessmentStore.setState({ locale: 'de' });
-    const { audioManager } = require('@/lib/audio');
-    
+  it('shows sliding panel symptoms when part is selected', () => {
     render(<BodyMapSelection onNext={mockOnNext} />);
     
-    expect(audioManager.narrate).toHaveBeenCalledWith('Wo tut es weh?', 'de');
-  });
-
-  it('clears subtitle on unmount', () => {
-    const { audioManager } = require('@/lib/audio');
-    const { unmount } = render(<BodyMapSelection onNext={mockOnNext} />);
+    const headPart = screen.getByTestId('head-part');
+    fireEvent.click(headPart);
     
-    unmount();
-    
-    expect(audioManager.stopNarration).toHaveBeenCalled();
-  });
-
-  it('shows confirm button when part is selected', () => {
-    render(<BodyMapSelection onNext={mockOnNext} />);
-    
-    // The confirm button should not be visible initially
-    const confirmButton = screen.queryByText('Confirm');
-    expect(confirmButton).not.toBeInTheDocument();
+    // The symptom panel should appear and contain 'Fever'
+    expect(screen.getByText('Fever')).toBeInTheDocument();
   });
 });

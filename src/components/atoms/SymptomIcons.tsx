@@ -53,6 +53,7 @@ export default function SymptomIcon({ id, selected, className = '' }: SymptomIco
             <path d="M80 60 L 90 65" stroke={strokeLineColor} strokeWidth="2" />
          </Wrapper>
       );
+    case 'fever':
     case 'fever_head':
       return (
         <Wrapper>
@@ -171,7 +172,7 @@ export default function SymptomIcon({ id, selected, className = '' }: SymptomIco
     default:
       return (
         <Wrapper>
-          <text x="50" y="60" textAnchor="middle" fontSize="40" fill={strokeLineColor}>?</text>
+          <text x="50" y="65" textAnchor="middle" fontSize="50" fill={strokeLineColor} fontWeight="bold">?</text>
         </Wrapper>
       );
   }

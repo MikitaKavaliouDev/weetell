@@ -1,0 +1,5 @@
+- [x] Add a reset button to the counter.
+- [x] Implement sliding off-canvas symptom selection panel in BodyMapSelection
+- [x] Merge Symptom and Body selection steps in the main wizard flow
+- [x] Update SeveritySelection to display non-selectable temperatures with Video/Chair/Doctor action buttons
+- [x] Update tests and symptom-graph data to match the new UI constraints

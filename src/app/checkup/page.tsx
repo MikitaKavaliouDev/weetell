@@ -12,18 +12,14 @@ import QRCodeModal from '@/components/molecules/QRCodeModal';
 
 // Step components
 import BodyMapSelection from '@/components/organisms/BodyMapSelection';
-import SymptomSelection from '@/components/organisms/SymptomSelection';
 import SeveritySelection from '@/components/organisms/SeveritySelection';
-import ActionDecision from '@/components/organisms/ActionDecision';
 import UrgencySelection from '@/components/organisms/UrgencySelection';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 
 const STEPS = {
   AGE: 'age',
   BODY: 'body',
-  SYMPTOM: 'symptom',
   SEVERITY: 'severity',
-  ACTION: 'action',
   URGENCY: 'urgency',
   RESULTS: 'results',
 };
@@ -32,7 +28,6 @@ function CheckupWizard() {
   const [step, setStep] = useQueryState('step', { defaultValue: STEPS.AGE });
   const [showQR, setShowQR] = useState(false);
   const router = useRouter();
-  const actionDecision = useAssessmentStore((state) => state.actionDecision);
   const resetAssessment = useAssessmentStore((state) => state.resetAssessment);
   const locale = useAssessmentStore((state) => state.locale);
 
@@ -47,26 +42,14 @@ function CheckupWizard() {
     }
   }, [step, router]);
 
-  const handleActionNext = () => {
-    if (actionDecision === 'wait') {
-      router.push('/results/home-care');
-    } else {
-      setStep(STEPS.URGENCY);
-    }
-  };
-
   const renderStep = () => {
     switch (step) {
       case STEPS.AGE:
         return <AgeSelection onNext={() => setStep(STEPS.BODY)} />;
       case STEPS.BODY:
-        return <BodyMapSelection onNext={() => setStep(STEPS.SYMPTOM)} />;
-      case STEPS.SYMPTOM:
-        return <SymptomSelection onNext={() => setStep(STEPS.SEVERITY)} />;
+        return <BodyMapSelection onNext={() => setStep(STEPS.SEVERITY)} />;
       case STEPS.SEVERITY:
-        return <SeveritySelection onNext={() => setStep(STEPS.ACTION)} />;
-      case STEPS.ACTION:
-        return <ActionDecision onNext={handleActionNext} />;
+        return <SeveritySelection onNext={() => setStep(STEPS.URGENCY)} />;
       case STEPS.URGENCY:
         return <UrgencySelection onNext={() => setStep(STEPS.RESULTS)} />;
       case STEPS.RESULTS:
@@ -85,7 +68,7 @@ function CheckupWizard() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
        {/* Header */}
-       <div className="flex justify-between items-center px-6 pt-8 pb-4">
+       <div className="flex justify-between items-center px-6 pt-8 pb-4 z-10">
           <div className="flex items-center gap-4">
               <button onClick={() => router.back()} className="text-neutral-400 hover:text-neutral-600 transition-colors">
                   <ArrowLeft size={32} strokeWidth={2.5} />
@@ -106,7 +89,7 @@ function CheckupWizard() {
 
         <QRCodeModal isOpen={showQR} onClose={() => setShowQR(false)} />
 
-       <div className="w-full max-w-2xl mx-auto flex-1 flex flex-col  p-6">
+       <div className="w-full max-w-2xl mx-auto flex-1 flex flex-col p-6 relative">
          {renderStep()}
        </div>
     </div>

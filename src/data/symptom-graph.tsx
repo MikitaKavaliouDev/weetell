@@ -50,12 +50,12 @@ const FEVER_DATA: Symptom = {
   labelDe: 'Fieber',
   labelEs: 'Fiebre',
   labelTr: 'Ateş',
-  icon: 'thermometer',
+  icon: 'fever',
   videoUrl: '/videos/high_fever_en.mp4',
   videoUrlDe: '/videos/high_fever_de.mp4',
   videoUrlEs: '/videos/high_fever_es.mp4',
   videoUrlTr: '/videos/high_fever_tr.mp4',
-  temperatureRanges: [
+  temperatureRanges:[
     { maxTemp: 37.5, videoUrl: '/videos/low_fever_en.mp4', videoUrlDe: '/videos/low_fever_de.mp4', videoUrlEs: '/videos/low_fever_es.mp4', videoUrlTr: '/videos/low_fever_tr.mp4', urgency: 'routine' },
     { maxTemp: 39.0, videoUrl: '/videos/medium_fever_en.mp4', videoUrlDe: '/videos/medium_fever_de.mp4', videoUrlEs: '/videos/medium_fever_es.mp4', videoUrlTr: '/videos/medium_fever_tr.mp4', urgency: 'routine' },
     { maxTemp: 40.0, videoUrl: '/videos/high_fever_en.mp4', videoUrlDe: '/videos/high_fever_de.mp4', videoUrlEs: '/videos/high_fever_es.mp4', videoUrlTr: '/videos/high_fever_tr.mp4', urgency: 'urgent' },
@@ -65,7 +65,7 @@ const FEVER_DATA: Symptom = {
     titleDe: 'Fieberpflege',
     titleEs: 'Cuidado de la Fiebre',
     titleTr: 'Ateş Bakımı',
-    steps: [
+    steps:[
       { text: 'Monitor temperature every 4 hours', textDe: 'Temperatur alle 4 Stunden messen', textEs: 'Controle la temperatura cada 4 horas', textTr: 'Her 4 saatte bir sıcaklığı kontrol edin' },
       { text: 'Keep child hydrated with fluids', textDe: 'Kind mit Flüssigkeiten versorgen', textEs: 'Mantenga al niño hidratado con líquidos', textTr: 'Çocuğu sıvılarla hidrate edin' },
       { text: 'Ensure adequate rest and sleep', textDe: 'Für ausreichend Ruhe sorgen', textEs: 'Asegure descanso y sueño adecuados', textTr: 'Yeterli dinlenme ve uyku sağlayın' },
@@ -88,11 +88,15 @@ const FEVER_DATA: Symptom = {
   },
 };
 
+const HEADACHE_DATA: Symptom = { ...FEVER_DATA, id: 'headache', label: 'Headache', labelDe: 'Kopfschmerzen', labelEs: 'Dolor de cabeza', labelTr: 'Baş ağrısı', icon: 'headache' };
+const DIZZINESS_DATA: Symptom = { ...FEVER_DATA, id: 'dizziness', label: 'Dizziness', labelDe: 'Schwindel', labelEs: 'Mareo', labelTr: 'Baş dönmesi', icon: 'dizziness' };
+const VISION_DATA: Symptom = { ...FEVER_DATA, id: 'vision', label: 'Vision', labelDe: 'Sicht', labelEs: 'Visión', labelTr: 'Görme', icon: 'vision' };
+
 export const SYMPTOM_GRAPH: Record<string, Record<AgeGroup, Symptom[]>> = {
   head: {
-    baby: [FEVER_DATA],
-    child: [FEVER_DATA],
-    teen: [FEVER_DATA],
+    baby:[FEVER_DATA, HEADACHE_DATA, DIZZINESS_DATA, VISION_DATA],
+    child:[FEVER_DATA, HEADACHE_DATA, DIZZINESS_DATA, VISION_DATA],
+    teen:[FEVER_DATA, HEADACHE_DATA, DIZZINESS_DATA, VISION_DATA],
   },
   chest: {
     baby: [FEVER_DATA],
@@ -100,19 +104,19 @@ export const SYMPTOM_GRAPH: Record<string, Record<AgeGroup, Symptom[]>> = {
     teen: [FEVER_DATA],
   },
   stomach: {
-    baby: [FEVER_DATA],
+    baby:[FEVER_DATA],
     child: [FEVER_DATA],
     teen: [FEVER_DATA],
   },
   arms: {
     baby: [FEVER_DATA],
-    child: [FEVER_DATA],
+    child:[FEVER_DATA],
     teen: [FEVER_DATA],
   },
   legs: {
     baby: [FEVER_DATA],
     child: [FEVER_DATA],
-    teen: [FEVER_DATA],
+    teen:[FEVER_DATA],
   },
   back: {
     baby: [FEVER_DATA],
@@ -129,7 +133,7 @@ export const SYMPTOM_GRAPH: Record<string, Record<AgeGroup, Symptom[]>> = {
 export function getSymptomsForBodyAndAge(bodyPart: string, ageGroup: AgeGroup): Symptom[] {
   const bodyPartData = SYMPTOM_GRAPH[bodyPart];
   if (!bodyPartData) return [];
-  return bodyPartData[ageGroup] || [];
+  return bodyPartData[ageGroup] ||[];
 }
 
 export function getSymptomById(bodyPart: string, ageGroup: AgeGroup, symptomId: string): Symptom | undefined {

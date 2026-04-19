@@ -33,6 +33,13 @@ jest.mock('@/data/symptom-graph', () => ({
   getVideoForTemperature: jest.fn(() => '/videos/test.mp4'),
 }));
 
+// Mock useRouter
+jest.mock('next/navigation', () => ({
+  useRouter: () => ({
+    push: jest.fn(),
+  }),
+}));
+
 describe('SeveritySelection', () => {
   const mockOnNext = jest.fn();
 
@@ -54,18 +61,18 @@ describe('SeveritySelection', () => {
     expect(screen.getByTestId('thermometer')).toBeInTheDocument();
   });
 
-  it('renders temperature options', () => {
+  it('renders static temperature text', () => {
     render(<SeveritySelection onNext={mockOnNext} />);
     
     expect(screen.getByText('37,5')).toBeInTheDocument();
     expect(screen.getByText('38')).toBeInTheDocument();
-    expect(screen.getByText('40')).toBeInTheDocument();
+    expect(screen.getByText('40°C')).toBeInTheDocument();
   });
 
   it('renders play button for video', () => {
     render(<SeveritySelection onNext={mockOnNext} />);
     
-    // The play button should exist (it's a button with Play icon)
+    // The play button should exist (it's a button with Play icon, and image buttons)
     const playButtons = document.querySelectorAll('button');
     expect(playButtons.length).toBeGreaterThan(0);
   });
@@ -73,7 +80,7 @@ describe('SeveritySelection', () => {
   it('narrates subtitle on mount', () => {
     render(<SeveritySelection onNext={mockOnNext} />);
     
-    expect(audio.audioManager.narrate).toHaveBeenCalledWith('How high is the fever?', 'en');
+    expect(audio.audioManager.narrate).toHaveBeenCalledWith('What would you like to do?', 'en');
   });
 
   it('narrates German subtitle when locale is German', () => {
@@ -81,7 +88,7 @@ describe('SeveritySelection', () => {
     
     render(<SeveritySelection onNext={mockOnNext} />);
     
-    expect(audio.audioManager.narrate).toHaveBeenCalledWith('Wie hoch ist das Fieber?', 'de');
+    expect(audio.audioManager.narrate).toHaveBeenCalledWith('Was möchten Sie tun?', 'de');
   });
 
   it('clears subtitle on unmount', () => {
@@ -92,36 +99,15 @@ describe('SeveritySelection', () => {
     expect(audio.audioManager.stopNarration).toHaveBeenCalled();
   });
 
-  it('calls playSound when temperature is selected', async () => {
+  it('calls onNext after doctor button click', async () => {
     render(<SeveritySelection onNext={mockOnNext} />);
     
-    const tempButton = screen.getByText('38');
-    fireEvent.click(tempButton);
-    
-    await waitFor(() => {
-      expect(audio.audioManager.playSound).toHaveBeenCalledWith('click');
-    }, { timeout: 500 });
-  });
-
-  it('calls onNext after temperature selection', async () => {
-    render(<SeveritySelection onNext={mockOnNext} />);
-    
-    const tempButton = screen.getByText('40');
-    fireEvent.click(tempButton);
+    const doctorButton = screen.getByAltText('Doctor');
+    fireEvent.click(doctorButton);
     
     await waitFor(() => {
       expect(mockOnNext).toHaveBeenCalled();
-    }, { timeout: 600 });
-  });
-
-  it('sets severity in store when temperature is selected', async () => {
-    render(<SeveritySelection onNext={mockOnNext} />);
-    
-    const tempButton = screen.getByText('38');
-    fireEvent.click(tempButton);
-    
-    await waitFor(() => {
-      expect(useAssessmentStore.getState().severity).toBe(38);
-    }, { timeout: 500 });
+      expect(useAssessmentStore.getState().actionDecision).toBe('doctor');
+    });
   });
 });
