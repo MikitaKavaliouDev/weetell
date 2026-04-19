@@ -2,8 +2,18 @@
 
 import { motion } from 'framer-motion';
 import { MapPin, Navigation } from 'lucide-react';
+import { useAssessmentStore } from '@/stores/useAssessmentStore';
+
+const TRANSLATIONS = {
+  en: { locationLabel: 'Current Location', locationValue: 'Berlin, Germany' },
+  de: { locationLabel: 'Aktueller Standort', locationValue: 'Berlin, Deutschland' },
+  es: { locationLabel: 'Ubicación Actual', locationValue: 'Berlín, Alemania' },
+  tr: { locationLabel: 'Mevcut Konum', locationValue: 'Berlin, Almanya' },
+} as const;
 
 export default function MapPage() {
+  const locale = useAssessmentStore((state) => state.locale);
+  const t = TRANSLATIONS[locale] ?? TRANSLATIONS.en;
   return (
     <div className="relative min-h-screen bg-slate-200 w-full overflow-hidden">
        {/* Mock Map Background Layer */}
@@ -20,10 +30,10 @@ export default function MapPage() {
              <div className="bg-blue-100 text-blue-500 p-2 rounded-lg">
                 <Navigation size={20} />
              </div>
-             <div>
-                <h3 className="font-bold">Current Location</h3>
-                <p className="text-xs text-neutral-500">Berlin, Germany</p>
-             </div>
+<div>
+                 <h3 className="font-bold">{t.locationLabel}</h3>
+                 <p className="text-xs text-neutral-500">{t.locationValue}</p>
+              </div>
           </div>
        </div>
 

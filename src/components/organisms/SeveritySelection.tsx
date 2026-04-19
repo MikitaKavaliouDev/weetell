@@ -31,7 +31,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
 
   useEffect(() => {
-    const subtitle = locale === 'de' ? 'Wie hoch ist das Fieber?' : 'How high is the fever?';
+    const subtitle = locale === 'de' ? 'Wie hoch ist das Fieber?' : locale === 'es' ? '¿Qué tan alta es la fiebre?' : locale === 'tr' ? 'Ateş ne kadar yüksek?' : 'How high is the fever?';
     setCurrentSubtitle(subtitle);
     audioManager.narrate(subtitle, locale);
     return () => {

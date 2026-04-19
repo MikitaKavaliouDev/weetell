@@ -1,7 +1,14 @@
-export default function WeetellLogo() {
+import Image from "next/image";
+
+
+export default function WeetellLogo({ className }: { className?: string }) {
   return (
-    <svg width="80" height="40" viewBox="0 0 80 40" fill="none" xmlns="http://www.w3.org/2000/svg">
-         <text x="0" y="30" fontFamily="cursive, sans-serif" fontSize="32" fontWeight="bold" fill="#2563EB" style={{ fontStyle: 'italic' }}>Wee</text>
-    </svg>
+    <Image
+      src="/WEEtell_Logo.svg"
+      alt="Weetell Logo"
+      width={120}
+      height={40}
+      className={className}
+    />
   );
 }

@@ -17,7 +17,11 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
 
   useEffect(() => {
-    const subtitle = locale === 'de' ? 'Wie alt ist das Kind?' : 'How old is the child?';
+    const subtitle =
+      locale === 'de' ? 'Wie alt ist das Kind?' :
+      locale === 'es' ? '¿Cuántos años tiene el niño?' :
+      locale === 'tr' ? 'Çocuk kaç yaşında?' :
+      'How old is the child?';
     setCurrentSubtitle(subtitle);
     audioManager.narrate(subtitle, locale);
     return () => {
@@ -33,7 +37,7 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
   };
 
   return (
-    <div className="flex flex-row items-end justify-center gap-8 w-full h-full pb-20">
+    <div className="flex flex-row items-end justify-center gap-8 w-full h-full pb-10">
         {/* Baby Option */}
         <motion.div
           whileTap={{ scale: 0.95 }}
@@ -43,13 +47,13 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
           <div className="relative w-32 h-32 md:w-40 md:h-40">
               <Image 
                  src="/baby.png" 
-                 alt={locale === 'de' ? 'Baby 0-3 Jahre' : 'Baby 0-3 years'} 
+                 alt={locale === 'de' ? 'Baby 0-3 Jahre' : locale === 'es' ? 'Bebé 0-3 años' : locale === 'tr' ? 'Bebek 0-3 yaş' : 'Baby 0-3 years'} 
                  fill 
                  className="object-contain object-bottom"
                  priority
               />
            </div>
-          {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">{locale === 'de' ? '0-3' : '0-3'}</span>}
+          {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">0-3</span>}
         </motion.div>
 
         {/* Child Option */}
@@ -61,13 +65,13 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
           <div className="relative w-40 h-56 md:w-48 md:h-64">
               <Image 
                 src="/child.png" 
-                alt={locale === 'de' ? 'Kind 3-11 Jahre' : 'Child 3-11 years'} 
+                alt={locale === 'de' ? 'Kind 3-11 Jahre' : locale === 'es' ? 'Niño 3-11 años' : locale === 'tr' ? 'Çocuk 3-11 yaş' : 'Child 3-11 years'} 
                 fill 
                 className="object-contain object-bottom"
                 priority
               />
           </div>
-          {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">{locale === 'de' ? '3-11' : '3-11'}</span>}
+          {showTextLabels && <span className="text-3xl font-bold text-[#C5A880]">3-11</span>}
         </motion.div>
 
         {/* Teen Option - Commented out for now

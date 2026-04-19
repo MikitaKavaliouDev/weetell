@@ -33,9 +33,7 @@ export default function StartPage() {
         <WeetellLogo />
         <div className="flex items-center gap-2">
             <SettingsMenu />
-            <button className="text-yellow-500 hover:text-yellow-600 transition-colors">
-                <Menu size={32} strokeWidth={3} />
-            </button>
+           
         </div>
       </div>
 

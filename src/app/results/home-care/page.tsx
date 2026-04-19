@@ -6,25 +6,31 @@ import { useRouter } from 'next/navigation';
 import { ArrowLeft, Play, CheckCircle, Clock, Thermometer, Droplets, X, Pill, AlertTriangle, Phone } from 'lucide-react';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import VideoPlayer from '@/components/molecules/VideoPlayer';
+import { getVideoForTemperature } from '@/data/symptom-graph';
 
 export default function HomeCarePage() {
   const router = useRouter();
   const severity = useAssessmentStore((state) => state.severity);
   const locale = useAssessmentStore((state) => state.locale);
+  const bodyPart = useAssessmentStore((state) => state.bodyPart);
+  const ageGroup = useAssessmentStore((state) => state.ageGroup);
+  const symptom = useAssessmentStore((state) => state.symptom);
   const [showVideo, setShowVideo] = useState(false);
 
+  const videoUrl = getVideoForTemperature(bodyPart || 'head', ageGroup || 'child', symptom || 'fever', severity || 37.5, locale);
+
   const careTips = [
-    { icon: Thermometer, title: 'Monitor Temperature', titleDe: 'Temperatur messen', desc: 'Check temperature every 4 hours', descDe: 'Temperatur alle 4 Stunden messen' },
-    { icon: Droplets, title: 'Stay Hydrated', titleDe: 'Flüssigkeit geben', desc: 'Give plenty of fluids', descDe: 'Kind mit Flüssigkeiten versorgen' },
-    { icon: Clock, title: 'Rest', titleDe: 'Ruhe', desc: 'Ensure adequate sleep and rest', descDe: 'Für ausreichend Ruhe sorgen' },
-    { icon: CheckCircle, title: 'Medication', titleDe: 'Medikamente', desc: 'Use fever reducer if needed', descDe: 'Fiebersenkende Medikamente bei Bedarf' },
+    { icon: Thermometer, title: 'Monitor Temperature', titleDe: 'Temperatur messen', titleEs: 'Monitorizar Temperatura', titleTr: 'Sıcaklığı Kontrol Et', desc: 'Check temperature every 4 hours', descDe: 'Temperatur alle 4 Stunden messen', descEs: 'Controle la temperatura cada 4 horas', descTr: 'Her 4 saatte bir sıcaklığı kontrol edin' },
+    { icon: Droplets, title: 'Stay Hydrated', titleDe: 'Flüssigkeit geben', titleEs: 'Mantenerse Hidratado', titleTr: 'Sıvı Verin', desc: 'Give plenty of fluids', descDe: 'Kind mit Flüssigkeiten versorgen', descEs: 'Mantenga al niño hidratado con líquidos', descTr: 'Çocuğu sıvılarla hidrate edin' },
+    { icon: Clock, title: 'Rest', titleDe: 'Ruhe', titleEs: 'Descanso', titleTr: 'Dinlendirin', desc: 'Ensure adequate sleep and rest', descDe: 'Für ausreichend Ruhe sorgen', descEs: 'Asegure descanso y sueño adecuados', descTr: 'Yeterli dinlenme sağlayın' },
+    { icon: CheckCircle, title: 'Medication', titleDe: 'Medikamente', titleEs: 'Medicación', titleTr: 'İlaç', desc: 'Use fever reducer if needed', descDe: 'Fiebersenkende Medikamente bei Bedarf', descEs: 'Use medicamento antifebril si es necesario', descTr: 'Gerekirse ateş düşürücü kullanın' },
   ];
 
   const warningSigns = [
-    { text: 'Stiff neck or severe headache', textDe: 'Nackensteife oder starke Kopfschmerzen' },
-    { text: 'Difficulty breathing', textDe: 'Atemnot' },
-    { text: 'Rash that doesn\'t fade', textDe: 'Ausschlag, der nicht verblasst' },
-    { text: 'Seizures or convulsions', textDe: 'Krampfanfälle' },
+    { text: 'Stiff neck or severe headache', textDe: 'Nackensteife oder starke Kopfschmerzen', textEs: 'Cuello rígido o dolor de cabeza intenso', textTr: 'Boyun sertliği veya şiddetli baş ağrısı' },
+    { text: 'Difficulty breathing', textDe: 'Atemnot', textEs: 'Dificultad para respirar', textTr: 'Nefes almada zorluk' },
+    { text: 'Rash that doesn\'t fade', textDe: 'Ausschlag, der nicht verblasst', textEs: 'Sarpullido que no desaparece', textTr: 'Geçmeyen döküntü' },
+    { text: 'Seizures or convulsions', textDe: 'Krampfanfälle', textEs: 'Convulsiones o espasmos', textTr: 'Nöbetler veya kasılmalar' },
   ];
 
   return (
@@ -45,7 +51,7 @@ export default function HomeCarePage() {
                 <X size={24} />
               </button>
               <VideoPlayer
-                src="/videos/high_fever_en.mp4"
+                src={videoUrl}
                 locale={locale}
                 onEnded={() => setShowVideo(false)}
               />
@@ -62,9 +68,9 @@ export default function HomeCarePage() {
           >
             <ArrowLeft size={20} />
           </button>
-          <h1 className="text-2xl font-bold text-white">Home Care Guide</h1>
+          <h1 className="text-2xl font-bold text-white">{locale === 'de' ? 'Pflegeanleitung' : locale === 'es' ? 'Guía de Cuidado en Casa' : locale === 'tr' ? 'Ev Bakımı Rehberi' : 'Home Care Guide'}</h1>
         </div>
-        <p className="text-white/80">Fever monitoring & treatment</p>
+        <p className="text-white/80">{locale === 'de' ? 'Fieberüberwachung und -behandlung' : locale === 'es' ? 'Monitoreo y tratamiento de fiebre' : locale === 'tr' ? 'Ateş takibi ve tedavisi' : 'Fever monitoring & treatment'}</p>
       </div>
 
       <div className="flex-1 px-6 py-8 max-w-md mx-auto w-full">
@@ -75,7 +81,7 @@ export default function HomeCarePage() {
         >
           <div className="flex items-center justify-between">
             <div>
-              <p className="text-sm text-neutral-500 mb-1">Current Fever</p>
+              <p className="text-sm text-neutral-500 mb-1">{locale === 'de' ? 'Aktuelles Fieber' : locale === 'es' ? 'Fiebre Actual' : locale === 'tr' ? 'Mevcut Ateş' : 'Current Fever'}</p>
               <p className="text-4xl font-bold text-[#EF4444]">
                 {severity ? `${severity}°C` : '--'}
               </p>
@@ -86,7 +92,7 @@ export default function HomeCarePage() {
           </div>
         </motion.div>
 
-        <h2 className="text-lg font-bold text-neutral-800 mb-4">{locale === 'de' ? 'Pflegeanleitung' : 'Care Instructions'}</h2>
+        <h2 className="text-lg font-bold text-neutral-800 mb-4">{locale === 'de' ? 'Pflegeanleitung' : locale === 'es' ? 'Instrucciones de Cuidado' : locale === 'tr' ? 'Bakım Talimatları' : 'Care Instructions'}</h2>
         <div className="space-y-3 mb-6">
           {careTips.map((tip, index) => (
             <motion.div
@@ -100,8 +106,8 @@ export default function HomeCarePage() {
                 <tip.icon className="w-6 h-6 text-[#10B981]" />
               </div>
               <div>
-                <h3 className="font-bold text-neutral-800">{locale === 'de' ? tip.titleDe : tip.title}</h3>
-                <p className="text-sm text-neutral-500">{locale === 'de' ? tip.descDe : tip.desc}</p>
+                <h3 className="font-bold text-neutral-800">{locale === 'de' ? tip.titleDe : locale === 'es' ? tip.titleEs : locale === 'tr' ? tip.titleTr : tip.title}</h3>
+                <p className="text-sm text-neutral-500">{locale === 'de' ? tip.descDe : locale === 'es' ? tip.descEs : locale === 'tr' ? tip.descTr : tip.desc}</p>
               </div>
             </motion.div>
           ))}
@@ -111,13 +117,13 @@ export default function HomeCarePage() {
         <div className="bg-amber-50 border border-amber-200 rounded-2xl p-4 mb-6">
           <div className="flex items-center gap-2 mb-3">
             <AlertTriangle className="w-5 h-5 text-amber-600" />
-            <h3 className="font-bold text-amber-800">{locale === 'de' ? 'Warnzeichen - Arzt rufen' : 'Warning Signs - Seek Medical Help'}</h3>
+            <h3 className="font-bold text-amber-800">{locale === 'de' ? 'Warnzeichen - Arzt rufen' : locale === 'es' ? 'Señales de Advertencia - Busque Ayuda Médica' : locale === 'tr' ? 'Uyarı İşaretleri - Tıbbi Yardım Arayın' : 'Warning Signs - Seek Medical Help'}</h3>
           </div>
           <ul className="space-y-2">
             {warningSigns.map((warning) => (
               <li key={warning.text} className="flex items-start gap-2 text-sm text-amber-900">
                 <span className="text-amber-600 mt-0.5">•</span>
-                {locale === 'de' ? warning.textDe : warning.text}
+                {locale === 'de' ? warning.textDe : locale === 'es' ? warning.textEs : locale === 'tr' ? warning.textTr : warning.text}
               </li>
             ))}
           </ul>
@@ -126,7 +132,7 @@ export default function HomeCarePage() {
             className="mt-3 w-full flex items-center justify-center gap-2 bg-amber-100 hover:bg-amber-200 text-amber-800 rounded-xl py-2 text-sm font-medium transition-colors"
           >
             <Phone size={16} />
-            {locale === 'de' ? 'Jetzt Arzt suchen' : 'Find a Doctor Now'}
+            {locale === 'de' ? 'Jetzt Arzt suchen' : locale === 'es' ? 'Encontrar un Médico Ahora' : locale === 'tr' ? 'Şimdi Doktor Bul' : 'Find a Doctor Now'}
           </button>
         </div>
 
@@ -137,7 +143,7 @@ export default function HomeCarePage() {
           className="w-full bg-[#10B981] text-white rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold shadow-lg shadow-green-500/30"
         >
           <Play fill="currentColor" size={20} />
-          Watch Care Video
+          {locale === 'de' ? 'Pflegevideo ansehen' : locale === 'es' ? 'Ver Video de Cuidado' : locale === 'tr' ? 'Bakım Videosunu İzle' : 'Watch Care Video'}
         </motion.button>
 
         <motion.button
@@ -147,14 +153,14 @@ export default function HomeCarePage() {
           className="w-full mt-4 bg-white border-2 border-[#6B8E23] text-[#6B8E23] rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold"
         >
           <Pill size={20} />
-          {locale === 'de' ? 'Apotheken-Beratung' : 'Pharmacy Advice'}
+          {locale === 'de' ? 'Apotheken-Beratung' : locale === 'es' ? 'Consejo de Farmacia' : locale === 'tr' ? 'Eczane Danışmanlığı' : 'Pharmacy Advice'}
         </motion.button>
 
         <button
           onClick={() => router.push('/checkup?step=age')}
           className="w-full mt-4 text-neutral-500 text-sm"
         >
-          Re-assess symptoms
+          {locale === 'de' ? 'Symptome neu bewerten' : locale === 'es' ? 'Reevaluar síntomas' : locale === 'tr' ? 'Semptomları Yeniden Değerlendir' : 'Re-assess symptoms'}
         </button>
       </div>
     </div>

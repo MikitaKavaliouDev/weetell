@@ -4,19 +4,24 @@ import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { audioManager } from '@/lib/audio';
+import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import { Volume2, VolumeX, Check } from 'lucide-react';
 import Image from 'next/image';
 
 export default function SplashPage() {
   const router = useRouter();
-  const[accepted, setAccepted] = useState(false);
+  const [accepted, setAccepted] = useState(false);
   const [audioEnabled, setAudioEnabled] = useState(true);
+  const locale = useAssessmentStore((state) => state.locale);
 
   const handleStart = () => {
     if (!accepted) return;
     audioManager.setEnabled(audioEnabled);
     audioManager.playSound('success');
-    audioManager.narrate('Welcome to Weetell', 'en');
+    audioManager.narrate(
+      locale === 'de' ? 'Willkommen bei Weetell' : locale === 'es' ? 'Bienvenido a Weetell' : locale === 'tr' ? 'Weetell\'e Hoş Geldiniz' : 'Welcome to Weetell',
+      locale === 'en' ? 'en' : locale === 'de' ? 'de' : locale === 'es' ? 'es' : 'tr'
+    );
     router.push('/start');
   };
 
@@ -58,11 +63,35 @@ export default function SplashPage() {
             </div>
           </div>
           <p className="text-neutral-800 text-[15px] leading-relaxed font-medium">
-            I understand this is a<br />
-            non-diagnostic educational tool.<br />
-            <br />
-            Not a substitute for<br />
-            professional medical advice.
+            {locale === 'de' ? (
+              <>
+                Ich verstehe, dass dies ein<br />
+                nicht diagnostisches Bildungswerkzeug ist.<br />
+                <br />
+                Kein Ersatz für<br />
+                professionelle medizinische Beratung.
+              </>
+            ) : locale === 'es' ? (
+              <>
+                Entiendo que esta es una<br />
+                herramienta educativa no diagnóstica.<br />
+                <br />
+                No sustituye el consejo<br />
+                médico profesional.
+              </>
+            ) : locale === 'tr' ? (
+              <>
+                Bu eğitimsel bir araç olduğunu ve profesyonel tıbbi tavsiyenin yerine geçmediğini anlıyorum.
+              </>
+            ) : (
+              <>
+                I understand this is a<br />
+                non-diagnostic educational tool.<br />
+                <br />
+                Not a substitute for<br />
+                professional medical advice.
+              </>
+            )}
           </p>
         </div>
 
@@ -76,7 +105,7 @@ export default function SplashPage() {
               : 'bg-[#e5e7eb] text-[#6b7280] cursor-not-allowed'
           }`}
         >
-          Continue
+          {locale === 'de' ? 'Weiter' : locale === 'es' ? 'Continuar' : locale === 'tr' ? 'Devam' : 'Continue'}
         </button>
       </motion.div>
 

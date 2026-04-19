@@ -5,9 +5,26 @@ import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
+import { useAssessmentStore } from '@/stores/useAssessmentStore';
+
+const TRANSLATIONS = {
+  location: {
+    en: 'Location',
+    de: 'Standort',
+    es: 'Ubicación',
+    tr: 'Konum',
+  },
+  medicine: {
+    en: 'Medicine',
+    de: 'Medizin',
+    es: 'Medicina',
+    tr: 'İlaç',
+  },
+} as const;
 
 export default function ServicePage() {
   const router = useRouter();
+  const locale = useAssessmentStore((state) => state.locale);
 
   return (
     <div className="min-h-screen bg-white flex flex-col p-6">
@@ -38,7 +55,7 @@ export default function ServicePage() {
             <div className="relative w-full h-full">
                 <Image 
                     src="/location.png" 
-                    alt="Location" 
+                    alt={TRANSLATIONS.location[locale]} 
                     fill
                     className="object-contain"
                 />
@@ -51,13 +68,13 @@ export default function ServicePage() {
             className="w-40 h-40 rounded-full bg-[#6B8E23] flex items-center justify-center p-8 hover:scale-105 transition-transform"
           >
              <div className="relative w-full h-full">
-                <Image 
-                    src="/medicine.png" 
-                    alt="Medicine" 
-                    fill
-                    className="object-contain"
-                />
-            </div>
+                 <Image 
+                     src="/medicine.png" 
+                     alt={TRANSLATIONS.medicine[locale]} 
+                     fill
+                     className="object-contain"
+                 />
+             </div>
           </button>
        </motion.div>
 

@@ -11,14 +11,14 @@ interface BodyMapSelectionProps {
   onNext: () => void;
 }
 
-const BODY_PART_NAMES: Record<string, { en: string; de: string }> = {
-  head: { en: 'Head', de: 'Kopf' },
-  chest: { en: 'Chest', de: 'Brust' },
-  stomach: { en: 'Abdomen', de: 'Bauch' },
-  arms: { en: 'Arms', de: 'Arme' },
-  legs: { en: 'Legs', de: 'Beine' },
-  back: { en: 'Back', de: 'Rücken' },
-  skin: { en: 'Skin', de: 'Haut' },
+const BODY_PART_NAMES: Record<string, { en: string; de: string; es: string; tr: string }> = {
+  head: { en: 'Head', de: 'Kopf', es: 'Cabeza', tr: 'Baş' },
+  chest: { en: 'Chest', de: 'Brust', es: 'Pecho', tr: 'Göğüs' },
+  stomach: { en: 'Abdomen', de: 'Bauch', es: 'Abdomen', tr: 'Karın' },
+  arms: { en: 'Arms', de: 'Arme', es: 'Brazos', tr: 'Kollar' },
+  legs: { en: 'Legs', de: 'Beine', es: 'Piernas', tr: 'Bacaklar' },
+  back: { en: 'Back', de: 'Rücken', es: 'Espalda', tr: 'Sırt' },
+  skin: { en: 'Skin', de: 'Haut', es: 'Piel', tr: 'Deri' },
 };
 
 export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
@@ -31,7 +31,11 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
 
   useEffect(() => {
-    const subtitle = locale === 'de' ? 'Wo tut es weh?' : 'Where does it hurt?';
+    const subtitle =
+      locale === 'de' ? 'Wo tut es weh?' :
+      locale === 'es' ? '¿Dónde le duele?' :
+      locale === 'tr' ? 'Neresinde ağrıyor?' :
+      'Where does it hurt?';
     setCurrentSubtitle(subtitle);
     audioManager.narrate(subtitle, locale);
     return () => {
@@ -44,10 +48,16 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
     audioManager.playSound('click');
     setSelectedPartId(partId);
     
-    const partName = locale === 'de' ? BODY_PART_NAMES[partId]?.de : BODY_PART_NAMES[partId]?.en;
-    const confirmationText = locale === 'de' 
-      ? `${partName} ausgewählt` 
-      : `${partName} selected`;
+    const partName =
+      locale === 'de' ? BODY_PART_NAMES[partId]?.de :
+      locale === 'es' ? BODY_PART_NAMES[partId]?.es :
+      locale === 'tr' ? BODY_PART_NAMES[partId]?.tr :
+      BODY_PART_NAMES[partId]?.en;
+    const confirmationText =
+      locale === 'de' ? `${partName} ausgewählt` :
+      locale === 'es' ? `${partName} seleccionado` :
+      locale === 'tr' ? `${partName} seçildi` :
+      `${partName} selected`;
     
     setCurrentSubtitle(confirmationText);
   };
@@ -61,11 +71,11 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
   };
 
   return (
-    <div className="flex flex-col items-center h-full pt-4 pb-28 px-6 w-full">
+    <div className="flex flex-col items-center h-full pt-4 pb-6 px-6 w-full">
       <div className="flex items-center gap-3 mb-4 shrink-0">
         <Crosshair className="w-8 h-8 text-[#C5A880]" />
         <h2 className="text-2xl font-bold text-[#4a4a40]">
-          {locale === 'de' ? 'Wo tut es weh?' : 'Where does it hurt?'}
+          {locale === 'de' ? 'Wo tut es weh?' : locale === 'es' ? '¿Dónde le duele?' : locale === 'tr' ? 'Neresinde ağrıyor?' : 'Where does it hurt?'}
         </h2>
       </div>
       
@@ -78,7 +88,7 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
         />
       </div>
 
-      <div className="shrink-0 flex flex-col items-center w-full gap-3 mt-4">
+      <div className="shrink-0 flex flex-col items-center w-full gap-4 mt-6">
         <AnimatePresence>
           {selectedPartId && (
             <motion.div
@@ -87,11 +97,15 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
               exit={{ opacity: 0, height: 0, overflow: 'hidden' }}
               className="flex flex-col items-center gap-3 w-full"
             >
-              <div className="bg-wee-blue text-white px-8 py-3 rounded-2xl flex items-center gap-3 shadow-lg mt-2">
+              <div className="bg-wee-blue text-white px-8 py-3 rounded-2xl flex items-center gap-3 shadow-lg">
                 <Check size={24} />
                 <span className="font-bold text-lg">
                   {locale === 'de' 
                     ? BODY_PART_NAMES[selectedPartId]?.de 
+                    : locale === 'es'
+                    ? BODY_PART_NAMES[selectedPartId]?.es
+                    : locale === 'tr'
+                    ? BODY_PART_NAMES[selectedPartId]?.tr
                     : BODY_PART_NAMES[selectedPartId]?.en}
                 </span>
               </div>
@@ -100,9 +114,9 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={handleConfirm}
-                className="bg-[#4a4a40] text-white px-8 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg mb-1"
+                className="bg-[#4a4a40] text-white px-8 py-3 rounded-full font-bold flex items-center gap-2 shadow-lg"
               >
-                {locale === 'de' ? 'Bestätigen' : 'Confirm'}
+                {locale === 'de' ? 'Bestätigen' : locale === 'es' ? 'Confirmar' : locale === 'tr' ? 'Onayla' : 'Confirm'}
                 <ArrowRight size={20} />
               </motion.button>
             </motion.div>
@@ -117,7 +131,7 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
           whileTap={{ scale: 0.95 }}
         >
           <Rotate3D className="w-5 h-5" />
-          {view === 'front' ? 'Show Back' : 'Show Front'}
+          {locale === 'de' ? (view === 'front' ? 'Rücken zeigen' : 'Vorne zeigen') : locale === 'es' ? (view === 'front' ? 'Mostrar Espalda' : 'Mostrar Frente') : locale === 'tr' ? (view === 'front' ? 'Sırtı Göster' : 'Önü Göster') : (view === 'front' ? 'Show Back' : 'Show Front')}
         </motion.button>
       </div>
     </div>

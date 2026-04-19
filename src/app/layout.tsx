@@ -8,7 +8,6 @@ export const metadata: Metadata = {
 
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import SubtitleOverlay from '@/components/molecules/SubtitleOverlay';
-import DisclaimerBanner from '@/components/molecules/DisclaimerBanner';
 
 export default function RootLayout({
   children,
@@ -19,7 +18,7 @@ export default function RootLayout({
     <html lang="en">
       <body className="antialiased">
         {/* Visual medical disclaimer conditionally rendered */}
-        <DisclaimerBanner />
+       
         
         <NuqsAdapter>{children}</NuqsAdapter>
         

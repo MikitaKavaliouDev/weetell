@@ -34,6 +34,7 @@ function CheckupWizard() {
   const router = useRouter();
   const actionDecision = useAssessmentStore((state) => state.actionDecision);
   const resetAssessment = useAssessmentStore((state) => state.resetAssessment);
+  const locale = useAssessmentStore((state) => state.locale);
 
   const handleRestart = () => {
     resetAssessment();
@@ -69,13 +70,13 @@ function CheckupWizard() {
       case STEPS.URGENCY:
         return <UrgencySelection onNext={() => setStep(STEPS.RESULTS)} />;
       case STEPS.RESULTS:
-        return <div className="flex justify-center p-10">Taking you to results...</div>;
+        return <div className="flex justify-center p-10">{locale === 'de' ? 'Weiterleitung zu den Ergebnissen...' : locale === 'es' ? 'Llevándote a los resultados...' : locale === 'tr' ? 'Sonuçlara yönlendiriyorum...' : 'Taking you to results...'}</div>;
       default:
         // Fallback or 404
         return (
           <div className="text-center p-10">
-            <h2 className="text-xl">Step not implemented yet: {step}</h2>
-            <button onClick={() => setStep(STEPS.AGE)} className="mt-4 text-blue-500 underline">Restart</button>
+            <h2 className="text-xl">{locale === 'de' ? 'Schritt noch nicht implementiert: ' : locale === 'es' ? 'Paso aún no implementado: ' : locale === 'tr' ? 'Adım henüz uygulanmadı: ' : 'Step not implemented yet: '}{step}</h2>
+            <button onClick={() => setStep(STEPS.AGE)} className="mt-4 text-blue-500 underline">{locale === 'de' ? 'Neustart' : locale === 'es' ? 'Reiniciar' : locale === 'tr' ? 'Yeniden Başla' : 'Restart'}</button>
           </div>
         );
     }
@@ -99,9 +100,7 @@ function CheckupWizard() {
                   <Smartphone size={28} strokeWidth={2.5} />
               </button>
               <SettingsMenu />
-              <button className="text-yellow-500 hover:text-yellow-600 transition-colors">
-                  <Menu size={32} strokeWidth={3} />
-              </button>
+             
           </div>
         </div>
 
@@ -115,8 +114,9 @@ function CheckupWizard() {
 }
 
 export default function CheckupPage() {
+  const locale = useAssessmentStore((state) => state.locale);
   return (
-    <Suspense fallback={<div className="flex h-screen items-center justify-center">Loading...</div>}>
+    <Suspense fallback={<div className="flex h-screen items-center justify-center">{locale === 'de' ? 'Wird geladen...' : locale === 'es' ? 'Cargando...' : locale === 'tr' ? 'Yükleniyor...' : 'Loading...'}</div>}>
       <CheckupWizard />
     </Suspense>
   );

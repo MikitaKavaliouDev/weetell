@@ -26,8 +26,12 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
   const urgencyLevel = getUrgencyForTemperature(bodyPart || 'head', ageGroup || 'child', symptom || 'fever', severity || 37.5);
 
   useEffect(() => {
-    const subtitle = locale === 'de' 
+    const subtitle = locale === 'de'
       ? 'Empfohlene Dringlichkeitsstufe basierend auf Ihrer Temperatur'
+      : locale === 'es'
+      ? 'Nivel de urgencia recomendado según su temperatura'
+      : locale === 'tr'
+      ? 'Sıcaklığınıza göre önerilen acililik düzeyi'
       : 'Recommended urgency level based on your temperature';
     setCurrentSubtitle(subtitle);
     audioManager.narrate(subtitle, locale);
@@ -37,15 +41,19 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
     };
   }, [locale, setCurrentSubtitle]);
 
-  const urgencyConfig: Record<string, { icon: typeof Clock; color: string; bgColor: string; title: string; titleDe: string; desc: string; descDe: string }> = {
+  const urgencyConfig: Record<string, { icon: typeof Clock; color: string; bgColor: string; title: string; titleDe: string; titleEs: string; titleTr: string; desc: string; descDe: string; descEs: string; descTr: string }> = {
     routine: {
       icon: Clock,
       color: 'text-blue-600',
       bgColor: 'bg-blue-50',
       title: 'Routine',
       titleDe: 'Routine',
+      titleEs: 'Routine',
+      titleTr: 'Routine',
       desc: 'Schedule an appointment within 2-3 days',
       descDe: 'Vereinbaren Sie einen Termin in 2-3 Tagen',
+      descEs: 'Programar una cita en 2-3 días',
+      descTr: '2-3 gün içinde randevu alın',
     },
     urgent: {
       icon: AlertTriangle,
@@ -53,8 +61,12 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
       bgColor: 'bg-amber-50',
       title: 'Urgent',
       titleDe: 'Dringend',
+      titleEs: 'Urgente',
+      titleTr: 'Acil',
       desc: 'Seek medical attention today',
       descDe: 'Suchen Sie noch heute medizinische Hilfe',
+      descEs: 'Busque atención médica hoy',
+      descTr: 'Bugün tıbbi yardım arayın',
     },
     emergency: {
       icon: Siren,
@@ -62,8 +74,12 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
       bgColor: 'bg-red-50',
       title: 'Emergency',
       titleDe: 'Notfall',
+      titleEs: 'Emergencia',
+      titleTr: 'Acil Durum',
       desc: 'Seek immediate medical attention',
       descDe: 'Sofortige medizinische Hilfe erforderlich',
+      descEs: 'Busque atención médica inmediata',
+      descTr: 'Derhal tıbbi yardım arayın',
     },
   };
 
@@ -82,7 +98,7 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
   return (
     <div className="flex flex-col items-center justify-center h-full pt-4 pb-8 px-6">
       <h2 className="text-2xl font-bold text-[#4a4a40] mb-2 text-center">
-        {locale === 'de' ? 'Empfohlene Stufe' : 'Recommended Level'}
+        {locale === 'de' ? 'Empfohlene Stufe' : locale === 'es' ? 'Nivel Recomendado' : locale === 'tr' ? 'Önerilen Seviye' : 'Recommended Level'}
       </h2>
 
       <motion.div
@@ -97,11 +113,11 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
           </div>
           <div className="flex-1">
             <h3 className={`text-2xl font-bold ${config.color}`}>
-              {locale === 'de' ? config.titleDe : config.title}
+              {locale === 'de' ? config.titleDe : locale === 'es' ? config.titleEs : locale === 'tr' ? config.titleTr : config.title}
             </h3>
             {showTextLabels && (
               <p className="text-neutral-500 mt-1">
-                {locale === 'de' ? config.descDe : config.desc}
+                {locale === 'de' ? config.descDe : locale === 'es' ? config.descEs : locale === 'tr' ? config.descTr : config.desc}
               </p>
             )}
           </div>
@@ -114,9 +130,9 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
       {severity && (
         <div className="text-center mb-6">
           <p className="text-neutral-500 text-sm">
-            {locale === 'de' ? 'Basierend auf' : 'Based on'} 
+            {locale === 'de' ? 'Basierend auf' : locale === 'es' ? 'Basado en' : locale === 'tr' ? 'Temel alınan' : 'Based on'}
             <span className="font-bold text-neutral-800"> {severity}°C </span>
-            {locale === 'de' ? 'Fieber' : 'fever'}
+            {locale === 'de' ? 'Fieber' : locale === 'es' ? 'fiebre' : locale === 'tr' ? 'ateş' : 'fever'}
           </p>
         </div>
       )}
@@ -129,7 +145,7 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
           className="w-full bg-[#4a4a40] text-white rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold shadow-lg"
         >
           <MapPin size={20} />
-          {locale === 'de' ? 'Arzt finden' : 'Find a Doctor'}
+          {locale === 'de' ? 'Arzt finden' : locale === 'es' ? 'Encontrar un Médico' : locale === 'tr' ? 'Doktor Bul' : 'Find a Doctor'}
         </motion.button>
 
         <motion.button
@@ -138,7 +154,7 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
           onClick={handleFindDoctor}
           className="w-full bg-white border-2 border-neutral-200 text-neutral-700 rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold"
         >
-          {locale === 'de' ? 'Zur Karte' : 'View Map'}
+          {locale === 'de' ? 'Zur Karte' : locale === 'es' ? 'Ver Mapa' : locale === 'tr' ? 'Haritayı Gör' : 'View Map'}
         </motion.button>
       </div>
     </div>

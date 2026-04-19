@@ -11,6 +11,7 @@ export default function SettingsMenu() {
   const showSubtitles = useAssessmentStore((state) => state.showSubtitles);
   const toggleTextLabels = useAssessmentStore((state) => state.toggleTextLabels);
   const toggleSubtitles = useAssessmentStore((state) => state.toggleSubtitles);
+  const locale = useAssessmentStore((state) => state.locale);
 
   return (
     <div className="relative z-50">
@@ -27,7 +28,11 @@ export default function SettingsMenu() {
             className="absolute top-12 right-0 bg-white shadow-xl rounded-2xl p-4 w-64 border border-neutral-100"
           >
             <div className="flex justify-between items-center mb-4">
-              <h3 className="font-bold text-neutral-800">Accessibility</h3>
+              <h3 className="font-bold text-neutral-800">{
+              locale === 'es' ? 'Accesibilidad' :
+              locale === 'tr' ? 'Erişilebilirlik' :
+              'Accessibility'
+            }</h3>
               <button onClick={() => setIsOpen(false)} className="text-neutral-400 hover:text-neutral-600">
                 <X size={20} />
               </button>
@@ -35,7 +40,11 @@ export default function SettingsMenu() {
 
             <div className="space-y-4">
               <label className="flex items-center justify-between cursor-pointer">
-                <span className="text-sm font-medium text-neutral-700">Show Text Labels</span>
+                <span className="text-sm font-medium text-neutral-700">{
+                    locale === 'es' ? 'Mostrar Etiquetas de Texto' :
+                    locale === 'tr' ? 'Metin Etiketlerini Göster' :
+                    'Show Text Labels'
+                  }</span>
                 <input
                   type="checkbox"
                   checked={showTextLabels}
@@ -44,7 +53,11 @@ export default function SettingsMenu() {
                 />
               </label>
               <label className="flex items-center justify-between cursor-pointer">
-                <span className="text-sm font-medium text-neutral-700">Show Subtitles</span>
+                <span className="text-sm font-medium text-neutral-700">{
+                    locale === 'es' ? 'Mostrar Subtítulos' :
+                    locale === 'tr' ? 'Altyazıları Göster' :
+                    'Show Subtitles'
+                  }</span>
                 <input
                   type="checkbox"
                   checked={showSubtitles}

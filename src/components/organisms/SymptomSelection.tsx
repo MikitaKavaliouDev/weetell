@@ -30,7 +30,7 @@ export default function SymptomSelection({ onNext }: SymptomSelectionProps) {
   const symptoms = getSymptomsForBodyAndAge(currentPart, currentAgeGroup);
 
   useEffect(() => {
-    const subtitle = locale === 'de' ? 'Welche Symptome?' : 'What symptoms?';
+    const subtitle = locale === 'de' ? 'Welche Symptome?' : locale === 'es' ? '¿Qué síntomas?' : locale === 'tr' ? 'Hangi semptomlar?' : 'What symptoms?';
     setCurrentSubtitle(subtitle);
     audioManager.narrate(subtitle, locale);
     return () => {
@@ -48,7 +48,7 @@ export default function SymptomSelection({ onNext }: SymptomSelectionProps) {
   return (
     <div className="flex flex-col h-full items-center relative pt-4">
       <h2 className="text-2xl font-bold text-[#4a4a40] mb-4 text-center">
-        {locale === 'de' ? 'Welche Symptome?' : 'What symptoms?'}
+        {locale === 'de' ? 'Welche Symptome?' : locale === 'es' ? '¿Qué síntomas?' : locale === 'tr' ? 'Hangi semptomlar?' : 'What symptoms?'}
       </h2>
       
       <div className="flex flex-wrap justify-center gap-4 mb-4 z-10 w-full px-4 max-h-[30vh] overflow-y-auto">
@@ -86,7 +86,7 @@ export default function SymptomSelection({ onNext }: SymptomSelectionProps) {
                
               {showTextLabels && (
                 <span className={`text-xs font-bold text-center w-20 leading-tight ${isSelected ? 'text-neutral-900' : 'text-neutral-500'}`}>
-                  {locale === 'de' ? symptomItem.labelDe : symptomItem.label}
+                  {locale === 'de' ? symptomItem.labelDe : locale === 'es' ? symptomItem.labelEs : locale === 'tr' ? symptomItem.labelTr : symptomItem.label}
                 </span>
               )}
             </motion.div>
