@@ -5,7 +5,7 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { audioManager } from '@/lib/audio';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
-import { Volume2, VolumeX, Check } from 'lucide-react';
+import { Check } from 'lucide-react';
 import Image from 'next/image';
 
 export default function SplashPage() {
@@ -115,20 +115,24 @@ export default function SplashPage() {
           onClick={() => toggleAudio(true)}
           className="transition-transform hover:scale-110"
         >
-          <Volume2 
-            size={32} 
-            className={audioEnabled ? "text-[#0088cc]" : "text-neutral-300"} 
-            strokeWidth={3}
+          <Image 
+            src="/assets/blue_on_speaker_icons.svg"
+            alt="Audio on"
+            width={40}
+            height={60}
+            className={audioEnabled ? "opacity-100" : "opacity-30"}
           />
         </button>
         <button 
           onClick={() => toggleAudio(false)}
           className="transition-transform hover:scale-110"
         >
-          <VolumeX 
-            size={32} 
-            className={!audioEnabled ? "text-[#ffcc00]" : "text-neutral-300"} 
-            strokeWidth={3}
+          <Image 
+            src="/assets/yellow_off_speaker_icon.svg"
+            alt="Audio off"
+            width={40}
+            height={60}
+            className={!audioEnabled ? "opacity-100" : "opacity-30"}
           />
         </button>
       </div>
