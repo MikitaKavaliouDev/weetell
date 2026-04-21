@@ -209,10 +209,17 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
               />
             </motion.button>
 
-            <VideoShortcutButton
-              onClick={() => setView('video-preview')}
-              className="fixed bottom-0 left-0 w-[100px] h-[100px] flex items-center justify-center"
-            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 1, type: 'spring', stiffness: 400, damping: 16 }}
+              className="fixed bottom-0 left-0 z-50"
+            >
+              <VideoShortcutButton
+                onClick={() => setView('video-preview')}
+                className="w-[100px] h-[100px] flex items-center justify-center cursor-pointer"
+              />
+            </motion.div>
           </motion.div>
         ) : view === 'home-care-choice' ? (
           <motion.div
@@ -255,10 +262,17 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
             </div>
 
             {/* Video shortcut in the corner */}
-            <VideoShortcutButton
-              onClick={() => setView('video-preview')}
-              className="fixed bottom-0 left-0 w-[100px] h-[100px] flex items-center justify-center"
-            />
+            <motion.div
+              initial={{ opacity: 0, scale: 0.5 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ delay: 0.5, type: 'spring', stiffness: 400, damping: 16 }}
+              className="fixed bottom-0 left-0 z-50"
+            >
+              <VideoShortcutButton
+                onClick={() => setView('video-preview')}
+                className="w-[100px] h-[100px] flex items-center justify-center cursor-pointer"
+              />
+            </motion.div>
           </motion.div>
         ) : null}
         
