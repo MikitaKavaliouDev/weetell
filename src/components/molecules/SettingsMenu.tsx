@@ -5,6 +5,7 @@ import { X, ArrowLeft, Home, Smartphone, Settings } from 'lucide-react';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MenuBurgerIcon } from '../atoms/ServiceIllustrations';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 interface AppMenuProps {
   onBack?: () => void;
@@ -19,6 +20,7 @@ export default function SettingsMenu({ onBack, onHome, onMobile }: AppMenuProps)
   const toggleTextLabels = useAssessmentStore((state) => state.toggleTextLabels);
   const toggleSubtitles = useAssessmentStore((state) => state.toggleSubtitles);
   const locale = useAssessmentStore((state) => state.locale);
+  const isMobile = useIsMobile();
 
   const handleAction = (action?: () => void) => {
     if (action) {
@@ -49,7 +51,7 @@ export default function SettingsMenu({ onBack, onHome, onMobile }: AppMenuProps)
             </div>
 
             {/* Navigation Actions */}
-            <div className="grid grid-cols-3 gap-3 border-b border-neutral-100 pb-6">
+            <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-3'} gap-3 border-b border-neutral-100 pb-6`}>
               <button onClick={() => handleAction(onBack)} className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-neutral-50 transition-colors">
                 <ArrowLeft size={24} className="text-neutral-500" />
                 <span className="text-[10px] font-bold uppercase text-neutral-400">Back</span>
@@ -58,10 +60,12 @@ export default function SettingsMenu({ onBack, onHome, onMobile }: AppMenuProps)
                 <Home size={24} className="text-neutral-500" />
                 <span className="text-[10px] font-bold uppercase text-neutral-400">Home</span>
               </button>
-              <button onClick={() => handleAction(onMobile)} className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-neutral-50 transition-colors">
-                <Smartphone size={24} className="text-neutral-500" />
-                <span className="text-[10px] font-bold uppercase text-neutral-400">Mobile</span>
-              </button>
+              {!isMobile && (
+                <button onClick={() => handleAction(onMobile)} className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-neutral-50 transition-colors">
+                  <Smartphone size={24} className="text-neutral-500" />
+                  <span className="text-[10px] font-bold uppercase text-neutral-400">Mobile</span>
+                </button>
+              )}
             </div>
 
             {/* Accessibility Toggles */}
