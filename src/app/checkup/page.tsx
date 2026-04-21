@@ -4,7 +4,6 @@ import { useQueryState } from 'nuqs';
 import { Suspense, useState } from 'react';
 import AgeSelection from '@/components/organisms/AgeSelection';
 import WeetellLogo from '@/components/molecules/WeetellLogo';
-import { ArrowLeft, Home, Smartphone } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import SettingsMenu from '@/components/molecules/SettingsMenu';
@@ -96,23 +95,17 @@ function CheckupWizard() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
        {/* Header */}
-       <div className="flex justify-between items-center px-6 pt-8 pb-4 z-10">
-          <div className="flex items-center gap-4">
-              <button onClick={handleBack} className="text-neutral-400 hover:text-neutral-600 transition-colors">
-                  <ArrowLeft size={32} strokeWidth={2.5} />
-              </button>
-              <WeetellLogo />
-              <button onClick={handleRestart} className="text-neutral-400 hover:text-neutral-600 transition-colors" title="Restart">
-                  <Home size={28} strokeWidth={2.5} />
-              </button>
-          </div>
-          <div className="flex items-center gap-2">
-              <button onClick={() => setShowQR(true)} className="text-neutral-400 hover:text-neutral-600 transition-colors" title="Open on Mobile">
-                  <Smartphone size={28} strokeWidth={2.5} />
-              </button>
-              <SettingsMenu />
-             
-          </div>
+       <div className="flex justify-between items-center px-6 pt-8 pb-4 z-50">
+<div className="flex items-center gap-4">
+               <WeetellLogo />
+           </div>
+           <div className="flex items-center gap-2">
+               <SettingsMenu 
+                   onBack={handleBack} 
+                   onHome={handleRestart} 
+                   onMobile={() => setShowQR(true)} 
+               />
+           </div>
         </div>
 
         <QRCodeModal isOpen={showQR} onClose={() => setShowQR(false)} />

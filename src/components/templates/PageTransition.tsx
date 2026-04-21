@@ -29,7 +29,7 @@ export default function PageTransition({ children }: { children: React.ReactNode
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -20 }}
         transition={{ duration: 0.3, ease: 'easeInOut' }}
-        className="h-full w-full"
+        className="h-full w-full overflow-visible"
       >
         <FrozenRouter>{children}</FrozenRouter>
       </motion.div>
