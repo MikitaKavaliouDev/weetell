@@ -12,8 +12,9 @@ interface DetailedBodySelectionProps {
 
 const SYMPTOM_OPTIONS = [
   { id: 'headache', icon: '/assets/headache_icon.svg', label: 'Fever' },
-  { id: 'concussion', icon: '/assets/concussion_icon.svg', label: 'Fever' },
   { id: 'fever', icon: '/assets/fever_thermometer_icon.svg', label: 'Fever' },
+  { id: 'concussion', icon: '/assets/concussion_icon.svg', label: 'Fever' },
+  
 ];
 
 export default function DetailedBodySelection({ onNext }: DetailedBodySelectionProps) {
@@ -81,7 +82,7 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: '100%', opacity: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-            className="absolute top-0 right-0 bottom-0 w-[45%] max-w-[180px] bg-[#FDE68A]/90 backdrop-blur-sm rounded-l-3xl shadow-xl flex flex-col items-center justify-center gap-8 py-10 z-30 border-l-4 border-white"
+            className="absolute top-0 right-0 bottom-0 w-[45%] max-w-[180px] bg-[#FDE68A]/40 backdrop-blur-sm flex flex-col items-center justify-center gap-8 py-10 z-30 border-l-4 border-white"
           >
             {SYMPTOM_OPTIONS.map((opt, idx) => (
               <div key={idx} className="relative flex flex-col items-center">
@@ -95,9 +96,9 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
                       setCurrentSubtitle('');
                   }}
                   onClick={() => handleSymptomSelect(opt.id)}
-                  className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-amber-400 p-2 relative"
+                  className="w-[100px] h-[100px]   flex items-center justify-center  relative"
                 >
-                  <Image src={opt.icon} alt={opt.label} width={40} height={40} className="object-contain" />
+                  <Image src={opt.icon} alt={opt.label} width={100} height={100}  />
                 </motion.button>
               </div>
             ))}

@@ -84,14 +84,14 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
             exit={{ opacity: 0 }}
             className="flex-1 w-full flex flex-col items-center justify-center relative"
           >
-            <div className="relative w-full max-w-[320px] h-[400px]"> 
-              <div className="absolute inset-0 flex items-center justify-center pr-16 mt-8">
+            <div className="relative w-full max-w-full h-[400px]"> 
+              <div className="flex items-center justify-center  ">
                 <Image 
                   src="/assets/fever_illustration.svg" 
                   alt="Fever illustration" 
-                  width={280} 
-                  height={320}
-                  className="w-72 h-80 object-contain"
+                  width={300} 
+                  height={400}
+                  className="w-full h-[400px] object-contain"
                 />
               </div>
 
