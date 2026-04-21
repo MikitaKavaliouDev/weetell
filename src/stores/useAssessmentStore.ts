@@ -2,7 +2,7 @@ import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 
 export type AgeGroup = 'baby' | 'child' | 'teen' | null;
-export type Locale = 'de' | 'es' | 'tr' | 'en';
+export type Locale = 'de' | 'es' | 'tr' | 'en' | 'fr';
 export type BodyPart = string | null;
 export type ActionDecision = 'wait' | 'doctor' | null;
 export type UrgencyLevel = 'routine' | 'urgent' | 'emergency' | null;

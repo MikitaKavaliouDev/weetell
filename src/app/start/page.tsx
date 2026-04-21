@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useAssessmentStore, Locale } from '@/stores/useAssessmentStore';
-import CartoonGlobe from '@/components/molecules/CartoonGlobe';
+
 import WeetellLogo from '@/components/molecules/WeetellLogo';
 import { LOCALES } from '@/data/locales';
 import { Menu } from 'lucide-react';
@@ -18,12 +18,21 @@ export default function StartPage() {
     router.push('/checkup?step=age');
   };
 
-  // Positions for bubbles around the center: [top, left, rotateTail]
+  const flagAssets: Record<Locale, string> = {
+    en: '/assets/english.png',
+   
+      es: '/assets/espanol.png',
+     de: '/assets/german.png',
+      tr: '/assets/turkish.png',
+    fr: '/assets/french.png',
+  };
+
   const positions = [
-    { top: '10%', left: '10%', tail: 'bottom-right', color: '#FFB74D' },  // Top Left (Orange/Yellow ish)
-    { top: '15%', right: '10%', tail: 'bottom-left', color: '#E57373' },  // Top Right (Reddish)
-    { bottom: '20%', left: '5%', tail: 'top-right', color: '#4DB6AC' },   // Bottom Left (Teal)
-    { bottom: '20%', right: '5%', tail: 'top-left', color: '#F06292' },   // Bottom Right (Pinkish)
+    { top: '10%', left: '10%', tail: 'bottom-right', color: '#FFB74D' },
+    { top: '15%', right: '10%', tail: 'bottom-left', color: '#E57373' },
+    { bottom: '20%', left: '5%', tail: 'top-right', color: '#4DB6AC' },
+      { bottom: '20%', right: '5%', tail: 'top-left', color: '#F06292' },
+    { bottom: '45%', right: '1%', tail: 'top-left', color: '#F06292' },
   ];
 
   return (
@@ -48,7 +57,11 @@ export default function StartPage() {
                 transition={{ duration: 0.5 }}
                 className="z-10"
             >
-                <CartoonGlobe />
+                <img 
+                    src="/assets/world.png" 
+                    alt="World" 
+                    className="w-100 h-100 object-contain"
+                />
             </motion.div>
 
             {/* Language Bubbles */}
@@ -64,34 +77,29 @@ export default function StartPage() {
                         transition={{ delay: 0.3 + index * 0.1, type: 'spring' }}
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
-                        className="absolute w-20 h-16 rounded-[40%] shadow-md flex items-center justify-center cursor-pointer z-20 overflow-visible"
+                        className="absolute w-20 h-16  flex items-center justify-center cursor-pointer z-20 overflow-visible"
                         style={{
                             top: pos.top,
                             bottom: pos.bottom,
                             left: pos.left,
                             right: pos.right,
-                            backgroundColor: pos.color || '#fff', 
+                          
                         }}
                     >
-                        {/* Bubble Tail */}
-                        <div 
-                            className="absolute w-4 h-4"
-                            style={{
-                                backgroundColor: 'inherit',
-                                ...(pos.tail === 'bottom-right' && { bottom: -2, right: 10, transform: 'rotate(45deg)' }),
-                                ...(pos.tail === 'bottom-left' && { bottom: -2, left: 10, transform: 'rotate(45deg)' }),
-                                ...(pos.tail === 'top-right' && { top: -2, right: 10, transform: 'rotate(45deg)' }),
-                                ...(pos.tail === 'top-left' && { top: -2, left: 10, transform: 'rotate(45deg)' }),
-                            }}
-                        />
+                     
 
-                        {/* Content (Flag) */}
-                        <span className="text-3xl relative z-10 filter drop-shadow-sm">
-                            {locale.flag}
-                        </span>
+                        {/* Content (Flag Image) */}
+                        <img 
+                            src={flagAssets[locale.id]} 
+                            alt={locale.label}
+                            className="w-20 h-20 object-contain relative z-10"
+                        />
                     </motion.button>
                 );
             })}
+
+            {/* Decorative Bubbles */}
+           
         </div>
       </div>
     </div>
