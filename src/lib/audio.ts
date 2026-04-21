@@ -1,6 +1,6 @@
 type SoundType = 'click' | 'success' | 'error' | 'hover' | 'narrative';
 
-type Locale = 'en' | 'de' | 'es' | 'tr';
+type Locale = 'en' | 'de' | 'es' | 'tr' | 'fr';
 
 class AudioManager {
   private audioContext: AudioContext | null = null;

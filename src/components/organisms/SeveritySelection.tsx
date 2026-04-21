@@ -24,7 +24,8 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   const locale = useAssessmentStore((state) => state.locale);
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
   
-  const [showVideo, setShowVideo] = useState(false);
+  type View = 'selection' | 'video-preview' | 'video-playing';
+  const [view, setView] = useState<View>('selection');
 
   useEffect(() => {
     const subtitle = locale === 'de' ? 'Was möchten Sie tun?' : locale === 'es' ? '¿Qué te gustaría hacer?' : locale === 'tr' ? 'Ne yapmak istersiniz?' : 'What would you like to do?';
@@ -38,11 +39,16 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
 
   const handleWatchVideo = () => {
     audioManager.playSound('click');
-    setShowVideo(true);
+    setView('video-preview');
+  };
+
+  const handleStartVideo = () => {
+    audioManager.playSound('click');
+    setView('video-playing');
   };
 
   const handleVideoEnded = () => {
-    setShowVideo(false);
+    setView('video-preview');
   };
 
   const handleChair = () => {
@@ -62,7 +68,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   return (
     <div className="flex flex-col items-center justify-between h-full pt-4 pb-8 relative w-full">
       <AnimatePresence mode="wait">
-        {showVideo ? (
+        {view === 'video-playing' ? (
           <motion.div
             key="video"
             initial={{ opacity: 0, scale: 0.9 }}
@@ -75,6 +81,49 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
               locale={locale}
               onEnded={handleVideoEnded}
             />
+          </motion.div>
+        ) : view === 'video-preview' ? (
+          <motion.div
+            key="video-preview"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            className="flex-1 w-full flex flex-col items-center justify-center"
+          >
+            <motion.button
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              onClick={handleStartVideo}
+              className="w-full max-w-[280px] aspect-video flex items-center justify-center mb-12"
+            >
+              <Image
+                src="/assets/Play_film_button.svg"
+                alt="Start video"
+                width={280}
+                height={200}
+                className="object-contain"
+              />
+            </motion.button>
+
+            <div className="flex justify-center gap-8">
+              <motion.button 
+                whileHover={{ scale: 1.1 }} 
+                whileTap={{ scale: 0.95 }} 
+                onClick={handleChair} 
+                className="w-20 flex flex-col items-center gap-2"
+              >
+                <Image src="/chair.png" alt="Wait" width={60} height={80} className="object-contain" />
+              </motion.button>
+              
+              <motion.button 
+                whileHover={{ scale: 1.1 }} 
+                whileTap={{ scale: 0.95 }} 
+                onClick={handleDoctor} 
+                className="w-20 flex flex-col items-center gap-2"
+              >
+                <Image src="/doctor.png" alt="Doctor" width={60} height={80} className="object-contain" />
+              </motion.button>
+            </div>
           </motion.div>
         ) : (
           <motion.div
