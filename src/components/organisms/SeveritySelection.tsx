@@ -5,6 +5,7 @@ import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import { useState, useEffect } from 'react';
 import ThermometerSVG from '../molecules/ThermometerSVG';
 import VideoPlayer from '../molecules/VideoPlayer';
+import VideoShortcutButton from '../atoms/VideoShortcutButton';
 import { Play } from 'lucide-react';
 import { audioManager } from '@/lib/audio';
 import { getVideoForTemperature } from '@/data/symptom-graph';
@@ -24,7 +25,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   const locale = useAssessmentStore((state) => state.locale);
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
   
-  type View = 'selection' | 'video-preview' | 'video-playing';
+  type View = 'selection' | 'video-preview' | 'video-playing' | 'waiting-room';
   const [view, setView] = useState<View>('selection');
 
   useEffect(() => {
@@ -60,13 +61,14 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   const handleDoctor = () => {
     audioManager.playSound('click');
     setActionDecision('doctor');
-    onNext();
+    setView('waiting-room');
   };
 
   const videoUrl = getVideoForTemperature(bodyPart || 'head', ageGroup || 'child', symptom || 'fever', 38.0, locale);
 
   return (
     <div className="flex flex-col items-center justify-between h-full pt-4 pb-8 relative w-full">
+       
       <AnimatePresence mode="wait">
         {view === 'video-playing' ? (
           <motion.div
@@ -125,7 +127,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
               </motion.button>
             </div>
           </motion.div>
-        ) : (
+        ) : view === 'selection' ? (
           <motion.div
             key="selector"
             initial={{ opacity: 0 }}
@@ -174,19 +176,49 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                     height={100} className="object-contain" />
                </motion.button>
                
-               <motion.button 
-                 whileHover={{ scale: 1.1 }} 
-                 whileTap={{ scale: 0.95 }} 
-                 onClick={handleDoctor} 
-                className="w-[100px]  flex items-center justify-center overflow-hidden"
-               >
-                  <Image src="/doctor.png" alt="Doctor"  width={75}
-                    height={100} className="object-contain" />
-               </motion.button>
-            </div>
+                <motion.button 
+                  whileHover={{ scale: 1.1 }} 
+                  whileTap={{ scale: 0.95 }} 
+                  onClick={handleDoctor} 
+                 className="w-[100px]  flex items-center justify-center overflow-hidden"
+                >
+                   <Image src="/doctor.png" alt="Nurse"  width={75}
+                     height={100} className="object-contain" />
+                </motion.button>
+             </div>
+           </motion.div>
+        ) : view === 'waiting-room' ? (
+          <motion.div
+            key="waiting-room"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="flex-1 w-full flex flex-col items-center justify-center relative"
+          >
+            <motion.button
+              whileHover={{ scale: 1.02 }}
+              whileTap={{ scale: 0.98 }}
+              onClick={onNext}
+              className="relative w-full max-w-sm aspect-square flex items-center justify-center"
+            >
+              <Image
+                src="/assets/Bed_waiting_button.svg"
+                alt="Go to bed"
+                fill
+                className="object-contain"
+              />
+            </motion.button>
+
+           {/* Video shortcut in the corner */}
+            <VideoShortcutButton
+              onClick={() => setView('video-preview')}
+              className="fixed bottom-0 left-0 w-[100px] h-[100px] flex items-center justify-center"
+            />
           </motion.div>
-        )}
+        ) : null}
+        
       </AnimatePresence>
+      
     </div>
   );
 }
