@@ -100,31 +100,39 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
 
             {/* Action Buttons Layer */}
             <div className="w-full flex justify-center gap-6 mt-8 z-10">
-               <motion.button 
-                 whileHover={{ scale: 1.1 }} 
-                 whileTap={{ scale: 0.95 }} 
-                 onClick={handleWatchVideo} 
-                 className="w-16 h-16 rounded-full bg-white shadow-lg border-4 border-yellow-400 flex items-center justify-center text-yellow-500"
-               >
-                  <Play fill="currentColor" size={28} className="ml-1" />
-               </motion.button>
+                <motion.button
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
+                  onClick={handleWatchVideo}
+                  className="w-[100px]  flex items-center justify-center"
+                >
+                  <Image
+                    src="/assets/Play_film_button.svg"
+                    alt="Play video"
+                    width={100}
+                    height={100}
+                    className="object-contain ml-0.5"
+                  />
+                </motion.button>
                
                <motion.button 
                  whileHover={{ scale: 1.1 }} 
                  whileTap={{ scale: 0.95 }} 
                  onClick={handleChair} 
-                 className="w-16 h-16 rounded-full bg-white shadow-lg border-4 border-orange-400 flex items-center justify-center overflow-hidden p-2.5"
+                 className="w-[100px]  flex items-center justify-center overflow-hidden"
                >
-                  <Image src="/chair.png" alt="Wait" width={40} height={40} className="object-contain" />
+                  <Image src="/chair.png" alt="Wait" width={75}
+                    height={100} className="object-contain" />
                </motion.button>
                
                <motion.button 
                  whileHover={{ scale: 1.1 }} 
                  whileTap={{ scale: 0.95 }} 
                  onClick={handleDoctor} 
-                 className="w-16 h-16 rounded-full bg-white shadow-lg border-4 border-[#10B981] flex items-center justify-center overflow-hidden p-2.5"
+                className="w-[100px]  flex items-center justify-center overflow-hidden"
                >
-                  <Image src="/doctor.png" alt="Doctor" width={40} height={40} className="object-contain" />
+                  <Image src="/doctor.png" alt="Doctor"  width={75}
+                    height={100} className="object-contain" />
                </motion.button>
             </div>
           </motion.div>
