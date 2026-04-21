@@ -13,12 +13,14 @@ const TRANSLATIONS = {
     de: 'Wartebereich',
     es: 'Sala de Espera',
     tr: 'Bekleme Odası',
+    fr: 'Salle d\'attente',
   },
   doctor: {
     en: 'Doctor',
     de: 'Arzt',
     es: 'Médico',
     tr: 'Doktor',
+    fr: 'Médecin',
   },
 } as const;
 

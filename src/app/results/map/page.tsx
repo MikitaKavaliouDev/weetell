@@ -9,6 +9,7 @@ const TRANSLATIONS = {
   de: { locationLabel: 'Aktueller Standort', locationValue: 'Berlin, Deutschland' },
   es: { locationLabel: 'Ubicación Actual', locationValue: 'Berlín, Alemania' },
   tr: { locationLabel: 'Mevcut Konum', locationValue: 'Berlin, Almanya' },
+  fr: { locationLabel: 'Position actuelle', locationValue: 'Berlin, Allemagne' },
 } as const;
 
 export default function MapPage() {

@@ -13,12 +13,14 @@ const TRANSLATIONS = {
     de: 'Standort',
     es: 'Ubicación',
     tr: 'Konum',
+    fr: 'Emplacement',
   },
   medicine: {
     en: 'Medicine',
     de: 'Medizin',
     es: 'Medicina',
     tr: 'İlaç',
+    fr: 'Médicament',
   },
 } as const;
 
