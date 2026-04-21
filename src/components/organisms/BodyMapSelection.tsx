@@ -1,13 +1,11 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import BodySVG from '@/components/molecules/BodySVG';
 import { Rotate3D, Crosshair } from 'lucide-react';
 import { audioManager } from '@/lib/audio';
-import SymptomIcon from '@/components/atoms/SymptomIcons';
-import { getSymptomsForBodyAndAge } from '@/data/symptom-graph';
 
 interface BodyMapSelectionProps {
   onNext: () => void;
@@ -28,7 +26,6 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
   const [selectedPartId, setSelectedPartId] = useState<string | null>(null);
   
   const setBodyPart = useAssessmentStore((state) => state.setBodyPart);
-  const setSymptom = useAssessmentStore((state) => state.setSymptom);
   const ageGroup = useAssessmentStore((state) => state.ageGroup);
   const locale = useAssessmentStore((state) => state.locale);
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
@@ -40,7 +37,7 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
       locale === 'tr' ? 'Neresinde ağrıyor?' :
       'Where does it hurt?';
     setCurrentSubtitle(subtitle);
-    audioManager.narrate(subtitle, locale);
+    audioManager.narrate(subtitle, locale as 'en' | 'de' | 'es' | 'tr' | undefined);
     return () => {
       setCurrentSubtitle('');
       audioManager.stopNarration();
@@ -71,16 +68,12 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
         `${partName} selected`;
       
       setCurrentSubtitle(confirmationText);
+      
+      setTimeout(() => {
+        onNext();
+      }, 500);
     }
   };
-
-  const handleSymptomClick = (symptomId: string) => {
-    audioManager.playSound('success');
-    setSymptom(symptomId);
-    onNext();
-  };
-
-  const symptoms = selectedPartId ? getSymptomsForBodyAndAge(selectedPartId, ageGroup || 'child') :[];
 
   return (
     <div className="flex flex-col items-center h-full pt-4 pb-6 px-6 w-full relative">
@@ -113,38 +106,6 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
         </motion.button>
       </div>
 
-      {/* Sliding Symptom Panel */}
-      <AnimatePresence>
-        {selectedPartId && (
-          <div className="fixed inset-0 z-50 flex justify-center pointer-events-none">
-            <div className="w-full max-w-2xl relative h-full overflow-hidden">
-              <motion.div
-                initial={{ x: '100%' }}
-                animate={{ x: 0 }}
-                exit={{ x: '100%' }}
-                transition={{ type: 'spring', damping: 25, stiffness: 200 }}
-                className="absolute right-0 top-0 bottom-0 w-28 md:w-32 bg-[#FDE68A]/95 backdrop-blur-sm rounded-l-3xl shadow-2xl flex flex-col items-center py-24 gap-6 pointer-events-auto overflow-y-auto border-l-4 border-white"
-              >
-                {symptoms.map(s => (
-                  <div key={s.id} className="group relative flex flex-col items-center w-full">
-                     <button
-                       onClick={() => handleSymptomClick(s.id)}
-                       className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm hover:scale-110 transition-transform p-1.5 border-2 border-amber-400"
-                     >
-                        <SymptomIcon id={s.icon || s.id} selected={false} />
-                     </button>
-                     
-                     {/* Tooltip */}
-                     <span className="absolute top-1/2 -translate-y-1/2 right-[calc(50%+2.5rem)] bg-white px-3 py-1.5 rounded-xl shadow-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap font-bold text-neutral-700 pointer-events-none z-30 border border-amber-200">
-                        {locale === 'de' ? s.labelDe : locale === 'es' ? s.labelEs : locale === 'tr' ? s.labelTr : s.label}
-                     </span>
-                  </div>
-                ))}
-              </motion.div>
-            </div>
-          </div>
-        )}
-      </AnimatePresence>
-    </div>
+      </div>
   );
 }

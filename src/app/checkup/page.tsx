@@ -4,7 +4,7 @@ import { useQueryState } from 'nuqs';
 import { Suspense, useState } from 'react';
 import AgeSelection from '@/components/organisms/AgeSelection';
 import WeetellLogo from '@/components/molecules/WeetellLogo';
-import { Menu, ArrowLeft, Home, Smartphone } from 'lucide-react';
+import { ArrowLeft, Home, Smartphone } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import SettingsMenu from '@/components/molecules/SettingsMenu';
@@ -12,6 +12,7 @@ import QRCodeModal from '@/components/molecules/QRCodeModal';
 
 // Step components
 import BodyMapSelection from '@/components/organisms/BodyMapSelection';
+import DetailedBodySelection from '@/components/organisms/DetailedBodySelection';
 import SeveritySelection from '@/components/organisms/SeveritySelection';
 import UrgencySelection from '@/components/organisms/UrgencySelection';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
@@ -19,6 +20,7 @@ import { useAssessmentStore } from '@/stores/useAssessmentStore';
 const STEPS = {
   AGE: 'age',
   BODY: 'body',
+  DETAILED: 'detailed',
   SEVERITY: 'severity',
   URGENCY: 'urgency',
   RESULTS: 'results',
@@ -36,6 +38,30 @@ function CheckupWizard() {
     router.push('/start');
   };
 
+  const handleBack = () => {
+    switch (step) {
+      case STEPS.BODY:
+        setStep(STEPS.AGE);
+        break;
+      case STEPS.DETAILED:
+        setStep(STEPS.BODY);
+        break;
+      case STEPS.SEVERITY:
+        setStep(STEPS.DETAILED);
+        break;
+      case STEPS.URGENCY:
+        setStep(STEPS.SEVERITY);
+        break;
+      case STEPS.RESULTS:
+        setStep(STEPS.URGENCY);
+        break;
+      case STEPS.AGE:
+      default:
+        router.push('/start');
+        break;
+    }
+  };
+
   useEffect(() => {
     if (step === STEPS.RESULTS) {
       router.push('/results');
@@ -47,7 +73,9 @@ function CheckupWizard() {
       case STEPS.AGE:
         return <AgeSelection onNext={() => setStep(STEPS.BODY)} />;
       case STEPS.BODY:
-        return <BodyMapSelection onNext={() => setStep(STEPS.SEVERITY)} />;
+        return <BodyMapSelection onNext={() => setStep(STEPS.DETAILED)} />;
+      case STEPS.DETAILED:
+        return <DetailedBodySelection onNext={() => setStep(STEPS.SEVERITY)} />;
       case STEPS.SEVERITY:
         return <SeveritySelection onNext={() => setStep(STEPS.URGENCY)} />;
       case STEPS.URGENCY:
@@ -70,7 +98,7 @@ function CheckupWizard() {
        {/* Header */}
        <div className="flex justify-between items-center px-6 pt-8 pb-4 z-10">
           <div className="flex items-center gap-4">
-              <button onClick={() => router.back()} className="text-neutral-400 hover:text-neutral-600 transition-colors">
+              <button onClick={handleBack} className="text-neutral-400 hover:text-neutral-600 transition-colors">
                   <ArrowLeft size={32} strokeWidth={2.5} />
               </button>
               <WeetellLogo />
