@@ -28,13 +28,11 @@ describe('AgeSelection', () => {
     jest.restoreAllMocks();
   });
 
-  it('renders three age options', () => {
+  it('renders two age options', () => {
     render(<AgeSelection onNext={mockOnNext} />);
     
-    // Check for the images by their alt text
     expect(screen.getByAltText(/Baby 0-3 years/)).toBeInTheDocument();
     expect(screen.getByAltText(/Child 3-11 years/)).toBeInTheDocument();
-    expect(screen.getByAltText(/Teen 12-21 years/)).toBeInTheDocument();
   });
 
   it('calls onNext when baby is selected', async () => {
@@ -55,17 +53,6 @@ describe('AgeSelection', () => {
     
     const childOption = screen.getByAltText(/Child 3-11 years/).closest('div[class*="cursor-pointer"]');
     fireEvent.click(childOption!);
-    
-    await waitFor(() => {
-      expect(mockOnNext).toHaveBeenCalled();
-    }, { timeout: 500 });
-  });
-
-  it('calls onNext when teen is selected', async () => {
-    render(<AgeSelection onNext={mockOnNext} />);
-    
-    const teenOption = screen.getByAltText(/Teen 12-21 years/).closest('div[class*="cursor-pointer"]');
-    fireEvent.click(teenOption!);
     
     await waitFor(() => {
       expect(mockOnNext).toHaveBeenCalled();
@@ -115,7 +102,6 @@ describe('AgeSelection', () => {
     
     expect(screen.getByText('0-3')).toBeInTheDocument();
     expect(screen.getByText('3-11')).toBeInTheDocument();
-    expect(screen.getByText('12-21')).toBeInTheDocument();
   });
 
   it('hides text labels when showTextLabels is false', () => {
@@ -125,7 +111,6 @@ describe('AgeSelection', () => {
     
     expect(container.textContent).not.toContain('0-3');
     expect(container.textContent).not.toContain('3-11');
-    expect(container.textContent).not.toContain('12-21');
   });
 
   it('clears subtitle on unmount', () => {

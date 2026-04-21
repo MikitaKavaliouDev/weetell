@@ -57,16 +57,15 @@ describe('SeveritySelection', () => {
   it('renders the component', () => {
     render(<SeveritySelection onNext={mockOnNext} />);
     
-    expect(screen.getByTestId('fever-child')).toBeInTheDocument();
-    expect(screen.getByTestId('thermometer')).toBeInTheDocument();
+    expect(screen.getByAltText('Fever illustration')).toBeInTheDocument();
   });
 
-  it('renders static temperature text', () => {
+  it('renders play video, wait and doctor buttons', () => {
     render(<SeveritySelection onNext={mockOnNext} />);
     
-    expect(screen.getByText('37,5')).toBeInTheDocument();
-    expect(screen.getByText('38')).toBeInTheDocument();
-    expect(screen.getByText('40°C')).toBeInTheDocument();
+    expect(screen.getByAltText('Play video')).toBeInTheDocument();
+    expect(screen.getByAltText('Wait')).toBeInTheDocument();
+    expect(screen.getByAltText('Nurse')).toBeInTheDocument();
   });
 
   it('renders play button for video', () => {
@@ -99,15 +98,16 @@ describe('SeveritySelection', () => {
     expect(audio.audioManager.stopNarration).toHaveBeenCalled();
   });
 
-  it('calls onNext after doctor button click', async () => {
+  it('sets actionDecision and shows waiting room when doctor button clicked', async () => {
     render(<SeveritySelection onNext={mockOnNext} />);
     
-    const doctorButton = screen.getByAltText('Doctor');
+    const doctorButton = screen.getByAltText('Nurse');
     fireEvent.click(doctorButton);
     
     await waitFor(() => {
-      expect(mockOnNext).toHaveBeenCalled();
       expect(useAssessmentStore.getState().actionDecision).toBe('doctor');
     });
+    
+    expect(screen.getByAltText('Go to bed')).toBeInTheDocument();
   });
 });

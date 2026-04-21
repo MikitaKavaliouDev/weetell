@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import BodyMapSelection from '../BodyMapSelection';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 
@@ -77,13 +77,14 @@ describe('BodyMapSelection', () => {
     expect(audioManager.narrate).toHaveBeenCalledWith('Where does it hurt?', 'en');
   });
 
-  it('shows sliding panel symptoms when part is selected', () => {
+  it('calls onNext when part is selected', async () => {
     render(<BodyMapSelection onNext={mockOnNext} />);
     
     const headPart = screen.getByTestId('head-part');
     fireEvent.click(headPart);
     
-    // The symptom panel should appear and contain 'Fever'
-    expect(screen.getByText('Fever')).toBeInTheDocument();
+    await waitFor(() => {
+      expect(mockOnNext).toHaveBeenCalled();
+    }, { timeout: 1000 });
   });
 });

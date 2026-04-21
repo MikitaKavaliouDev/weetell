@@ -11,7 +11,7 @@ describe('symptom-graph', () => {
   describe('getSymptomsForBodyAndAge', () => {
     it('returns symptoms for head and baby', () => {
       const symptoms = getSymptomsForBodyAndAge('head', 'baby');
-      expect(symptoms).toHaveLength(1);
+      expect(symptoms).toHaveLength(4);
       expect(symptoms[0].id).toBe('fever');
     });
 
