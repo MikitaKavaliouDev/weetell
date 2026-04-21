@@ -28,7 +28,7 @@ export default function StartPage() {
   };
 
   const positions = [
-    { top: '10%', left: '10%', tail: 'bottom-right', color: '#FFB74D' },
+    { top: '15%', left: '10%', tail: 'bottom-right', color: '#FFB74D' },
     { top: '15%', right: '10%', tail: 'bottom-left', color: '#E57373' },
     { bottom: '20%', left: '5%', tail: 'top-right', color: '#4DB6AC' },
       { bottom: '20%', right: '5%', tail: 'top-left', color: '#F06292' },
