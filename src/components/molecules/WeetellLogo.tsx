@@ -4,11 +4,11 @@ import Image from "next/image";
 export default function WeetellLogo({ className }: { className?: string }) {
   return (
     <Image
-      src="/WEEtell_Logo.svg"
+      src="/wee_logo.png"
       alt="Weetell Logo"
-      width={120}
+      width={100}
       height={40}
-      className={className}
+      className={`${className} object-contain `}
     />
   );
 }

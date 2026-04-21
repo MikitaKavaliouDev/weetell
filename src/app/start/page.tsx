@@ -38,7 +38,7 @@ export default function StartPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white relative overflow-hidden">
       {/* Header */}
-      <div className="flex justify-between items-center p-6 pt-8 z-10">
+      <div className="flex justify-between items-center px-2 pt-2 pb-4 z-10">
         <WeetellLogo />
         <div className="flex items-center gap-2">
             <SettingsMenu />
@@ -47,7 +47,7 @@ export default function StartPage() {
       </div>
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col items-center justify-center relative">
+      <div className="flex-1 flex flex-col items-center justify-center  relative">
         <div className="relative w-full max-w-sm aspect-square flex items-center justify-center">
             
             {/* The Globe */}

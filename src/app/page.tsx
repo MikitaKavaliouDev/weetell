@@ -54,11 +54,15 @@ export default function SplashPage() {
 
         {/* Checkbox Area */}
         <div 
+          data-testid="disclaimer-checkbox"
           className="flex items-start gap-4 mb-16 cursor-pointer w-full px-2"
           onClick={() => setAccepted(!accepted)}
         >
           <div className="pt-1 shrink-0">
-            <div className={`w-7 h-7 border-[3px] border-neutral-800 rounded-md flex items-center justify-center transition-colors ${accepted ? 'bg-white' : 'bg-white'}`}>
+            <div 
+              data-testid="disclaimer-checkbox-indicator"
+              className={`w-7 h-7 border-[3px] border-neutral-800 rounded-md flex items-center justify-center transition-colors ${accepted ? 'bg-white' : 'bg-white'}`}
+            >
               {accepted && <Check size={20} className="text-neutral-800" strokeWidth={4} />}
             </div>
           </div>
@@ -97,6 +101,7 @@ export default function SplashPage() {
 
         {/* Button */}
         <button
+          data-testid="continue-button"
           disabled={!accepted}
           onClick={handleStart}
           className={`w-full max-w-[280px] py-4 rounded-full font-bold text-2xl transition-all ${
@@ -112,6 +117,7 @@ export default function SplashPage() {
       {/* Audio Controls */}
       <div className="absolute bottom-10 left-10 flex gap-4">
         <button 
+          data-testid="audio-on-button"
           onClick={() => toggleAudio(true)}
           className="transition-transform hover:scale-110"
         >
@@ -124,6 +130,7 @@ export default function SplashPage() {
           />
         </button>
         <button 
+          data-testid="audio-off-button"
           onClick={() => toggleAudio(false)}
           className="transition-transform hover:scale-110"
         >

@@ -1,32 +1,32 @@
-'use client';
+"use client";
 
-import { useQueryState } from 'nuqs';
-import { Suspense, useState } from 'react';
-import AgeSelection from '@/components/organisms/AgeSelection';
-import WeetellLogo from '@/components/molecules/WeetellLogo';
-import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
-import SettingsMenu from '@/components/molecules/SettingsMenu';
-import QRCodeModal from '@/components/molecules/QRCodeModal';
+import { useQueryState } from "nuqs";
+import { Suspense, useState } from "react";
+import AgeSelection from "@/components/organisms/AgeSelection";
+import WeetellLogo from "@/components/molecules/WeetellLogo";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import SettingsMenu from "@/components/molecules/SettingsMenu";
+import QRCodeModal from "@/components/molecules/QRCodeModal";
 
 // Step components
-import BodyMapSelection from '@/components/organisms/BodyMapSelection';
-import DetailedBodySelection from '@/components/organisms/DetailedBodySelection';
-import SeveritySelection from '@/components/organisms/SeveritySelection';
-import UrgencySelection from '@/components/organisms/UrgencySelection';
-import { useAssessmentStore } from '@/stores/useAssessmentStore';
+import BodyMapSelection from "@/components/organisms/BodyMapSelection";
+import DetailedBodySelection from "@/components/organisms/DetailedBodySelection";
+import SeveritySelection from "@/components/organisms/SeveritySelection";
+import UrgencySelection from "@/components/organisms/UrgencySelection";
+import { useAssessmentStore } from "@/stores/useAssessmentStore";
 
 const STEPS = {
-  AGE: 'age',
-  BODY: 'body',
-  DETAILED: 'detailed',
-  SEVERITY: 'severity',
-  URGENCY: 'urgency',
-  RESULTS: 'results',
+  AGE: "age",
+  BODY: "body",
+  DETAILED: "detailed",
+  SEVERITY: "severity",
+  URGENCY: "urgency",
+  RESULTS: "results",
 };
 
 function CheckupWizard() {
-  const [step, setStep] = useQueryState('step', { defaultValue: STEPS.AGE });
+  const [step, setStep] = useQueryState("step", { defaultValue: STEPS.AGE });
   const [showQR, setShowQR] = useState(false);
   const router = useRouter();
   const resetAssessment = useAssessmentStore((state) => state.resetAssessment);
@@ -34,7 +34,7 @@ function CheckupWizard() {
 
   const handleRestart = () => {
     resetAssessment();
-    router.push('/start');
+    router.push("/start");
   };
 
   const handleBack = () => {
@@ -56,14 +56,14 @@ function CheckupWizard() {
         break;
       case STEPS.AGE:
       default:
-        router.push('/start');
+        router.push("/start");
         break;
     }
   };
 
   useEffect(() => {
     if (step === STEPS.RESULTS) {
-      router.push('/results');
+      router.push("/results");
     }
   }, [step, router]);
 
@@ -80,13 +80,43 @@ function CheckupWizard() {
       case STEPS.URGENCY:
         return <UrgencySelection onNext={() => setStep(STEPS.RESULTS)} />;
       case STEPS.RESULTS:
-        return <div className="flex justify-center p-10">{locale === 'de' ? 'Weiterleitung zu den Ergebnissen...' : locale === 'es' ? 'Llevándote a los resultados...' : locale === 'tr' ? 'Sonuçlara yönlendiriyorum...' : 'Taking you to results...'}</div>;
+        return (
+          <div className="flex justify-center p-10">
+            {locale === "de"
+              ? "Weiterleitung zu den Ergebnissen..."
+              : locale === "es"
+                ? "Llevándote a los resultados..."
+                : locale === "tr"
+                  ? "Sonuçlara yönlendiriyorum..."
+                  : "Taking you to results..."}
+          </div>
+        );
       default:
         // Fallback or 404
         return (
           <div className="text-center p-10">
-            <h2 className="text-xl">{locale === 'de' ? 'Schritt noch nicht implementiert: ' : locale === 'es' ? 'Paso aún no implementado: ' : locale === 'tr' ? 'Adım henüz uygulanmadı: ' : 'Step not implemented yet: '}{step}</h2>
-            <button onClick={() => setStep(STEPS.AGE)} className="mt-4 text-blue-500 underline">{locale === 'de' ? 'Neustart' : locale === 'es' ? 'Reiniciar' : locale === 'tr' ? 'Yeniden Başla' : 'Restart'}</button>
+            <h2 className="text-xl">
+              {locale === "de"
+                ? "Schritt noch nicht implementiert: "
+                : locale === "es"
+                  ? "Paso aún no implementado: "
+                  : locale === "tr"
+                    ? "Adım henüz uygulanmadı: "
+                    : "Step not implemented yet: "}
+              {step}
+            </h2>
+            <button
+              onClick={() => setStep(STEPS.AGE)}
+              className="mt-4 text-blue-500 underline"
+            >
+              {locale === "de"
+                ? "Neustart"
+                : locale === "es"
+                  ? "Reiniciar"
+                  : locale === "tr"
+                    ? "Yeniden Başla"
+                    : "Restart"}
+            </button>
           </div>
         );
     }
@@ -94,25 +124,25 @@ function CheckupWizard() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col">
-       {/* Header */}
-       <div className="flex justify-between items-center px-6 pt-8 pb-4 z-50">
-<div className="flex items-center gap-4">
-               <WeetellLogo />
-           </div>
-           <div className="flex items-center gap-2">
-               <SettingsMenu 
-                   onBack={handleBack} 
-                   onHome={handleRestart} 
-                   onMobile={() => setShowQR(true)} 
-               />
-           </div>
+      {/* Header */}
+      <div className="flex justify-between items-center px-2 pt-2 pb-4 z-50">
+        <div className="flex items-center gap-4">
+          <WeetellLogo />
         </div>
+        <div className="flex items-center gap-2">
+          <SettingsMenu
+            onBack={handleBack}
+            onHome={handleRestart}
+            onMobile={() => setShowQR(true)}
+          />
+        </div>
+      </div>
 
-        <QRCodeModal isOpen={showQR} onClose={() => setShowQR(false)} />
+      <QRCodeModal isOpen={showQR} onClose={() => setShowQR(false)} />
 
-       <div className="w-full max-w-2xl mx-auto pt-[50px] flex-1 flex flex-col p-6 ">
-         {renderStep()}
-       </div>
+      <div className="w-full max-w-2xl mx-auto pt-[50px] flex-1 flex flex-col p-6 ">
+        {renderStep()}
+      </div>
     </div>
   );
 }
@@ -120,7 +150,19 @@ function CheckupWizard() {
 export default function CheckupPage() {
   const locale = useAssessmentStore((state) => state.locale);
   return (
-    <Suspense fallback={<div className="flex h-screen items-center justify-center">{locale === 'de' ? 'Wird geladen...' : locale === 'es' ? 'Cargando...' : locale === 'tr' ? 'Yükleniyor...' : 'Loading...'}</div>}>
+    <Suspense
+      fallback={
+        <div className="flex h-screen items-center justify-center">
+          {locale === "de"
+            ? "Wird geladen..."
+            : locale === "es"
+              ? "Cargando..."
+              : locale === "tr"
+                ? "Yükleniyor..."
+                : "Loading..."}
+        </div>
+      }
+    >
       <CheckupWizard />
     </Suspense>
   );
