@@ -25,7 +25,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   const locale = useAssessmentStore((state) => state.locale);
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
   
-  type View = 'selection' | 'video-preview' | 'video-playing' | 'waiting-room';
+  type View = 'selection' | 'video-preview' | 'video-playing' | 'waiting-room' | 'home-care-choice';
   const [view, setView] = useState<View>('selection');
 
   useEffect(() => {
@@ -55,7 +55,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   const handleChair = () => {
     audioManager.playSound('click');
     setActionDecision('wait');
-    router.push('/results/home-care');
+    setView('home-care-choice');
   };
 
   const handleDoctor = () => {
@@ -209,7 +209,52 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
               />
             </motion.button>
 
-           {/* Video shortcut in the corner */}
+            <VideoShortcutButton
+              onClick={() => setView('video-preview')}
+              className="fixed bottom-0 left-0 w-[100px] h-[100px] flex items-center justify-center"
+            />
+          </motion.div>
+        ) : view === 'home-care-choice' ? (
+          <motion.div
+            key="home-care-choice"
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.9 }}
+            className="flex-1 w-full flex flex-col items-center justify-center relative"
+          >
+            <div className="flex justify-center gap-6">
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => router.push('/results/map')}
+                className="w-1/2 max-w-[160px] aspect-square flex items-center justify-center"
+              >
+                <Image
+                  src="/assets/directions_icon.svg"
+                  alt="Directions"
+                  width={160}
+                  height={160}
+                  className="object-contain"
+                />
+              </motion.button>
+
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => router.push('/results/pharmacy')}
+                className="w-1/2 max-w-[160px] aspect-square flex items-center justify-center"
+              >
+                <Image
+                  src="/assets/chemist_icon.svg"
+                  alt="Chemist"
+                  width={160}
+                  height={160}
+                  className="object-contain"
+                />
+              </motion.button>
+            </div>
+
+            {/* Video shortcut in the corner */}
             <VideoShortcutButton
               onClick={() => setView('video-preview')}
               className="fixed bottom-0 left-0 w-[100px] h-[100px] flex items-center justify-center"
