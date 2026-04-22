@@ -3,10 +3,9 @@
 import { useQueryState } from "nuqs";
 import { Suspense, useState } from "react";
 import AgeSelection from "@/components/organisms/AgeSelection";
-import WeetellLogo from "@/components/molecules/WeetellLogo";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import SettingsMenu from "@/components/molecules/SettingsMenu";
+import AppHeader from "@/components/molecules/AppHeader";
 import QRCodeModal from "@/components/molecules/QRCodeModal";
 
 // Step components
@@ -125,18 +124,11 @@ function CheckupWizard() {
   return (
     <div className="min-h-screen bg-white flex flex-col">
       {/* Header */}
-      <div className="flex justify-between items-center px-2 pt-2 pb-4 z-50">
-        <div className="flex items-center gap-4">
-          <WeetellLogo />
-        </div>
-        <div className="flex items-center gap-2">
-          <SettingsMenu
-            onBack={handleBack}
-            onHome={handleRestart}
-            onMobile={() => setShowQR(true)}
-          />
-        </div>
-      </div>
+      <AppHeader
+        onBack={handleBack}
+        onHome={handleRestart}
+        onMobile={() => setShowQR(true)}
+      />
 
       <QRCodeModal isOpen={showQR} onClose={() => setShowQR(false)} />
 

@@ -16,6 +16,10 @@ const customJestConfig = {
     '<rootDir>/src/__tests__/**/*.(test|spec).[jt]s?(x)',
     '<rootDir>/src/**/*.(test|spec).[jt]s?(x)',
   ],
+  transformIgnorePatterns: [
+    '/node_modules/(?!(nuqs)/)',
+  ],
+
 }
 
 module.exports = createJestConfig(customJestConfig)

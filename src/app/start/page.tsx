@@ -4,10 +4,9 @@ import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useAssessmentStore, Locale } from '@/stores/useAssessmentStore';
 
-import WeetellLogo from '@/components/molecules/WeetellLogo';
 import { LOCALES } from '@/data/locales';
 import { Menu } from 'lucide-react';
-import SettingsMenu from '@/components/molecules/SettingsMenu';
+import AppHeader from '@/components/molecules/AppHeader';
 
 export default function StartPage() {
   const router = useRouter();
@@ -38,13 +37,7 @@ export default function StartPage() {
   return (
     <div className="flex flex-col min-h-screen bg-white relative overflow-hidden">
       {/* Header */}
-      <div className="flex justify-between items-center px-2 pt-2 pb-4 z-10">
-        <WeetellLogo />
-        <div className="flex items-center gap-2">
-            <SettingsMenu />
-           
-        </div>
-      </div>
+      <AppHeader />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col items-center justify-center  relative">

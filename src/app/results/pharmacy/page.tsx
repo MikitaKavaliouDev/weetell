@@ -31,8 +31,8 @@ export default function PharmacyPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col p-6">
-      <header className="flex items-center gap-4 mb-8">
-        <button onClick={() => router.back()} className="w-12 h-12 rounded-full flex items-center justify-center border border-neutral-100 shadow-sm">
+      <header className="sticky top-0 bg-white/95 backdrop-blur-sm flex items-center gap-4 py-4 mb-8 z-50">
+        <button onClick={() => router.back()} className="w-12 h-12 rounded-full flex items-center justify-center border border-neutral-100 shadow-sm transition-colors hover:bg-neutral-50">
           <ArrowLeft size={24} />
         </button>
         <h1 className="text-2xl font-bold text-neutral-800">

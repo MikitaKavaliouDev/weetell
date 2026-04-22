@@ -18,7 +18,7 @@ export default function ResultsPage() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
       {/* Dynamic Header Background */}
-      <div className={`transition-all duration-500 ease-in-out ${showResults ? 'bg-white shadow-sm' : 'bg-[#E6F0FF] rounded-b-[40px]'} relative z-20`}>
+      <div className={`sticky top-0 transition-all duration-500 ease-in-out ${showResults ? 'bg-white shadow-sm' : 'bg-[#E6F0FF] rounded-b-[40px]'} relative z-20`}>
     <div className="max-w-md mx-auto px-6 py-6">
         {/* Header */}
         <header className="flex justify-between items-center mb-6">

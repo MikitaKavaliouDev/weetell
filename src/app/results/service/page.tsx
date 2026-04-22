@@ -31,7 +31,7 @@ export default function ServicePage() {
   return (
     <div className="min-h-screen bg-white flex flex-col p-6">
        {/* Header */}
-       <header className="flex justify-between items-center mb-12">
+       <header className="sticky top-0 bg-white/95 backdrop-blur-sm flex justify-between items-center py-4 mb-12 z-50">
            <div className="flex items-center gap-4">
                <button onClick={() => router.back()} className="p-2 text-neutral-500 hover:text-neutral-800 transition-colors">
                    <ArrowLeft size={32} strokeWidth={2.5} />
