@@ -73,7 +73,7 @@ export default function HomeCarePage() {
         <p className="text-white/80">{locale === 'de' ? 'Fieberüberwachung und -behandlung' : locale === 'es' ? 'Monitoreo y tratamiento de fiebre' : locale === 'tr' ? 'Ateş takibi ve tedavisi' : 'Fever monitoring & treatment'}</p>
       </div>
 
-      <div className="flex-1 px-6 py-8 max-w-md mx-auto w-full">
+      <div className="flex-1 px-6 pt-16 pb-8 max-w-md mx-auto w-full">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

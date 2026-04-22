@@ -107,24 +107,26 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
               />
             </motion.button>
 
-            <div className="flex justify-center gap-8">
-              <motion.button 
-                whileHover={{ scale: 1.1 }} 
-                whileTap={{ scale: 0.95 }} 
-                onClick={handleChair} 
-                className="w-20 flex flex-col items-center gap-2"
-              >
-                <Image src="/chair.png" alt="Wait" width={60} height={80} className="object-contain" />
-              </motion.button>
-              
-              <motion.button 
-                whileHover={{ scale: 1.1 }} 
-                whileTap={{ scale: 0.95 }} 
-                onClick={handleDoctor} 
-                className="w-20 flex flex-col items-center gap-2"
-              >
-                <Image src="/doctor.png" alt="Doctor" width={60} height={80} className="object-contain" />
-              </motion.button>
+            <div className="fixed bottom-0 left-0 w-full p-6 bg-white/60 backdrop-blur-md z-40 border-t border-gray-100/50">
+              <div className="flex justify-center gap-8 max-w-2xl mx-auto">
+                <motion.button 
+                  whileHover={{ scale: 1.1 }} 
+                  whileTap={{ scale: 0.95 }} 
+                  onClick={handleChair} 
+                  className="w-20 flex flex-col items-center gap-2"
+                >
+                  <Image src="/chair.png" alt="Wait" width={60} height={80} className="object-contain" />
+                </motion.button>
+                
+                <motion.button 
+                  whileHover={{ scale: 1.1 }} 
+                  whileTap={{ scale: 0.95 }} 
+                  onClick={handleDoctor} 
+                  className="w-20 flex flex-col items-center gap-2"
+                >
+                  <Image src="/doctor.png" alt="Doctor" width={60} height={80} className="object-contain" />
+                </motion.button>
+              </div>
             </div>
           </motion.div>
         ) : view === 'selection' ? (
@@ -150,41 +152,43 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
             </div>
 
             {/* Action Buttons Layer */}
-            <div className="w-full flex justify-center gap-6 mt-8 z-10">
-                <motion.button
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={handleWatchVideo}
-                  className="w-[100px]  flex items-center justify-center"
-                >
-                  <Image
-                    src="/assets/Play_film_button.svg"
-                    alt="Play video"
-                    width={100}
-                    height={100}
-                    className="object-contain ml-0.5"
-                  />
-                </motion.button>
-               
-               <motion.button 
-                 whileHover={{ scale: 1.1 }} 
-                 whileTap={{ scale: 0.95 }} 
-                 onClick={handleChair} 
-                 className="w-[100px]  flex items-center justify-center overflow-hidden"
-               >
-                  <Image src="/chair.png" alt="Wait" width={75}
-                    height={100} className="object-contain" />
-               </motion.button>
-               
-                <motion.button 
-                  whileHover={{ scale: 1.1 }} 
-                  whileTap={{ scale: 0.95 }} 
-                  onClick={handleDoctor} 
-                 className="w-[100px]  flex items-center justify-center overflow-hidden"
-                >
-                   <Image src="/doctor.png" alt="Nurse"  width={75}
-                     height={100} className="object-contain" />
-                </motion.button>
+            <div className="fixed bottom-0 left-0 w-full p-6 bg-white/60 backdrop-blur-md z-40 border-t border-gray-100/50">
+                <div className="flex justify-center gap-6 max-w-2xl mx-auto">
+                  <motion.button
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={handleWatchVideo}
+                    className="w-[100px]  flex items-center justify-center"
+                  >
+                    <Image
+                      src="/assets/Play_film_button.svg"
+                      alt="Play video"
+                      width={100}
+                      height={100}
+                      className="object-contain ml-0.5"
+                    />
+                  </motion.button>
+                 
+                 <motion.button 
+                   whileHover={{ scale: 1.1 }} 
+                   whileTap={{ scale: 0.95 }} 
+                   onClick={handleChair} 
+                   className="w-[100px]  flex items-center justify-center overflow-hidden"
+                 >
+                    <Image src="/chair.png" alt="Wait" width={75}
+                      height={100} className="object-contain" />
+                 </motion.button>
+                 
+                  <motion.button 
+                    whileHover={{ scale: 1.1 }} 
+                    whileTap={{ scale: 0.95 }} 
+                    onClick={handleDoctor} 
+                   className="w-[100px]  flex items-center justify-center overflow-hidden"
+                  >
+                     <Image src="/doctor.png" alt="Nurse"  width={75}
+                       height={100} className="object-contain" />
+                  </motion.button>
+                </div>
              </div>
            </motion.div>
         ) : view === 'waiting-room' ? (

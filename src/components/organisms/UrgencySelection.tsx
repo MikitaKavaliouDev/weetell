@@ -137,25 +137,27 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
         </div>
       )}
 
-      <div className="flex flex-col gap-3 w-full max-w-md">
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={handleProceed}
-          className="w-full bg-[#4a4a40] text-white rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold shadow-lg"
-        >
-          <MapPin size={20} />
-          {locale === 'de' ? 'Arzt finden' : locale === 'es' ? 'Encontrar un Médico' : locale === 'tr' ? 'Doktor Bul' : 'Find a Doctor'}
-        </motion.button>
+      <div className="fixed bottom-0 left-0 w-full p-6 bg-white/60 backdrop-blur-md z-40 flex flex-col gap-3 border-t border-gray-100/50">
+        <div className="w-full max-w-md mx-auto flex flex-col gap-3">
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleProceed}
+            className="w-full bg-[#4a4a40] text-white rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold shadow-lg"
+          >
+            <MapPin size={20} />
+            {locale === 'de' ? 'Arzt finden' : locale === 'es' ? 'Encontrar un Médico' : locale === 'tr' ? 'Doktor Bul' : 'Find a Doctor'}
+          </motion.button>
 
-        <motion.button
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          onClick={handleFindDoctor}
-          className="w-full bg-white border-2 border-neutral-200 text-neutral-700 rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold"
-        >
-          {locale === 'de' ? 'Zur Karte' : locale === 'es' ? 'Ver Mapa' : locale === 'tr' ? 'Haritayı Gör' : 'View Map'}
-        </motion.button>
+          <motion.button
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            onClick={handleFindDoctor}
+            className="w-full bg-white border-2 border-neutral-200 text-neutral-700 rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold"
+          >
+            {locale === 'de' ? 'Zur Karte' : locale === 'es' ? 'Ver Mapa' : locale === 'tr' ? 'Haritayı Gör' : 'View Map'}
+          </motion.button>
+        </div>
       </div>
     </div>
   );

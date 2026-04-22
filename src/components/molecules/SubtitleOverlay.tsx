@@ -1,10 +1,18 @@
 'use client';
 
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
+import { useEffect } from 'react';
+import { audioManager } from '@/lib/audio';
 
 export default function SubtitleOverlay() {
   const showSubtitles = useAssessmentStore((state) => state.showSubtitles);
   const currentSubtitle = useAssessmentStore((state) => state.currentSubtitle);
+  const isSoundEnabled = useAssessmentStore((state) => state.isSoundEnabled);
+
+  // Synchronize audio manager with store state on mount and when it changes
+  useEffect(() => {
+    audioManager.setEnabled(isSoundEnabled);
+  }, [isSoundEnabled]);
   
   if (!showSubtitles || !currentSubtitle) return null;
 

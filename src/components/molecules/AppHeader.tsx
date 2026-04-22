@@ -12,7 +12,7 @@ interface AppHeaderProps {
 
 export default function AppHeader({ onBack, onHome, onMobile, className = "" }: AppHeaderProps) {
   return (
-    <header className={`sticky top-0 bg-white/95 backdrop-blur-sm flex justify-between items-center px-4 py-3 z-50 w-full border-b border-transparent transition-all ${className}`}>
+    <header className={`sticky top-0 bg-white/95 backdrop-blur-sm flex justify-between items-center px-4  z-[100] w-full border-b border-transparent transition-all ${className}`}>
       <div className="flex items-center gap-4">
         <WeetellLogo />
       </div>

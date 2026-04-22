@@ -70,7 +70,7 @@ export default function StartPage() {
                         transition={{ delay: 0.3 + index * 0.1, type: 'spring' }}
                         whileHover={{ scale: 1.1 }}
                         whileTap={{ scale: 0.95 }}
-                        className="absolute w-20 h-16  flex items-center justify-center cursor-pointer z-20 overflow-visible"
+                        className="absolute w-20 h-20 flex items-center justify-center cursor-pointer z-10 overflow-hidden"
                         style={{
                             top: pos.top,
                             bottom: pos.bottom,

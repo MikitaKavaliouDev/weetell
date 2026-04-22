@@ -11,12 +11,13 @@ import Image from 'next/image';
 export default function SplashPage() {
   const router = useRouter();
   const [accepted, setAccepted] = useState(false);
-  const [audioEnabled, setAudioEnabled] = useState(true);
+  const isSoundEnabled = useAssessmentStore((state) => state.isSoundEnabled);
+  const toggleSound = useAssessmentStore((state) => state.toggleSound);
   const locale = useAssessmentStore((state) => state.locale);
 
   const handleStart = () => {
     if (!accepted) return;
-    audioManager.setEnabled(audioEnabled);
+    audioManager.setEnabled(isSoundEnabled);
     audioManager.playSound('success');
     audioManager.narrate(
       locale === 'de' ? 'Willkommen bei Weetell' : locale === 'es' ? 'Bienvenido a Weetell' : locale === 'tr' ? 'Weetell\'e Hoş Geldiniz' : 'Welcome to Weetell',
@@ -26,10 +27,12 @@ export default function SplashPage() {
   };
 
   const toggleAudio = (state: boolean) => {
-    setAudioEnabled(state);
-    audioManager.setEnabled(state);
-    if (state) {
-      audioManager.playSound('click');
+    if (state !== isSoundEnabled) {
+      toggleSound();
+      audioManager.setEnabled(state);
+      if (state) {
+        audioManager.playSound('click');
+      }
     }
   };
 
@@ -126,7 +129,7 @@ export default function SplashPage() {
             alt="Audio on"
             width={40}
             height={60}
-            className={audioEnabled ? "opacity-100" : "opacity-30"}
+            className={isSoundEnabled ? "opacity-100" : "opacity-30"}
           />
         </button>
         <button 
@@ -139,7 +142,7 @@ export default function SplashPage() {
             alt="Audio off"
             width={40}
             height={60}
-            className={!audioEnabled ? "opacity-100" : "opacity-30"}
+            className={!isSoundEnabled ? "opacity-100" : "opacity-30"}
           />
         </button>
       </div>

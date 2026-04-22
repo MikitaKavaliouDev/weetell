@@ -18,6 +18,7 @@ interface AssessmentState {
   currentSubtitle: string;
   showTextLabels: boolean;
   showSubtitles: boolean;
+  isSoundEnabled: boolean;
   
   // Actions
   setLocale: (locale: Locale) => void;
@@ -31,6 +32,7 @@ interface AssessmentState {
   clearSubtitle: () => void;
   toggleTextLabels: () => void;
   toggleSubtitles: () => void;
+  toggleSound: () => void;
   resetAssessment: () => void;
 }
 
@@ -47,6 +49,7 @@ export const useAssessmentStore = create<AssessmentState>()(
       currentSubtitle: '',
       showTextLabels: true,
       showSubtitles: true,
+      isSoundEnabled: true,
 
       setLocale: (locale) => set({ locale }),
       setAgeGroup: (ageGroup) => set({ ageGroup }),
@@ -59,6 +62,7 @@ export const useAssessmentStore = create<AssessmentState>()(
       clearSubtitle: () => set({ currentSubtitle: '' }),
       toggleTextLabels: () => set((state) => ({ showTextLabels: !state.showTextLabels })),
       toggleSubtitles: () => set((state) => ({ showSubtitles: !state.showSubtitles })),
+      toggleSound: () => set((state) => ({ isSoundEnabled: !state.isSoundEnabled })),
       resetAssessment: () => set({
         ageGroup: null,
         bodyPart: null,
@@ -81,7 +85,8 @@ export const useAssessmentStore = create<AssessmentState>()(
         actionDecision: state.actionDecision,
         urgencyLevel: state.urgencyLevel,
         showTextLabels: state.showTextLabels,
-        showSubtitles: state.showSubtitles 
+        showSubtitles: state.showSubtitles,
+        isSoundEnabled: state.isSoundEnabled
       }),
     }
   )

@@ -90,7 +90,7 @@ export default function ResultsPage() {
 
       {/* Main Content Area */}
       <div className="flex-1 bg-[#FAFAFA] relative z-10">
-        <div className="max-w-md mx-auto px-6 py-8">
+        <div className="max-w-md mx-auto px-6 pt-16 pb-8">
             <AnimatePresence mode="wait">
                 {!showResults ? (
                      /* OFT GESUCHT SECTION */

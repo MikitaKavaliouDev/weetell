@@ -93,17 +93,19 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
         />
       </div>
 
-      <div className="shrink-0 flex flex-col items-center w-full gap-4 mt-6">
-        <motion.button
-          layout
-          onClick={() => setView(view === 'front' ? 'back' : 'front')}
-          className="flex items-center gap-2 px-6 py-3 bg-[#C5A880] text-white rounded-full font-semibold shadow-md"
-          whileHover={{ scale: 1.05 }}
-          whileTap={{ scale: 0.95 }}
-        >
-          <Rotate3D className="w-5 h-5" />
-          {locale === 'de' ? (view === 'front' ? 'Rücken zeigen' : 'Vorne zeigen') : locale === 'es' ? (view === 'front' ? 'Mostrar Espalda' : 'Mostrar Frente') : locale === 'tr' ? (view === 'front' ? 'Sırtı Göster' : 'Önü Göster') : (view === 'front' ? 'Show Back' : 'Show Front')}
-        </motion.button>
+      <div className="fixed bottom-0 left-0 w-full p-6 bg-white/60 backdrop-blur-md z-40 border-t border-gray-100/50">
+        <div className="max-w-2xl mx-auto flex flex-col items-center">
+          <motion.button
+            layout
+            onClick={() => setView(view === 'front' ? 'back' : 'front')}
+            className="flex items-center gap-2 px-6 py-3 bg-[#C5A880] text-white rounded-full font-semibold shadow-md"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <Rotate3D className="w-5 h-5" />
+            {locale === 'de' ? (view === 'front' ? 'Rücken zeigen' : 'Vorne zeigen') : locale === 'es' ? (view === 'front' ? 'Mostrar Espalda' : 'Mostrar Frente') : locale === 'tr' ? (view === 'front' ? 'Sırtı Göster' : 'Önü Göster') : (view === 'front' ? 'Show Back' : 'Show Front')}
+          </motion.button>
+        </div>
       </div>
 
       </div>
