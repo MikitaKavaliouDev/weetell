@@ -76,7 +76,7 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
   };
 
   return (
-    <div className="flex flex-col items-center h-full pt-4 pb-6 px-6 w-full relative">
+    <div className="flex flex-col items-center h-full pt-20 pb-6 px-6 w-full relative">
       <div className="flex items-center gap-3 mb-4 shrink-0">
         <Crosshair className="w-8 h-8 text-[#C5A880]" />
         <h2 className="text-2xl font-bold text-[#4a4a40]">

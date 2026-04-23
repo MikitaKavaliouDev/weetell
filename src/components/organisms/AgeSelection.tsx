@@ -38,12 +38,12 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
 
   return (
     <div className=" w-full p-6 justify-center flex flex-1">
-      <div className="flex flex-row items-end justify-center gap-8 w-full max-w-2xl mx-auto pb-4">
+      <div className="flex flex-row items-center justify-center gap-8 w-full max-w-2xl mx-auto pb-4">
           {/* Baby Option */}
           <motion.div
             whileTap={{ scale: 0.95 }}
             onClick={() => handleSelect('baby')}
-            className="cursor-pointer flex flex-col items-center gap-4"
+            className="cursor-pointer flex flex-col items-center justify-center gap-4"
           >
             <div className="relative w-32 h-32 md:w-36 md:h-36">
                 <Image 

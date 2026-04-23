@@ -58,7 +58,7 @@ export default function SplashPage() {
         {/* Checkbox Area */}
         <div 
           data-testid="disclaimer-checkbox"
-          className="flex items-start gap-4 mb-16 cursor-pointer w-full px-2"
+          className="flex items-start gap-4 mb-4 cursor-pointer w-full px-2"
           onClick={() => setAccepted(!accepted)}
         >
           <div className="pt-1 shrink-0">
