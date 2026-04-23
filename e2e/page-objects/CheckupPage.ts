@@ -1,12 +1,11 @@
-import type { Page } from '@playwright/test';
+import type { Page, Locator } from '@playwright/test';
 
 export type CheckupStep = 'age' | 'body' | 'detailed' | 'severity' | 'urgency' | 'results';
 
 export class CheckupPage {
   readonly page: Page;
-  readonly stepIndicator;
-  readonly backButton;
-  readonly settingsButton;
+  readonly stepIndicator: Locator;
+  readonly settingsButton: Locator;
 
   constructor(page: Page) {
     this.page = page;

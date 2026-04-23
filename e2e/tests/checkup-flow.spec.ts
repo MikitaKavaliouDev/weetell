@@ -118,7 +118,7 @@ test.describe('Checkup Wizard Flow', () => {
   });
 
   test('13. Invalid step: Unknown step shows error with restart option', async ({ page }) => {
-    await checkupPage.goto('invalid-step');
+    await checkupPage.goto('invalid-step' as any);
     await expect(page.getByRole('heading', { name: /step not implemented yet/i })).toBeVisible();
     await expect(page.getByRole('button', { name: /restart/i })).toBeVisible();
   });

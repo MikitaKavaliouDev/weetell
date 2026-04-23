@@ -45,7 +45,7 @@ export default function SplashPage() {
         className="w-full max-w-sm flex flex-col items-center"
       >
         {/* Logo Area */}
-        <div className="flex items-center justify-center mb-16 relative w-full">
+        <div className="flex items-center justify-center relative w-full">
           <Image
             src="/WEEtell_Logo.svg"
             alt="Weetell"
@@ -94,7 +94,7 @@ export default function SplashPage() {
               <>
                 I understand this is a<br />
                 non-diagnostic educational tool.<br />
-                <br />
+                
                 Not a substitute for<br />
                 professional medical advice.
               </>
@@ -118,7 +118,7 @@ export default function SplashPage() {
       </motion.div>
 
       {/* Audio Controls */}
-      <div className="absolute bottom-10 left-10 flex gap-4">
+      <div className="absolute bottom-0 left-10 flex gap-4">
         <button 
           data-testid="audio-on-button"
           onClick={() => toggleAudio(true)}
