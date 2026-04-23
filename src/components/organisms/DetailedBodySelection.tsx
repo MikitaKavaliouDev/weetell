@@ -82,7 +82,7 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
             animate={{ x: 0, opacity: 1 }}
             exit={{ x: '100%', opacity: 0 }}
             transition={{ type: 'spring', damping: 20, stiffness: 100 }}
-            className="absolute top-0 right-0 bottom-0 w-[45%] max-w-[180px] bg-[#FDE68A]/40 backdrop-blur-sm flex flex-col items-center justify-center gap-8 py-10 z-30 border-l-4 border-white"
+            className="fixed top-0 right-0 bottom-0 w-[45%] max-w-[180px] bg-[#FDE68A]/40 backdrop-blur-sm flex flex-col items-center justify-center gap-8 py-10 z-[150] border-l-4 border-white"
           >
             {SYMPTOM_OPTIONS.map((opt, idx) => (
               <div key={idx} className="relative flex flex-col items-center">
