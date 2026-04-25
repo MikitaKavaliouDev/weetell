@@ -152,7 +152,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
             </div>
 
             {/* Action Buttons Layer */}
-            <div className="fixed bottom-0 left-0 w-full p-6 bg-white/60 backdrop-blur-md z-40 border-t border-gray-100/50">
+            <div className="fixed bottom-12 left-0 w-full p-6 bg-white/60 backdrop-blur-md z-40 border-t border-gray-100/50">
                 <div className="flex justify-center gap-6 max-w-2xl mx-auto">
                   <motion.button
                     whileHover={{ scale: 1.1 }}
@@ -217,7 +217,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 1, type: 'spring', stiffness: 400, damping: 16 }}
-              className="fixed bottom-0 left-0 z-50"
+              className="fixed bottom-12 left-0 z-50"
             >
               <VideoShortcutButton
                 onClick={() => setView('video-preview')}
@@ -270,7 +270,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
               initial={{ opacity: 0, scale: 0.5 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.5, type: 'spring', stiffness: 400, damping: 16 }}
-              className="fixed bottom-0 left-0 z-50"
+              className="fixed bottom-12 left-0 z-50"
             >
               <VideoShortcutButton
                 onClick={() => setView('video-preview')}

@@ -6,7 +6,7 @@ export default function WeetellLogo({ className }: { className?: string }) {
     <Image
       src="/assets/WEEtell_WEE_LOGO.svg"
       alt="Weetell Logo"
-      width={48}
+      width={100}
       height={48}
       className={`${className} object-contain `}
     />

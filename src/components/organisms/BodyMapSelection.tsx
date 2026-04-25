@@ -93,7 +93,7 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
         />
       </div>
 
-      <div className="fixed bottom-0 left-0 w-full p-6 bg-white/60 backdrop-blur-md z-40 border-t border-gray-100/50">
+      <div className="fixed bottom-12 left-0 w-full p-6 bg-white/60 backdrop-blur-md z-40 border-t border-gray-100/50">
         <div className="max-w-2xl mx-auto flex flex-col items-center">
           <motion.button
             layout

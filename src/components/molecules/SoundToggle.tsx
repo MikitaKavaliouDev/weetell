@@ -24,7 +24,7 @@ export default function SoundToggle() {
   };
 
   return (
-    <div className="fixed bottom-6 left-10 flex gap-4 z-150 pointer-events-auto">
+    <div className="fixed bottom-2 left-10 flex gap-4 z-150 pointer-events-auto">
       <button 
         data-testid="audio-on-button-global"
         onClick={() => toggleAudio(true)}
