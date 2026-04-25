@@ -17,6 +17,7 @@ export default function SplashPage() {
 
   const handleStart = () => {
     if (!accepted) return;
+    sessionStorage.setItem('disclaimerAccepted', 'true');
     audioManager.setEnabled(isSoundEnabled);
     audioManager.playSound('success');
     audioManager.narrate(
@@ -26,15 +27,6 @@ export default function SplashPage() {
     router.push('/start');
   };
 
-  const toggleAudio = (state: boolean) => {
-    if (state !== isSoundEnabled) {
-      toggleSound();
-      audioManager.setEnabled(state);
-      if (state) {
-        audioManager.playSound('click');
-      }
-    }
-  };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-white relative px-6">
@@ -47,7 +39,7 @@ export default function SplashPage() {
         {/* Logo Area */}
         <div className="flex items-center justify-center relative w-full">
           <Image
-            src="/WEEtell_Logo.svg"
+            src="/assets/WEE_child_logo.svg"
             alt="Weetell"
             width={400}
             height={267}
@@ -117,35 +109,6 @@ export default function SplashPage() {
         </button>
       </motion.div>
 
-      {/* Audio Controls */}
-      <div className="absolute bottom-0 left-10 flex gap-4">
-        <button 
-          data-testid="audio-on-button"
-          onClick={() => toggleAudio(true)}
-          className="transition-transform hover:scale-110"
-        >
-          <Image 
-            src="/assets/blue_on_speaker_icons.svg"
-            alt="Audio on"
-            width={40}
-            height={60}
-            className={isSoundEnabled ? "opacity-100" : "opacity-30"}
-          />
-        </button>
-        <button 
-          data-testid="audio-off-button"
-          onClick={() => toggleAudio(false)}
-          className="transition-transform hover:scale-110"
-        >
-          <Image 
-            src="/assets/yellow_off_speaker_icon.svg"
-            alt="Audio off"
-            width={40}
-            height={60}
-            className={!isSoundEnabled ? "opacity-100" : "opacity-30"}
-          />
-        </button>
-      </div>
     </div>
   );
 }

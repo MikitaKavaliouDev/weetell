@@ -8,6 +8,8 @@ export const metadata: Metadata = {
 
 import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import SubtitleOverlay from '@/components/molecules/SubtitleOverlay';
+import SoundToggle from '@/components/molecules/SoundToggle';
+import { DisclaimerGuard } from '@/components/DisclaimerGuard';
 
 export default function RootLayout({
   children,
@@ -20,10 +22,11 @@ export default function RootLayout({
         {/* Visual medical disclaimer conditionally rendered */}
        
         
-        <NuqsAdapter>{children}</NuqsAdapter>
+        <NuqsAdapter><DisclaimerGuard>{children}</DisclaimerGuard></NuqsAdapter>
         
         {/* Foundational layout for deaf/hard-of-hearing text subtitle support */}
         <SubtitleOverlay />
+        <SoundToggle />
       </body>
     </html>
   );
