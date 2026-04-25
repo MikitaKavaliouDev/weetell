@@ -7,6 +7,7 @@ import Image from 'next/image';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import { useEffect } from 'react';
 import { audioManager } from '@/lib/audio';
+import WeetellLogo from '@/components/molecules/WeetellLogo';
 
 export default function PharmacyPage() {
   const router = useRouter();
@@ -31,20 +32,22 @@ export default function PharmacyPage() {
 
   return (
     <div className="min-h-screen bg-white flex flex-col p-6">
-      <header className="sticky top-0 bg-white/95 backdrop-blur-sm flex items-center gap-4 py-4 mb-8 z-50">
+      <header className="fixed top-0 bg-white/95 backdrop-blur-sm flex justify-between items-center gap-4 py-4 mb-8 z-50">
         <button onClick={() => router.back()} className="w-12 h-12 rounded-full flex items-center justify-center border border-neutral-100 shadow-sm transition-colors hover:bg-neutral-50">
           <ArrowLeft size={24} />
         </button>
-        <h1 className="text-2xl font-bold text-neutral-800">
+        
+        <WeetellLogo className="shrink-0" />
+        <h1 className="text-2xl font-bold text-neutral-800 flex-1">
           {locale === 'de' ? 'Apotheker-Beratung' : locale === 'es' ? 'Consejo de Farmacia' : locale === 'tr' ? 'Eczane Danışmanlığı' : 'Pharmacy Advice'}
         </h1>
       </header>
 
-      <div className="flex-1 max-w-md mx-auto w-full space-y-8">
+      <div className="flex-1 max-w-md mx-auto w-full space-y-8 mt-20">
         {/* Main Illustration */}
         <div className="flex justify-center">
           <div className="w-48 h-48 bg-[#6B8E23]/10 rounded-full flex items-center justify-center relative">
-            <Image src="/medicine.png" alt="Pharmacy" fill className="object-contain p-8" />
+            <Image src="/assets/chemist_icon.svg" alt="Pharmacy" fill className="object-contain p-8" />
           </div>
         </div>
 
