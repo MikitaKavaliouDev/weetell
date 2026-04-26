@@ -3,6 +3,7 @@
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import { useEffect } from 'react';
 import { audioManager } from '@/lib/audio';
+import { motion, AnimatePresence } from 'framer-motion';
 
 export default function SubtitleOverlay() {
   const showSubtitles = useAssessmentStore((state) => state.showSubtitles);
@@ -14,15 +15,30 @@ export default function SubtitleOverlay() {
     audioManager.setEnabled(isSoundEnabled);
   }, [isSoundEnabled]);
   
-  if (!showSubtitles || !currentSubtitle) return null;
-
   return (
     <div className="fixed top-[100px] left-0 right-0 pointer-events-none z-40 flex justify-center px-6">
-       <div 
-         className="bg-black/80 text-white font-bold text-lg px-6 py-3 rounded-2xl text-center backdrop-blur-md max-w-lg shadow-xl"
-       >
-           {currentSubtitle}
-       </div>
+      <AnimatePresence>
+        {showSubtitles && currentSubtitle && (
+          <motion.div 
+            initial={{ opacity: 0, y: -20, scale: 0.9 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: -20, scale: 0.9 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 16 }}
+            className="relative bg-wee-yellow text-wee-black font-bold text-xl md:text-2xl px-10 py-5 rounded-[2.5rem] text-center shadow-xl max-w-lg"
+          >
+            {currentSubtitle}
+            
+            {/* Speech bubble tail */}
+            <div 
+              className="absolute -bottom-3 left-10 w-8 h-8 bg-wee-yellow"
+              style={{ 
+                clipPath: 'polygon(0 0, 100% 0, 0 100%)',
+                transform: 'translateX(-50%)'
+              }}
+            />
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

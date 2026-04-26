@@ -47,10 +47,6 @@ export default function SymptomSelection({ onNext }: SymptomSelectionProps) {
 
   return (
     <div className="flex flex-col h-full items-center relative pt-4">
-      <h2 className="text-2xl font-bold text-[#4a4a40] mb-4 text-center">
-        {locale === 'de' ? 'Welche Symptome?' : locale === 'es' ? '¿Qué síntomas?' : locale === 'tr' ? 'Hangi semptomlar?' : 'What symptoms?'}
-      </h2>
-      
       <div className="flex flex-wrap justify-center gap-4 mb-4 z-10 w-full px-4 max-h-[30vh] overflow-y-auto">
         {symptoms.map((symptomItem, index) => {
           const isSelected = symptom === symptomItem.id;

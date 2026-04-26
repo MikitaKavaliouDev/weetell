@@ -50,10 +50,6 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
 
   return (
     <div className="flex flex-col items-center justify-center h-full w-full">
-      <h2 className="text-2xl font-bold text-[#4a4a40] mb-8 text-center">
-        {locale === 'de' ? 'Wo genau?' : locale === 'es' ? '¿Dónde exactamente?' : locale === 'tr' ? 'Tam olarak neresi?' : 'Where exactly?'}
-      </h2>
-      
       <div className="relative w-full max-w-[320px] aspect-[3/4]">
         <motion.div
           animate={{ scale: showSlider ? 0.95 : 1 }}

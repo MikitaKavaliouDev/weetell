@@ -101,7 +101,7 @@ export default function SplashPage() {
           onClick={handleStart}
           className={`w-full max-w-[280px] py-4 rounded-full font-bold text-2xl transition-all ${
             accepted
-              ? 'bg-[#ffcc00] text-[#0088cc] shadow-md hover:scale-[1.02] active:scale-95'
+              ? 'bg-wee-yellow text-wee-black shadow-md hover:scale-[1.02] active:scale-95'
               : 'bg-[#e5e7eb] text-[#6b7280] cursor-not-allowed'
           }`}
         >

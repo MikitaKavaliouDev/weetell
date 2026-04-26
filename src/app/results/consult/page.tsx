@@ -62,7 +62,10 @@ export default function ConsultPage() {
           </button>
 
           {/* Doctor Button */}
-          <button className="w-40 h-40 rounded-full flex items-center justify-center p-0 hover:scale-105 transition-transform overflow-hidden">
+          <button 
+            onClick={() => window.location.href = 'https://www.arzt-auskunft.de/?form=fs1'}
+            className="w-40 h-40 rounded-full flex items-center justify-center p-0 hover:scale-105 transition-transform overflow-hidden"
+          >
              <div className="relative w-full h-full">
                  <Image 
                      src="/doctor.png" 

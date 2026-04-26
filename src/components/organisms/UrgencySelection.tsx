@@ -97,10 +97,6 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
 
   return (
     <div className="flex flex-col items-center justify-center h-full pt-4 pb-8 px-6">
-      <h2 className="text-2xl font-bold text-[#4a4a40] mb-2 text-center">
-        {locale === 'de' ? 'Empfohlene Stufe' : locale === 'es' ? 'Nivel Recomendado' : locale === 'tr' ? 'Önerilen Seviye' : 'Recommended Level'}
-      </h2>
-
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}

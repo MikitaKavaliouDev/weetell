@@ -21,6 +21,8 @@
   /* Gray 400 - Secondary Text */
   --dark-grey: #1f2937;
   /* Gray 800 - Primary Text */
+  --wee-yellow: #FFC52F;
+  --wee-black: #1A1A1A;
 }
 
 @theme inline {
@@ -36,6 +38,8 @@
   --color-light-grey: var(--light-grey);
   --color-medium-grey: var(--medium-grey);
   --color-dark-grey: var(--dark-grey);
+  --color-wee-yellow: var(--wee-yellow);
+  --color-wee-black: var(--wee-black);
 }
 
 @layer utilities {

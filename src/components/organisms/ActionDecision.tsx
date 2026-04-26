@@ -92,10 +92,6 @@ export default function ActionDecision({ onNext }: ActionDecisionProps) {
 
   return (
     <div className="flex flex-col items-center justify-center h-full pt-4 pb-8 px-6">
-      <h2 className="text-2xl font-bold text-[#4a4a40] mb-8 text-center">
-        {str.header}
-      </h2>
-
       <div className="flex flex-col gap-6 w-full max-w-md">
         {/* Wait / Home Care Option */}
         <motion.div

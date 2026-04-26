@@ -8,9 +8,10 @@ import VideoPlayer from '../molecules/VideoPlayer';
 import VideoShortcutButton from '../atoms/VideoShortcutButton';
 import { Play } from 'lucide-react';
 import { audioManager } from '@/lib/audio';
-import { getVideoForTemperature } from '@/data/symptom-graph';
+import { SYMPTOM_GRAPH, getVideoForTemperature } from '@/data/symptom-graph';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import { Droplet, Thermometer, Music, Bandage, X } from 'lucide-react';
 
 interface SeveritySelectionProps {
   onNext: () => void;
@@ -27,6 +28,10 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   
   type View = 'selection' | 'video-preview' | 'video-playing' | 'waiting-room' | 'home-care-choice';
   const [view, setView] = useState<View>('selection');
+  const [selectedCareStep, setSelectedCareStep] = useState<number | null>(null);
+
+  const symptomData = SYMPTOM_GRAPH.head[ageGroup || 'child'][0]; // Fever data
+  const waitSteps = symptomData?.waitGuidance?.steps || [];
 
   useEffect(() => {
     const subtitle = locale === 'de' ? 'Was möchten Sie tun?' : locale === 'es' ? '¿Qué te gustaría hacer?' : locale === 'tr' ? 'Ne yapmak istersiniz?' : 'What would you like to do?';
@@ -148,7 +153,43 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                 />
               </div>
 
-             
+              {/* Interactive Care Bubbles */}
+              {view === 'selection' && [
+                { id: 0, icon: Thermometer, color: 'bg-red-100 text-red-600', top: '15%', left: '72%' },
+                { id: 1, icon: Droplet, color: 'bg-amber-100 text-amber-600', top: '30%', left: '18%' },
+                { id: 2, icon: Music, color: 'bg-emerald-100 text-emerald-600', top: '70%', left: '75%' },
+                { id: 3, icon: Bandage, color: 'bg-blue-100 text-blue-600', top: '45%', left: '82%' },
+              ].map((bubble) => (
+                <motion.button
+                  key={bubble.id}
+                  className={`absolute w-12 h-12 ${bubble.color} rounded-full flex items-center justify-center shadow-lg border-2 border-white z-10 cursor-pointer`}
+                  style={{ top: bubble.top, left: bubble.left }}
+                  whileHover={{ scale: 1.15 }}
+                  whileTap={{ scale: 0.9 }}
+                  animate={{
+                    y: [0, -10, 0],
+                  }}
+                  transition={{
+                    duration: 4,
+                    repeat: Infinity,
+                    ease: "easeInOut",
+                    delay: bubble.id * 0.7
+                  }}
+                  onClick={() => {
+                    audioManager.playSound('click');
+                    setSelectedCareStep(bubble.id);
+                    if (waitSteps[bubble.id]) {
+                      const text = locale === 'de' ? waitSteps[bubble.id].textDe : 
+                                 locale === 'es' ? waitSteps[bubble.id].textEs :
+                                 locale === 'tr' ? waitSteps[bubble.id].textTr :
+                                 waitSteps[bubble.id].text;
+                      audioManager.narrate(text, locale);
+                    }
+                  }}
+                >
+                  <bubble.icon size={24} />
+                </motion.button>
+              ))}
             </div>
 
             {/* Action Buttons Layer */}
@@ -282,6 +323,66 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
         
       </AnimatePresence>
       
+      {/* Care Guidance Overlay */}
+      <AnimatePresence>
+        {selectedCareStep !== null && (
+          <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/40 backdrop-blur-md"
+            onClick={() => setSelectedCareStep(null)}
+          >
+            <motion.div 
+              initial={{ scale: 0.9, opacity: 0, y: 20 }}
+              animate={{ scale: 1, opacity: 1, y: 0 }}
+              exit={{ scale: 0.9, opacity: 0, y: 20 }}
+              className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl relative border-4 border-amber-100"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <button 
+                className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 transition-colors"
+                onClick={() => setSelectedCareStep(null)}
+              >
+                <X size={24} className="text-gray-400" />
+              </button>
+              
+              <div className="flex flex-col items-center text-center gap-6">
+                <div className={`w-20 h-20 rounded-full flex items-center justify-center shadow-inner
+                  ${selectedCareStep === 0 ? 'bg-red-50 text-red-500' : 
+                    selectedCareStep === 1 ? 'bg-amber-50 text-amber-500' : 
+                    selectedCareStep === 2 ? 'bg-emerald-50 text-emerald-500' : 
+                    'bg-blue-50 text-blue-500'}`}
+                >
+                   {selectedCareStep === 0 && <Thermometer size={40} />}
+                   {selectedCareStep === 1 && <Droplet size={40} />}
+                   {selectedCareStep === 2 && <Music size={40} />}
+                   {selectedCareStep === 3 && <Bandage size={40} />}
+                </div>
+                
+                <p className="text-2xl font-medium text-gray-800 leading-tight">
+                  {selectedCareStep !== null && waitSteps[selectedCareStep] ? (
+                    locale === 'de' ? waitSteps[selectedCareStep].textDe : 
+                    locale === 'es' ? waitSteps[selectedCareStep].textEs :
+                    locale === 'tr' ? waitSteps[selectedCareStep].textTr :
+                    waitSteps[selectedCareStep].text
+                  ) : ''}
+                </p>
+                
+                <button
+                  className="mt-4 px-8 py-3 bg-gray-100 text-gray-700 font-bold rounded-2xl hover:bg-gray-200 transition-colors"
+                  onClick={() => {
+                    setSelectedCareStep(null);
+                    audioManager.stopNarration();
+                  }}
+                >
+                  {locale === 'de' ? 'OK' : locale === 'es' ? 'OK' : locale === 'tr' ? 'Tamam' : 'OK'}
+                </button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }
