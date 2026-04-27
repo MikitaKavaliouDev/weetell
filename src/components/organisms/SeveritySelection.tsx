@@ -3,15 +3,13 @@
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import { useState, useEffect } from 'react';
-import ThermometerSVG from '../molecules/ThermometerSVG';
 import VideoPlayer from '../molecules/VideoPlayer';
 import VideoShortcutButton from '../atoms/VideoShortcutButton';
-import { Play } from 'lucide-react';
+import { Play, X } from 'lucide-react';
 import { audioManager } from '@/lib/audio';
 import { SYMPTOM_GRAPH, getVideoForTemperature } from '@/data/symptom-graph';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
-import { Droplet, Thermometer, Music, Bandage, X } from 'lucide-react';
 
 interface SeveritySelectionProps {
   onNext: () => void;
@@ -28,10 +26,50 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   
   type View = 'selection' | 'video-preview' | 'video-playing' | 'waiting-room' | 'home-care-choice';
   const [view, setView] = useState<View>('selection');
-  const [selectedCareStep, setSelectedCareStep] = useState<number | null>(null);
 
-  const symptomData = SYMPTOM_GRAPH.head[ageGroup || 'child'][0]; // Fever data
-  const waitSteps = symptomData?.waitGuidance?.steps || [];
+  const [selectedTempInfo, setSelectedTempInfo] = useState<{
+    id: string;
+    text: string;
+    textDe: string;
+    textEs: string;
+    textTr: string;
+    icon: string;
+  } | null>(null);
+
+   const temperatureOptions = [
+     { 
+       id: 'thermometer', 
+       icon: '/assets/fever_pic_assets/thermometer.png',
+       text: 'Monitor temperature every 4 hours for accuracy.',
+       textDe: 'Messen Sie die Temperatur zur Genauigkeit alle 4 Stunden.',
+       textEs: 'Controle la temperatura cada 4 horas para mayor precisión.',
+       textTr: 'Doğruluk için her 4 saatte bir sıcaklığı ölçün.'
+     },
+     { 
+       id: '37.5', 
+       icon: '/assets/fever_pic_assets/thirty_seven_and_five_degres.png',
+       text: 'A mild temperature that usually requires only observation and fluids.',
+       textDe: 'Erhöhte Temperatur, die meist nur Beobachtung und Flüssigkeit erfordert.',
+       textEs: 'Una temperatura leve que generalmente solo requiere observación y líquidos.',
+       textTr: 'Genellikle sadece gözlem ve sıvı gerektiren hafif bir ateş.'
+     },
+     { 
+       id: '38.0', 
+       icon: '/assets/fever_pic_assets/thirty_eight_degres.png',
+       text: 'A moderate fever—ensure your child is resting and drinking plenty of water.',
+       textDe: 'Mäßiges Fieber – achten Sie darauf, dass Ihr Kind ruht und viel trinkt.',
+       textEs: 'Fiebre moderada: asegúrate de que tu hijo descanse y beba mucha agua.',
+       textTr: 'Orta derece ateş — çocuğunuzun dinldiğinden ve bol su içtiğinden emin olun.'
+     },
+     { 
+       id: '40.0', 
+       icon: '/assets/fever_pic_assets/fourty_degres.png',
+       text: 'A high fever that needs close monitoring and may require medical advice.',
+       textDe: 'Hohes Fieber, das engmaschig überwacht werden muss und ärztlichen Rat erfordern kann.',
+       textEs: 'Fiebre alta que requiere un control cercano y puede necesitar consejo médico.',
+       textTr: 'Yakından izlenmesi gereken ve tıbbi tavsiye gerektirebilecek yüksek ateş.'
+     },
+   ];
 
   useEffect(() => {
     const subtitle = locale === 'de' ? 'Was möchten Sie tun?' : locale === 'es' ? '¿Qué te gustaría hacer?' : locale === 'tr' ? 'Ne yapmak istersiniz?' : 'What would you like to do?';
@@ -72,7 +110,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   const videoUrl = getVideoForTemperature(bodyPart || 'head', ageGroup || 'child', symptom || 'fever', 38.0, locale);
 
   return (
-    <div className="flex flex-col items-center justify-between h-full pt-4 pb-8 relative w-full">
+    <div className="flex flex-col items-center justify-between h-full pt-4 pb-8 relative w-full overflow-hidden">
        
       <AnimatePresence mode="wait">
         {view === 'video-playing' ? (
@@ -120,7 +158,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                   onClick={handleChair} 
                   className="w-20 flex flex-col items-center gap-2"
                 >
-                  <Image src="/chair.png" alt="Wait" width={60} height={80} className="object-contain" />
+                  <Image src="/assets/waiting_chair_brown_icon.svg" alt="Wait" width={80} height={80} className="object-contain" />
                 </motion.button>
                 
                 <motion.button 
@@ -129,7 +167,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                   onClick={handleDoctor} 
                   className="w-20 flex flex-col items-center gap-2"
                 >
-                  <Image src="/doctor.png" alt="Doctor" width={60} height={80} className="object-contain" />
+                  <Image src="/assets/brown_doctor_icon.svg" alt="Doctor" width={80} height={80} className="object-contain" />
                 </motion.button>
               </div>
             </div>
@@ -140,54 +178,54 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="flex-1 w-full flex flex-col items-center justify-center relative"
+            className="flex-1 w-full flex flex-col md:flex-row items-center justify-center gap-4 md:gap-12 px-6 max-w-5xl mx-auto mb-28 md:mb-0 mt-16 md:mt-0"
           >
-            <div className="relative w-full max-w-full h-[400px]"> 
-              <div className="flex items-center justify-center  ">
+            {/* Illustration on the Left */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="w-full md:w-1/2 flex justify-center max-h-80 md:max-h-full md:justify-end"
+            >
+              <div className="relative w-full max-w-[300px] aspect-3/4">
                 <Image 
-                  src="/assets/fever_illustration.svg" 
-                  alt="Fever illustration" 
-                  width={300} 
-                  height={400}
-                  className="w-full h-[400px] object-contain"
+                  src="/assets/fever_pic_assets/fever_pic_guy.png" 
+                  alt="Symptom illustration" 
+                  fill
+                  className="object-contain"
+                  priority
                 />
               </div>
+            </motion.div>
 
-              {/* Interactive Care Bubbles */}
-              {view === 'selection' && [
-                { id: 0, icon: Thermometer, color: 'bg-red-100 text-red-600', top: '15%', left: '72%' },
-                { id: 1, icon: Droplet, color: 'bg-amber-100 text-amber-600', top: '30%', left: '18%' },
-                { id: 2, icon: Music, color: 'bg-emerald-100 text-emerald-600', top: '70%', left: '75%' },
-                { id: 3, icon: Bandage, color: 'bg-blue-100 text-blue-600', top: '45%', left: '82%' },
-              ].map((bubble) => (
+            {/* Temperature Icons on the Right */}
+            <div className="w-full md:w-1/2 flex flex-wrap md:flex-col items-center justify-center gap-3 md:gap-3">
+              {temperatureOptions.map((opt, idx) => (
                 <motion.button
-                  key={bubble.id}
-                  className={`absolute w-12 h-12 ${bubble.color} rounded-full flex items-center justify-center shadow-lg border-2 border-white z-10 cursor-pointer`}
-                  style={{ top: bubble.top, left: bubble.left }}
-                  whileHover={{ scale: 1.15 }}
-                  whileTap={{ scale: 0.9 }}
-                  animate={{
-                    y: [0, -10, 0],
-                  }}
-                  transition={{
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut",
-                    delay: bubble.id * 0.7
-                  }}
+                  key={opt.id}
+                  initial={{ opacity: 0, x: 30 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="relative w-20 h-20 md:w-28 md:h-28 flex items-center justify-center group"
+                  whileHover={{ scale: 1.1 }}
+                  whileTap={{ scale: 0.95 }}
                   onClick={() => {
                     audioManager.playSound('click');
-                    setSelectedCareStep(bubble.id);
-                    if (waitSteps[bubble.id]) {
-                      const text = locale === 'de' ? waitSteps[bubble.id].textDe : 
-                                 locale === 'es' ? waitSteps[bubble.id].textEs :
-                                 locale === 'tr' ? waitSteps[bubble.id].textTr :
-                                 waitSteps[bubble.id].text;
-                      audioManager.narrate(text, locale);
-                    }
+                    setSelectedTempInfo(opt);
+                    const text = locale === 'de' ? opt.textDe : 
+                               locale === 'es' ? opt.textEs :
+                               locale === 'tr' ? opt.textTr :
+                               opt.text;
+                    audioManager.narrate(text, locale);
                   }}
                 >
-                  <bubble.icon size={24} />
+                  <div className="absolute inset-0 bg-amber-100/0 group-hover:bg-amber-100/30 rounded-full transition-colors duration-300" />
+                  <Image 
+                    src={opt.icon} 
+                    alt={opt.id} 
+                    width={112} 
+                    height={112} 
+                    className="object-contain drop-shadow-md group-hover:drop-shadow-lg transition-all"
+                  />
                 </motion.button>
               ))}
             </div>
@@ -216,7 +254,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                    onClick={handleChair} 
                    className="w-[100px]  flex items-center justify-center overflow-hidden"
                  >
-                    <Image src="/chair.png" alt="Wait" width={75}
+                    <Image src="/assets/waiting_chair_brown_icon.svg" alt="Wait" width={90}
                       height={100} className="object-contain" />
                  </motion.button>
                  
@@ -226,7 +264,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                     onClick={handleDoctor} 
                    className="w-[100px]  flex items-center justify-center overflow-hidden"
                   >
-                     <Image src="/doctor.png" alt="Nurse"  width={75}
+                     <Image src="/assets/brown_doctor_icon.svg" alt="Nurse"  width={90}
                        height={100} className="object-contain" />
                   </motion.button>
                 </div>
@@ -279,7 +317,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => router.push('/results/map')}
-                className="w-1/2 max-w-[160px] aspect-square flex items-center justify-center"
+                className="w-1/2 max-w-40 aspect-square flex items-center justify-center"
               >
                 <Image
                   src="/assets/directions_icon.svg"
@@ -294,7 +332,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
                 onClick={() => router.push('/results/pharmacy')}
-                className="w-1/2 max-w-[160px] aspect-square flex items-center justify-center"
+                className="w-1/2 max-w-40 aspect-square flex items-center justify-center"
               >
                 <Image
                   src="/assets/chemist_icon.svg"
@@ -322,16 +360,19 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
         ) : null}
         
       </AnimatePresence>
-      
-      {/* Care Guidance Overlay */}
+
+      {/* Temperature Info Overlay */}
       <AnimatePresence>
-        {selectedCareStep !== null && (
+        {selectedTempInfo && (
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/40 backdrop-blur-md"
-            onClick={() => setSelectedCareStep(null)}
+            onClick={() => {
+               setSelectedTempInfo(null);
+               audioManager.stopNarration();
+            }}
           >
             <motion.div 
               initial={{ scale: 0.9, opacity: 0, y: 20 }}
@@ -342,37 +383,36 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
             >
               <button 
                 className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 transition-colors"
-                onClick={() => setSelectedCareStep(null)}
+                onClick={() => {
+                  setSelectedTempInfo(null);
+                  audioManager.stopNarration();
+                }}
               >
                 <X size={24} className="text-gray-400" />
               </button>
               
               <div className="flex flex-col items-center text-center gap-6">
-                <div className={`w-20 h-20 rounded-full flex items-center justify-center shadow-inner
-                  ${selectedCareStep === 0 ? 'bg-red-50 text-red-500' : 
-                    selectedCareStep === 1 ? 'bg-amber-50 text-amber-500' : 
-                    selectedCareStep === 2 ? 'bg-emerald-50 text-emerald-500' : 
-                    'bg-blue-50 text-blue-500'}`}
-                >
-                   {selectedCareStep === 0 && <Thermometer size={40} />}
-                   {selectedCareStep === 1 && <Droplet size={40} />}
-                   {selectedCareStep === 2 && <Music size={40} />}
-                   {selectedCareStep === 3 && <Bandage size={40} />}
+                <div className="w-24 h-24 rounded-full bg-amber-50 flex items-center justify-center p-2 shadow-inner">
+                  <Image 
+                    src={selectedTempInfo?.icon || ''} 
+                    alt={selectedTempInfo?.id || ''} 
+                    width={80} 
+                    height={80} 
+                    className="object-contain"
+                  />
                 </div>
                 
                 <p className="text-2xl font-medium text-gray-800 leading-tight">
-                  {selectedCareStep !== null && waitSteps[selectedCareStep] ? (
-                    locale === 'de' ? waitSteps[selectedCareStep].textDe : 
-                    locale === 'es' ? waitSteps[selectedCareStep].textEs :
-                    locale === 'tr' ? waitSteps[selectedCareStep].textTr :
-                    waitSteps[selectedCareStep].text
-                  ) : ''}
+                  {locale === 'de' ? selectedTempInfo?.textDe : 
+                   locale === 'es' ? selectedTempInfo?.textEs :
+                   locale === 'tr' ? selectedTempInfo?.textTr :
+                   selectedTempInfo?.text}
                 </p>
                 
                 <button
-                  className="mt-4 px-8 py-3 bg-gray-100 text-gray-700 font-bold rounded-2xl hover:bg-gray-200 transition-colors"
+                  className="mt-4 px-8 py-3 bg-amber-100 text-amber-900 font-bold rounded-2xl hover:bg-amber-200 transition-colors"
                   onClick={() => {
-                    setSelectedCareStep(null);
+                    setSelectedTempInfo(null);
                     audioManager.stopNarration();
                   }}
                 >
