@@ -198,14 +198,14 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
             </motion.div>
 
             {/* Temperature Icons on the Right */}
-            <div className="w-full md:w-1/2 flex flex-wrap md:flex-col items-center justify-center gap-3 md:gap-3">
+            <div className="w-full md:w-1/2 flex flex-wrap md:flex-col items-center justify-center gap-1 md:gap-1">
               {temperatureOptions.map((opt, idx) => (
                 <motion.button
                   key={opt.id}
                   initial={{ opacity: 0, x: 30 }}
                   animate={{ opacity: 1, x: 0 }}
                   transition={{ delay: idx * 0.1 }}
-                  className="relative w-20 h-20 md:w-28 md:h-28 flex items-center justify-center group"
+                  className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center group"
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.95 }}
                   onClick={() => {
