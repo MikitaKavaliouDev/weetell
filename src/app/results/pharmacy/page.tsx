@@ -83,7 +83,7 @@ export default function PharmacyPage() {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => router.push('/results/map')}
+          onClick={() => window.location.href = 'https://www.arzt-auskunft.de/?form=fs1'}
           className="w-full bg-[#6B8E23] text-white rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold shadow-lg shadow-green-900/20"
         >
           <MapPin size={20} />

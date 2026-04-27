@@ -316,7 +316,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => router.push('/results/map')}
+                onClick={() => window.location.href = 'https://www.arzt-auskunft.de/?form=fs1'}
                 className="w-1/2 max-w-40 aspect-square flex items-center justify-center"
               >
                 <Image
@@ -331,7 +331,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => router.push('/results/pharmacy')}
+                onClick={() => window.location.href = 'https://www.arzt-auskunft.de/?form=fs1'}
                 className="w-1/2 max-w-40 aspect-square flex items-center justify-center"
               >
                 <Image

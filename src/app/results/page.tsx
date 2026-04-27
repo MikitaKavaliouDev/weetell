@@ -12,7 +12,7 @@ export default function ResultsPage() {
   const [showResults, setShowResults] = useState(false);
 
   const handleSearch = () => {
-    setShowResults(true);
+    window.location.href = 'https://www.arzt-auskunft.de/?form=fs1';
   };
 
   return (

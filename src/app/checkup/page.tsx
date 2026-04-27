@@ -62,9 +62,9 @@ function CheckupWizard() {
 
   useEffect(() => {
     if (step === STEPS.RESULTS) {
-      router.push("/results");
+      window.location.href = 'https://www.arzt-auskunft.de/?form=fs1';
     }
-  }, [step, router]);
+  }, [step]);
 
   const renderStep = () => {
     switch (step) {

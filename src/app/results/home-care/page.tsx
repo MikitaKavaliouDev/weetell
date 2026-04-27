@@ -128,7 +128,7 @@ export default function HomeCarePage() {
             ))}
           </ul>
           <button
-            onClick={() => router.push('/results')}
+            onClick={() => window.location.href = 'https://www.arzt-auskunft.de/?form=fs1'}
             className="mt-3 w-full flex items-center justify-center gap-2 bg-amber-100 hover:bg-amber-200 text-amber-800 rounded-xl py-2 text-sm font-medium transition-colors"
           >
             <Phone size={16} />
@@ -149,7 +149,7 @@ export default function HomeCarePage() {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => router.push('/results/pharmacy')}
+          onClick={() => window.location.href = 'https://www.arzt-auskunft.de/?form=fs1'}
           className="w-full mt-4 bg-white border-2 border-[#6B8E23] text-[#6B8E23] rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold"
         >
           <Pill size={20} />

@@ -87,12 +87,12 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
 
   const handleProceed = () => {
     audioManager.playSound('success');
-    onNext();
+    window.location.href = 'https://www.arzt-auskunft.de/?form=fs1';
   };
 
   const handleFindDoctor = () => {
     audioManager.playSound('click');
-    router.push('/results');
+    window.location.href = 'https://www.arzt-auskunft.de/?form=fs1';
   };
 
   return (
