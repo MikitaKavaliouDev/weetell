@@ -1,6 +1,7 @@
 'use client';
 
 import { motion } from 'framer-motion';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useAssessmentStore, Locale } from '@/stores/useAssessmentStore';
 
@@ -50,10 +51,12 @@ export default function StartPage() {
                 transition={{ duration: 0.5 }}
                 className="z-10"
             >
-                <img 
-                    src="/assets/world.png" 
-                    alt="World" 
+                <Image
+                    src="/assets/world.png"
+                    alt="World"
                     className="w-100 h-100 object-contain"
+                    width={100}
+                    height={100}
                 />
             </motion.div>
 
@@ -82,10 +85,12 @@ export default function StartPage() {
                      
 
                         {/* Content (Flag Image) */}
-                        <img 
+                        <Image 
                             src={flagAssets[locale.id]} 
                             alt={locale.label}
                             className="w-20 h-20 object-contain relative z-10"
+                            width={20}
+                            height={20}
                         />
                     </motion.button>
                 );
