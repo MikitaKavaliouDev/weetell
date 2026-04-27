@@ -198,36 +198,71 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
             </motion.div>
 
             {/* Temperature Icons on the Right */}
-            <div className="w-full md:w-1/2 flex flex-wrap md:flex-col items-center justify-center gap-1 md:gap-1">
-              {temperatureOptions.map((opt, idx) => (
-                <motion.button
-                  key={opt.id}
-                  initial={{ opacity: 0, x: 30 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center group"
-                  whileHover={{ scale: 1.1 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => {
-                    audioManager.playSound('click');
-                    setSelectedTempInfo(opt);
-                    const text = locale === 'de' ? opt.textDe : 
-                               locale === 'es' ? opt.textEs :
-                               locale === 'tr' ? opt.textTr :
-                               opt.text;
-                    audioManager.narrate(text, locale);
-                  }}
-                >
-                  <div className="absolute inset-0 bg-amber-100/0 group-hover:bg-amber-100/30 rounded-full transition-colors duration-300" />
-                  <Image 
-                    src={opt.icon} 
-                    alt={opt.id} 
-                    width={112} 
-                    height={112} 
-                    className="object-contain drop-shadow-md group-hover:drop-shadow-lg transition-all"
-                  />
-                </motion.button>
-              ))}
+            <div className="w-full md:w-1/2 flex flex-col items-center justify-center gap-6">
+              {/* Thermometer Line */}
+              <div className="flex justify-center w-full">
+                {temperatureOptions.filter(opt => opt.id === 'thermometer').map((opt) => (
+                  <motion.button
+                    key={opt.id}
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    className="relative w-16 h-16 md:w-24 md:h-24 flex items-center justify-center group"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      audioManager.playSound('click');
+                      setSelectedTempInfo(opt);
+                      const text = locale === 'de' ? opt.textDe : 
+                                 locale === 'es' ? opt.textEs :
+                                 locale === 'tr' ? opt.textTr :
+                                 opt.text;
+                      audioManager.narrate(text, locale);
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-amber-100/0 group-hover:bg-amber-100/30 rounded-full transition-colors duration-300" />
+                    <Image 
+                      src={opt.icon} 
+                      alt={opt.id} 
+                      width={112} 
+                      height={112} 
+                      className="object-contain drop-shadow-md group-hover:drop-shadow-lg transition-all"
+                    />
+                  </motion.button>
+                ))}
+              </div>
+
+              {/* Temperatures Line */}
+              <div className="flex flex-wrap items-center justify-center gap-2 md:gap-6">
+                {temperatureOptions.filter(opt => opt.id !== 'thermometer').map((opt, idx) => (
+                  <motion.button
+                    key={opt.id}
+                    initial={{ opacity: 0, x: 30 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: idx * 0.1 }}
+                    className="relative w-16 h-16 md:w-20 md:h-20 flex items-center justify-center group"
+                    whileHover={{ scale: 1.1 }}
+                    whileTap={{ scale: 0.95 }}
+                    onClick={() => {
+                      audioManager.playSound('click');
+                      setSelectedTempInfo(opt);
+                      const text = locale === 'de' ? opt.textDe : 
+                                 locale === 'es' ? opt.textEs :
+                                 locale === 'tr' ? opt.textTr :
+                                 opt.text;
+                      audioManager.narrate(text, locale);
+                    }}
+                  >
+                    <div className="absolute inset-0 bg-amber-100/0 group-hover:bg-amber-100/30 rounded-full transition-colors duration-300" />
+                    <Image 
+                      src={opt.icon} 
+                      alt={opt.id} 
+                      width={112} 
+                      height={112} 
+                      className="object-contain drop-shadow-md group-hover:drop-shadow-lg transition-all"
+                    />
+                  </motion.button>
+                ))}
+              </div>
             </div>
 
             {/* Action Buttons Layer */}
