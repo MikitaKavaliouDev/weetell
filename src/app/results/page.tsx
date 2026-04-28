@@ -1,15 +1,20 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { ArztAuskunftLogo, MenuIcon, SearchIcon, GeneralPracticeIcon, GynecologyIcon, OrthopedicsIcon } from '@/components/atoms/ResultsIcons';
 import { DOCTORS } from '@/data/doctors';
 import { Star, MapPin, ArrowLeft } from 'lucide-react';
+import { audioManager } from '@/lib/audio';
 
 export default function ResultsPage() {
   const router = useRouter();
   const [showResults, setShowResults] = useState(false);
+
+  useEffect(() => {
+    audioManager.playSound('reassurance');
+  }, []);
 
   const handleSearch = () => {
     window.location.href = 'https://www.arzt-auskunft.de/?form=fs1';

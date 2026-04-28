@@ -1,12 +1,13 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { ArrowLeft, Play, CheckCircle, Clock, Thermometer, Droplets, X, Pill, AlertTriangle, Phone } from 'lucide-react';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import VideoPlayer from '@/components/molecules/VideoPlayer';
 import { getVideoForTemperature } from '@/data/symptom-graph';
+import { audioManager } from '@/lib/audio';
 
 export default function HomeCarePage() {
   const router = useRouter();
@@ -16,6 +17,10 @@ export default function HomeCarePage() {
   const ageGroup = useAssessmentStore((state) => state.ageGroup);
   const symptom = useAssessmentStore((state) => state.symptom);
   const [showVideo, setShowVideo] = useState(false);
+
+  useEffect(() => {
+    audioManager.playSound('reassurance');
+  }, []);
 
   const videoUrl = getVideoForTemperature(bodyPart || 'head', ageGroup || 'child', symptom || 'fever', severity || 37.5, locale);
 

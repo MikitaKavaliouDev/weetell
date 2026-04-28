@@ -1,11 +1,51 @@
-type SoundType = 'click' | 'success' | 'error' | 'hover' | 'narrative';
+export type SoundType = 
+  | 'brand_logo' 
+  | 'bubble_appears' 
+  | 'click' 
+  | 'success' 
+  | 'next' 
+  | 'back' 
+  | 'attention' 
+  | 'error' 
+  | 'reassurance' 
+  | 'voice_cue'
+  | 'hover'     // For backward compatibility
+  | 'narrative'; // For backward compatibility
 
 type Locale = 'en' | 'de' | 'es' | 'tr' | 'fr';
+
+const SOUND_FILES: Record<string, string> = {
+  brand_logo: '01_weetell_brand_logo.wav',
+  bubble_appears: '02_speech_bubble_appears.wav',
+  click: '03_tap_select.wav',
+  success: '04_confirm_success.wav',
+  next: '05_next_continue.wav',
+  back: '06_back_return.wav',
+  attention: '07_attention_check.wav',
+  error: '08_try_again_soft.wav',
+  reassurance: '09_calm_reassurance.wav',
+  voice_cue: '10_listening_voice_cue.wav',
+};
 
 class AudioManager {
   private audioContext: AudioContext | null = null;
   private enabled: boolean = true;
   private currentLocale: Locale = 'en';
+  private sounds: Map<string, HTMLAudioElement> = new Map();
+
+  constructor() {
+    if (typeof window !== 'undefined') {
+      this.preloadSounds();
+    }
+  }
+
+  private preloadSounds() {
+    Object.entries(SOUND_FILES).forEach(([type, filename]) => {
+      const audio = new Audio(`/assets/weetell_sound_system/${filename}`);
+      audio.preload = 'auto';
+      this.sounds.set(type, audio);
+    });
+  }
 
   private getContext(): AudioContext {
     if (!this.audioContext) {
@@ -49,6 +89,10 @@ class AudioManager {
     }
   }
 
+  /**
+   * Play a legacy tone if needed.
+   * Currently kept for reference but unused by main playSound.
+   */
   playTone(frequency: number, duration: number, type: OscillatorType = 'sine', volume: number = 0.3) {
     if (!this.enabled) return;
     
@@ -74,26 +118,35 @@ class AudioManager {
   }
 
   playSound(type: SoundType) {
-    switch (type) {
-      case 'click':
-        this.playTone(800, 0.1, 'sine', 0.2);
-        break;
-      case 'success':
-        this.playTone(523, 0.15, 'sine', 0.2);
-        setTimeout(() => this.playTone(659, 0.15, 'sine', 0.2), 150);
-        setTimeout(() => this.playTone(784, 0.2, 'sine', 0.2), 300);
-        break;
-      case 'error':
-        this.playTone(200, 0.3, 'sawtooth', 0.15);
-        break;
-      case 'hover':
-        this.playTone(440, 0.05, 'sine', 0.1);
-        break;
-      case 'narrative':
-        this.playTone(300, 0.3, 'sine', 0.1);
-        break;
+    if (!this.enabled) return;
+
+    // Handle legacy types
+    let mappedType: string = type;
+    if (type === 'hover') mappedType = 'click';
+    if (type === 'narrative') mappedType = 'bubble_appears';
+
+    const audio = this.sounds.get(mappedType);
+    if (audio) {
+      audio.currentTime = 0;
+      audio.play().catch(e => console.warn(`Failed to play sound ${type}:`, e));
+    } else {
+      // Fallback to legacy tones if file not found or legacy type not mapped
+      switch (type) {
+        case 'click':
+          this.playTone(800, 0.1, 'sine', 0.2);
+          break;
+        case 'success':
+          this.playTone(523, 0.15, 'sine', 0.2);
+          setTimeout(() => this.playTone(659, 0.15, 'sine', 0.2), 150);
+          setTimeout(() => this.playTone(784, 0.2, 'sine', 0.2), 300);
+          break;
+        case 'error':
+          this.playTone(200, 0.3, 'sawtooth', 0.15);
+          break;
+      }
     }
   }
 }
 
 export const audioManager = new AudioManager();
+

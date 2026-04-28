@@ -26,8 +26,9 @@ export default function SettingsMenu({ onBack, onHome, onMobile }: AppMenuProps)
   const locale = useAssessmentStore((state) => state.locale);
   const isMobile = useIsMobile();
 
-  const handleAction = (action?: () => void) => {
+  const handleAction = (action?: () => void, sound: 'click' | 'back' | 'next' = 'click') => {
     if (action) {
+      audioManager.playSound(sound);
       action();
       setIsOpen(false);
     }
@@ -44,7 +45,10 @@ export default function SettingsMenu({ onBack, onHome, onMobile }: AppMenuProps)
 
   return (
     <div className="relative z-[100] overflow-visible">
-      <button onClick={() => setIsOpen(true)} className="p-2 transition-transform active:scale-90">
+      <button onClick={() => {
+        audioManager.playSound('click');
+        setIsOpen(true);
+      }} className="p-2 transition-transform active:scale-90">
         <MenuBurgerIcon className="w-8 h-8" />
       </button>
 
@@ -58,14 +62,17 @@ export default function SettingsMenu({ onBack, onHome, onMobile }: AppMenuProps)
           >
             <div className="flex justify-between items-center">
               <h3 className="font-bold text-neutral-800 text-lg">Menu</h3>
-              <button onClick={() => setIsOpen(false)} className="text-neutral-400 hover:text-neutral-600">
+              <button onClick={() => {
+                audioManager.playSound('click');
+                setIsOpen(false);
+              }} className="text-neutral-400 hover:text-neutral-600">
                 <X size={24} />
               </button>
             </div>
 
             {/* Navigation Actions */}
             <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-3'} gap-3 border-b border-neutral-100 pb-6`}>
-              <button onClick={() => handleAction(onBack)} className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-neutral-50 transition-colors">
+              <button onClick={() => handleAction(onBack, 'back')} className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-neutral-50 transition-colors">
                 <ArrowLeft size={24} className="text-neutral-500" />
                 <span className="text-[10px] font-bold uppercase text-neutral-400">Back</span>
               </button>

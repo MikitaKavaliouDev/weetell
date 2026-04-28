@@ -14,6 +14,13 @@ export default function SubtitleOverlay() {
   useEffect(() => {
     audioManager.setEnabled(isSoundEnabled);
   }, [isSoundEnabled]);
+
+  // Play sound when bubble appears
+  useEffect(() => {
+    if (showSubtitles && currentSubtitle) {
+      audioManager.playSound('bubble_appears');
+    }
+  }, [currentSubtitle, showSubtitles]);
   
   return (
     <div className="fixed top-[100px] left-0 right-0 pointer-events-none z-40 flex justify-center px-6">

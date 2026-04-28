@@ -19,7 +19,7 @@ export default function SplashPage() {
     if (!accepted) return;
     sessionStorage.setItem('disclaimerAccepted', 'true');
     audioManager.setEnabled(isSoundEnabled);
-    audioManager.playSound('success');
+    audioManager.playSound('brand_logo');
     audioManager.narrate(
       locale === 'de' ? 'Willkommen bei Weetell' : locale === 'es' ? 'Bienvenido a Weetell' : locale === 'tr' ? 'Weetell\'e Hoş Geldiniz' : 'Welcome to Weetell',
       locale === 'en' ? 'en' : locale === 'de' ? 'de' : locale === 'es' ? 'es' : 'tr'
