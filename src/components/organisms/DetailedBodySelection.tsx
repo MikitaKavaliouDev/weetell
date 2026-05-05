@@ -43,7 +43,7 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
   };
 
   const handleSymptomSelect = (id: string) => {
-    audioManager.playSound('success');
+    audioManager.playSound('click');
     setSymptom(id); 
     onNext();
   };

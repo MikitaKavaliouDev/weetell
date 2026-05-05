@@ -70,14 +70,14 @@ describe('AgeSelection', () => {
     }, { timeout: 500 });
   });
 
-  it('plays success sound on selection', async () => {
+  it('plays click sound on selection', async () => {
     render(<AgeSelection onNext={mockOnNext} />);
     
     const childOption = screen.getByAltText(/Child 3-11 years/).closest('div[class*="cursor-pointer"]');
     fireEvent.click(childOption!);
     
     await waitFor(() => {
-      expect(audio.audioManager.playSound).toHaveBeenCalledWith('success');
+      expect(audio.audioManager.playSound).toHaveBeenCalledWith('click');
     }, { timeout: 500 });
   });
 

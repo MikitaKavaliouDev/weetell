@@ -55,7 +55,7 @@ function CheckupWizard() {
         break;
       case STEPS.AGE:
       default:
-        router.push("/start");
+        router.push("/");
         break;
     }
   };

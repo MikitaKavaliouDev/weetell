@@ -101,10 +101,10 @@ test.describe('Checkup Wizard Flow', () => {
     expect(checkupPage.getStepFromUrl()).toBe('severity');
   });
 
-  test('11. Back from age: Returns to /start', async ({ page }) => {
+  test('11. Back from age: Returns to globe', async ({ page }) => {
     await checkupPage.goto('age');
     await checkupPage.clickBack();
-    await page.waitForURL(/\/start/);
+    await page.waitForURL(/\//);
   });
 
   test('12. Direct URL access: Navigating to /checkup?step=severity loads severity step', async ({ page }) => {
@@ -160,11 +160,11 @@ test.describe('Checkup Wizard Flow', () => {
     await page.waitForURL(/step=severity/);
   });
 
-  test('19. Restart from middle: Clicking restart clears state, goes to /start', async ({ page }) => {
+  test('19. Restart from middle: Clicking restart clears state, goes to globe', async ({ page }) => {
     await seedZustandState(page, { ageGroup: 'child', bodyPart: 'head' });
     await checkupPage.goto('detailed');
     await checkupPage.clickHome();
-    await page.waitForURL(/\/start/);
+    await page.waitForURL(/\//);
     const state = await page.evaluate(() => {
       const data = localStorage.getItem('weetell-storage');
       if (!data) return null;
@@ -186,7 +186,7 @@ test.describe('Checkup Wizard Flow', () => {
     await page.goto('/results');
     await page.locator('button').filter({ has: page.locator('svg') }).first().click();
     await page.getByRole('button', { name: /home/i }).click();
-    await page.waitForURL(/\/start/);
+    await page.waitForURL(/\//);
     const state = await page.evaluate(() => {
       const data = localStorage.getItem('weetell-storage');
       if (!data) return {};

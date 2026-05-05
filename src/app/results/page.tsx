@@ -13,7 +13,7 @@ export default function ResultsPage() {
   const [showResults, setShowResults] = useState(false);
 
   useEffect(() => {
-    audioManager.playSound('reassurance');
+    audioManager.playSound('click');
   }, []);
 
   const handleSearch = () => {

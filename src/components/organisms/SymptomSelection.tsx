@@ -40,7 +40,7 @@ export default function SymptomSelection({ onNext }: SymptomSelectionProps) {
   }, [locale, setCurrentSubtitle]);
 
   const handleSelectSymptom = (symptomId: string) => {
-    audioManager.playSound('success');
+    audioManager.playSound('click');
     setSymptom(symptomId);
     setTimeout(onNext, 300);
   };

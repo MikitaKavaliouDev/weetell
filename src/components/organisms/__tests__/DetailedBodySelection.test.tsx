@@ -122,7 +122,7 @@ describe('DetailedBodySelection', () => {
     expect(audio.audioManager.playSound).toHaveBeenCalledWith('click');
   });
 
-  it('plays success sound when symptom selected', async () => {
+  it('plays click sound when symptom selected', async () => {
     render(<DetailedBodySelection onNext={mockOnNext} />);
     
     // Click to show slider
@@ -137,6 +137,6 @@ describe('DetailedBodySelection', () => {
       }
     }, { timeout: 500 });
     
-    expect(audio.audioManager.playSound).toHaveBeenCalledWith('success');
+    expect(audio.audioManager.playSound).toHaveBeenCalledWith('click');
   });
 });

@@ -1,8 +1,9 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
-import { useAssessmentStore } from '@/stores/useAssessmentStore';
+
+const PUBLIC_ROUTES = ['/', '/disclaimer'];
 
 interface DisclaimerGuardProps {
   children: React.ReactNode;
@@ -11,26 +12,21 @@ interface DisclaimerGuardProps {
 export function DisclaimerGuard({ children }: DisclaimerGuardProps) {
   const pathname = usePathname();
   const router = useRouter();
-  const resetAssessment = useAssessmentStore((state) => state.resetAssessment);
-
-  useEffect(() => {
-    // Clear state and force start from beginning on refresh
-    sessionStorage.removeItem('disclaimerAccepted');
-    resetAssessment();
-    
-    // If we are not at the index, force redirect
-    if (window.location.pathname !== '/') {
-      router.replace('/');
-    }
-  }, [resetAssessment, router]); // Runs once on mount (stable deps)
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
     const disclaimerAccepted = sessionStorage.getItem('disclaimerAccepted');
-    
-    if (pathname !== '/' && disclaimerAccepted !== 'true') {
+
+    if (!PUBLIC_ROUTES.includes(pathname) && disclaimerAccepted !== 'true') {
       router.replace('/');
+    } else {
+      setIsInitialized(true);
     }
   }, [pathname, router]);
+
+  if (!isInitialized && !PUBLIC_ROUTES.includes(pathname)) {
+    return null;
+  }
 
   return <>{children}</>;
 }

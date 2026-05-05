@@ -19,7 +19,7 @@ export default function HomeCarePage() {
   const [showVideo, setShowVideo] = useState(false);
 
   useEffect(() => {
-    audioManager.playSound('reassurance');
+    audioManager.playSound('click');
   }, []);
 
   const videoUrl = getVideoForTemperature(bodyPart || 'head', ageGroup || 'child', symptom || 'fever', severity || 37.5, locale);

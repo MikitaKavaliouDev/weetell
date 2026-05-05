@@ -1,6 +1,7 @@
 import type { Page } from '@playwright/test';
 
-import { SplashPage } from './SplashPage';
+import { GlobePage } from './GlobePage';
+import { DisclaimerPage } from './DisclaimerPage';
 import { StartPage } from './StartPage';
 import { CheckupPage, type CheckupStep } from './CheckupPage';
 import { AgeSelection } from './AgeSelection';
@@ -11,11 +12,12 @@ import { UrgencySelection, type UrgencyLevel } from './UrgencySelection';
 import { ResultsPage } from './ResultsPage';
 import { SettingsMenu } from './SettingsMenu';
 
-export { SplashPage, StartPage, CheckupPage, AgeSelection, BodyMapSelection, DetailedBodySelection, SeveritySelection, UrgencySelection, ResultsPage, SettingsMenu };
+export { GlobePage, DisclaimerPage, StartPage, CheckupPage, AgeSelection, BodyMapSelection, DetailedBodySelection, SeveritySelection, UrgencySelection, ResultsPage, SettingsMenu };
 export type { CheckupStep, BodyPart, UrgencyLevel };
 
 export class PageObjects {
-  readonly splash: SplashPage;
+  readonly globe: GlobePage;
+  readonly disclaimer: DisclaimerPage;
   readonly start: StartPage;
   readonly checkup: CheckupPage;
   readonly ageSelection: AgeSelection;
@@ -27,7 +29,8 @@ export class PageObjects {
   readonly settings: SettingsMenu;
 
   constructor(page: Page) {
-    this.splash = new SplashPage(page);
+    this.globe = new GlobePage(page);
+    this.disclaimer = new DisclaimerPage(page);
     this.start = new StartPage(page);
     this.checkup = new CheckupPage(page);
     this.ageSelection = new AgeSelection(page);

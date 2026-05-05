@@ -152,14 +152,14 @@ describe('ActionDecision', () => {
     }, { timeout: 500 });
   });
 
-  it('plays success sound on selection', async () => {
+  it('plays click sound on selection', async () => {
     render(<ActionDecision onNext={mockOnNext} />);
     
     const doctorButton = screen.getByText('See a Doctor');
     fireEvent.click(doctorButton);
     
     await waitFor(() => {
-      expect(audio.audioManager.playSound).toHaveBeenCalledWith('success');
+      expect(audio.audioManager.playSound).toHaveBeenCalledWith('click');
     });
   });
 

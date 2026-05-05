@@ -11,18 +11,18 @@ test.describe('Navigation Persistence', () => {
   });
 
   test.describe('Back Button Navigation', () => {
-    test('Back from start: Returns to splash', async ({ page }) => {
-      await page.goto('/start');
-      await page.goBack();
+    test('Back from disclaimer: Returns to globe', async ({ page }) => {
+      await page.goto('/disclaimer');
+      await page.locator('svg').first().click();
       await expect(page).toHaveURL('/');
     });
 
-    test('Back from checkup/age: Returns to start', async ({ page }) => {
+    test('Back from checkup/age: Returns to globe', async ({ page }) => {
       await page.goto('/checkup?step=age');
       await page.locator('button').filter({ has: page.locator('svg') }).first().click();
       await expect(page.getByText('Menu')).toBeVisible();
       await page.getByText('Back').first().click();
-      await expect(page).toHaveURL(/\/start$/);
+      await expect(page).toHaveURL(/\//);
     });
 
     test('Back from checkup/body: Returns to age', async ({ page }) => {
@@ -43,15 +43,11 @@ test.describe('Navigation Persistence', () => {
     });
 
     test('Browser back button: Browser history works correctly', async ({ page }) => {
-      await page.goto('/start');
       await page.goto('/checkup?step=age');
       await page.goto('/checkup?step=body');
 
       await page.goBack();
       await expect(page).toHaveURL(/step=age/);
-
-      await page.goBack();
-      await expect(page).toHaveURL(/\/start$/);
     });
   });
 
@@ -74,13 +70,13 @@ test.describe('Navigation Persistence', () => {
       expect(state.ageGroup).toBe('baby');
     });
 
-    test('Restart from start: State persists on start page', async ({ page }) => {
+    test('Restart from globe: State persists on globe page', async ({ page }) => {
       await seedZustandState(page, {
         locale: 'de',
         ageGroup: 'child',
       });
 
-      await page.goto('/start');
+      await page.goto('/');
 
       const state = await page.evaluate((key) => {
         const data = localStorage.getItem(key);
@@ -91,7 +87,7 @@ test.describe('Navigation Persistence', () => {
       expect(state.ageGroup).toBe('child');
     });
 
-    test('Restart from checkup: Clears all state, goes to /start', async ({ page }) => {
+    test('Restart from checkup: Clears all state, goes to globe', async ({ page }) => {
       await seedZustandState(page, {
         ageGroup: 'teen',
         bodyPart: 'chest',
@@ -105,7 +101,7 @@ test.describe('Navigation Persistence', () => {
       await page.waitForTimeout(300);
       await page.getByText('Home').click();
 
-      await expect(page).toHaveURL(/\/start$/);
+      await expect(page).toHaveURL(/\//);
 
       const state = await page.evaluate((key) => {
         const data = localStorage.getItem(key);
@@ -118,7 +114,7 @@ test.describe('Navigation Persistence', () => {
       expect(state.symptom).toBeNull();
     });
 
-    test('Restart from results: Clears assessment, goes to /start', async ({ page }) => {
+    test('Restart from results: Clears assessment, goes to globe', async ({ page }) => {
       await seedZustandState(page, {
         ageGroup: 'baby',
         bodyPart: 'head',
@@ -133,7 +129,7 @@ test.describe('Navigation Persistence', () => {
       await page.waitForTimeout(300);
       await page.getByText('Home').click();
 
-      await expect(page).toHaveURL(/\/start$/);
+      await expect(page).toHaveURL(/\//);
 
       const state = await page.evaluate((key) => {
         const data = localStorage.getItem(key);

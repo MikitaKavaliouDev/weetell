@@ -20,14 +20,14 @@ test.describe('Settings & Accessibility', () => {
       await expect(page.getByText('Menu')).toBeVisible();
     });
 
-    test('Home navigation: Clicking home returns to /start', async ({ page }) => {
+    test('Home navigation: Clicking home returns to globe', async ({ page }) => {
       await page.goto('/checkup?step=age');
 
       await page.locator('button').filter({ has: page.locator('svg') }).first().click();
       await expect(page.getByText('Menu')).toBeVisible();
 
       await page.getByText('Home').click();
-      await expect(page).toHaveURL(/\/start$/);
+      await expect(page).toHaveURL(/\//);
     });
 
     test('Mobile QR: Clicking mobile shows QR code modal', async ({ page }) => {
@@ -187,7 +187,7 @@ test.describe('Settings & Accessibility', () => {
       await expect(page.getByText('Menu')).toBeVisible();
 
       await page.getByText('Home').click();
-      await expect(page).toHaveURL(/\/start$/);
+      await expect(page).toHaveURL(/\//);
 
       await page.reload();
 

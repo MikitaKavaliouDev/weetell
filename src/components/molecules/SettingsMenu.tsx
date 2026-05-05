@@ -26,7 +26,7 @@ export default function SettingsMenu({ onBack, onHome, onMobile }: AppMenuProps)
   const locale = useAssessmentStore((state) => state.locale);
   const isMobile = useIsMobile();
 
-  const handleAction = (action?: () => void, sound: 'click' | 'back' | 'next' = 'click') => {
+  const handleAction = (action?: () => void, sound: 'click' | 'pop' = 'click') => {
     if (action) {
       audioManager.playSound(sound);
       action();
@@ -72,7 +72,7 @@ export default function SettingsMenu({ onBack, onHome, onMobile }: AppMenuProps)
 
             {/* Navigation Actions */}
             <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-3'} gap-3 border-b border-neutral-100 pb-6`}>
-              <button onClick={() => handleAction(onBack, 'back')} className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-neutral-50 transition-colors">
+              <button onClick={() => handleAction(onBack, 'click')} className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-neutral-50 transition-colors">
                 <ArrowLeft size={24} className="text-neutral-500" />
                 <span className="text-[10px] font-bold uppercase text-neutral-400">Back</span>
               </button>

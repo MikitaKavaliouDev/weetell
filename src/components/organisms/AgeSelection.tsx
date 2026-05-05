@@ -31,7 +31,7 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
   }, [locale, setCurrentSubtitle]);
 
   const handleSelect = (age: AgeGroup) => {
-    audioManager.playSound('success');
+    audioManager.playSound('click');
     setAgeGroup(age);
     setTimeout(onNext, 200); 
   };

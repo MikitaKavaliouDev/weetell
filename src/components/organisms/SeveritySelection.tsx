@@ -96,13 +96,13 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   };
 
   const handleChair = () => {
-    audioManager.playSound('next');
+    audioManager.playSound('click');
     setActionDecision('wait');
     setView('home-care-choice');
   };
 
   const handleDoctor = () => {
-    audioManager.playSound('next');
+    audioManager.playSound('click');
     setActionDecision('doctor');
     setView('waiting-room');
   };

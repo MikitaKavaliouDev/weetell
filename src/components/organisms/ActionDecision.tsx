@@ -85,7 +85,7 @@ export default function ActionDecision({ onNext }: ActionDecisionProps) {
   }, [locale, str.header, setCurrentSubtitle]);
 
   const handleSelect = (decision: ActionDecisionType) => {
-    audioManager.playSound('success');
+    audioManager.playSound('click');
     setActionDecision(decision);
     setTimeout(onNext, 300);
   };

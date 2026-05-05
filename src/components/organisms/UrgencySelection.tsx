@@ -86,7 +86,7 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
   const config = urgencyConfig[urgencyLevel];
 
   const handleProceed = () => {
-    audioManager.playSound('success');
+    audioManager.playSound('click');
     window.location.href = 'https://www.arzt-auskunft.de/?form=fs1';
   };
 

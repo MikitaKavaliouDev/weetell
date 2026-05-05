@@ -110,14 +110,14 @@ describe('UrgencySelection', () => {
     });
   });
 
-  it('plays success sound on proceed', async () => {
+  it('plays click sound on proceed', async () => {
     render(<UrgencySelection onNext={mockOnNext} />);
     
     const proceedButton = screen.getByText('Find a Doctor');
     fireEvent.click(proceedButton);
     
     await waitFor(() => {
-      expect(audio.audioManager.playSound).toHaveBeenCalledWith('success');
+      expect(audio.audioManager.playSound).toHaveBeenCalledWith('click');
     });
   });
 
