@@ -13,7 +13,7 @@ export default function WeetellLogo({ className, onClick }: WeetellLogoProps) {
       <button
         type="button"
         onClick={onClick}
-        className="bg-transparent border-none p-0 cursor-pointer"
+        className="bg-transparent border-none p-0 cursor-pointer transition-transform hover:scale-105 active:scale-95"
         aria-label="Go back"
       >
         <Image
