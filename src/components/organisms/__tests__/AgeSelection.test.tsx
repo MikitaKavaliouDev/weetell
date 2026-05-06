@@ -9,6 +9,7 @@ jest.mock('@/lib/audio', () => ({
     narrate: jest.fn(),
     stopNarration: jest.fn(),
     playSound: jest.fn(),
+    playLanguageAudio: jest.fn(),
   },
 }));
 
@@ -84,7 +85,7 @@ describe('AgeSelection', () => {
   it('narrates subtitle on mount', () => {
     render(<AgeSelection onNext={mockOnNext} />);
     
-    expect(audio.audioManager.narrate).toHaveBeenCalledWith('How old is the child?', 'en');
+    expect(audio.audioManager.playLanguageAudio).toHaveBeenCalledWith('how_old_is_the_child', 'en');
   });
 
   it('narrates German subtitle when locale is German', () => {
@@ -92,7 +93,7 @@ describe('AgeSelection', () => {
     
     render(<AgeSelection onNext={mockOnNext} />);
     
-    expect(audio.audioManager.narrate).toHaveBeenCalledWith('Wie alt ist das Kind?', 'de');
+    expect(audio.audioManager.playLanguageAudio).toHaveBeenCalledWith('how_old_is_the_child', 'de');
   });
 
   it('shows text labels when showTextLabels is true', () => {

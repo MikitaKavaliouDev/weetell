@@ -1,11 +1,13 @@
 'use client';
 
-import { WeeHeaderLogo, MenuBurgerIcon, VideoPlayIcon } from '@/components/atoms/ServiceIllustrations';
+import { MenuBurgerIcon, VideoPlayIcon } from '@/components/atoms/ServiceIllustrations';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
 import { ArrowLeft } from 'lucide-react';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
+import { audioManager } from '@/lib/audio';
+import WeetellLogo from '@/components/molecules/WeetellLogo';
 
 const TRANSLATIONS = {
   location: {
@@ -36,7 +38,9 @@ export default function ServicePage() {
                <button onClick={() => router.back()} className="p-2 text-neutral-500 hover:text-neutral-800 transition-colors">
                    <ArrowLeft size={32} strokeWidth={2.5} />
                </button>
-               <WeeHeaderLogo className="w-24 h-12" />
+               <button type="button" onClick={() => { audioManager.playSound('click'); router.push('/checkup?step=age'); }} className="bg-transparent border-none p-0 cursor-pointer">
+                 <WeetellLogo />
+               </button>
            </div>
            <button className="p-2">
                <MenuBurgerIcon className="w-8 h-8" />

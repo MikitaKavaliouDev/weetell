@@ -8,6 +8,7 @@ jest.mock('@/lib/audio', () => ({
     narrate: jest.fn(),
     stopNarration: jest.fn(),
     playSound: jest.fn(),
+    playLanguageAudio: jest.fn(),
   },
 }));
 
@@ -74,7 +75,7 @@ describe('BodyMapSelection', () => {
     const { audioManager } = require('@/lib/audio');
     render(<BodyMapSelection onNext={mockOnNext} />);
     
-    expect(audioManager.narrate).toHaveBeenCalledWith('Where does it hurt?', 'en');
+    expect(audioManager.playLanguageAudio).toHaveBeenCalledWith('where_does_it_hurt', 'en');
   });
 
   it('calls onNext when part is selected', async () => {

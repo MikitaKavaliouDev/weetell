@@ -14,7 +14,7 @@ export default function AppHeader({ onBack, onHome, onMobile, className = "" }: 
   return (
     <header className={`fixed top-0 bg-white/95 backdrop-blur-sm flex justify-between items-center px-4  z-[100] w-full border-b border-transparent transition-all ${className}`}>
       <div className="flex items-center gap-4">
-        <WeetellLogo />
+        <WeetellLogo onClick={onBack || onHome} />
       </div>
       <div className="flex items-center gap-2">
         <SettingsMenu

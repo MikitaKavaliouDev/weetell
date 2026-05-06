@@ -9,6 +9,7 @@ jest.mock('@/lib/audio', () => ({
     narrate: jest.fn(),
     stopNarration: jest.fn(),
     playSound: jest.fn(),
+    playLanguageAudio: jest.fn(),
   },
 }));
 
@@ -57,7 +58,7 @@ describe('SeveritySelection', () => {
   it('renders the component', () => {
     render(<SeveritySelection onNext={mockOnNext} />);
     
-    expect(screen.getByAltText('Fever illustration')).toBeInTheDocument();
+    expect(screen.getByAltText('Symptom illustration')).toBeInTheDocument();
   });
 
   it('renders play video, wait and doctor buttons', () => {
@@ -79,7 +80,7 @@ describe('SeveritySelection', () => {
   it('narrates subtitle on mount', () => {
     render(<SeveritySelection onNext={mockOnNext} />);
     
-    expect(audio.audioManager.narrate).toHaveBeenCalledWith('What would you like to do?', 'en');
+    expect(audio.audioManager.playLanguageAudio).toHaveBeenCalledWith('how_high_is_the_fever', 'en');
   });
 
   it('narrates German subtitle when locale is German', () => {
@@ -87,7 +88,7 @@ describe('SeveritySelection', () => {
     
     render(<SeveritySelection onNext={mockOnNext} />);
     
-    expect(audio.audioManager.narrate).toHaveBeenCalledWith('Was möchten Sie tun?', 'de');
+    expect(audio.audioManager.playLanguageAudio).toHaveBeenCalledWith('how_high_is_the_fever', 'de');
   });
 
   it('clears subtitle on unmount', () => {

@@ -22,10 +22,14 @@ export default function SubtitleOverlay() {
     }
   }, [currentSubtitle, showSubtitles]);
   
+  if (!showSubtitles || !currentSubtitle) {
+    return null;
+  }
+
   return (
     <div className="fixed top-[100px] left-0 right-0 pointer-events-none z-40 flex justify-center px-6">
       <AnimatePresence>
-        {showSubtitles && currentSubtitle && (
+        {(
           <motion.div 
             initial={{ opacity: 0, y: -20, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}

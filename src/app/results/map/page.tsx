@@ -2,7 +2,10 @@
 
 import { motion } from 'framer-motion';
 import { MapPin, Navigation } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
+import { audioManager } from '@/lib/audio';
+import WeetellLogo from '@/components/molecules/WeetellLogo';
 
 const TRANSLATIONS = {
   en: { locationLabel: 'Current Location', locationValue: 'Berlin, Germany' },
@@ -13,10 +16,17 @@ const TRANSLATIONS = {
 } as const;
 
 export default function MapPage() {
+  const router = useRouter();
   const locale = useAssessmentStore((state) => state.locale);
   const t = TRANSLATIONS[locale] ?? TRANSLATIONS.en;
   return (
     <div className="relative min-h-screen bg-slate-200 w-full overflow-hidden">
+       {/* Navigation Header */}
+       <div className="absolute top-4 left-4 z-20">
+         <button type="button" onClick={() => { audioManager.playSound('click'); router.push('/checkup?step=age'); }} className="bg-transparent border-none p-0 cursor-pointer">
+           <WeetellLogo />
+         </button>
+       </div>
        {/* Mock Map Background Layer */}
        <div className="absolute inset-0 opacity-20" 
             style={{ 

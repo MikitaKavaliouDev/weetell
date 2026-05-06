@@ -36,6 +36,13 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
     icon: string;
   } | null>(null);
 
+   // Maps temperature option IDs to language audio keys
+   const TEMP_AUDIO_KEYS: Record<string, string> = {
+     '37.5': 'mild_temperature',
+     '38.0': 'moderate_fever',
+     '40.0': 'high_fever',
+   };
+
    const temperatureOptions = [
      { 
        id: 'thermometer', 
@@ -51,7 +58,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
        text: 'A mild temperature that usually requires only observation and fluids.',
        textDe: 'Erhöhte Temperatur, die meist nur Beobachtung und Flüssigkeit erfordert.',
        textEs: 'Una temperatura leve que generalmente solo requiere observación y líquidos.',
-       textTr: 'Genellikle sadece gözlem ve sıvı gerektiren hafif bir ateş.'
+       textTr: 'Yükselmiş vücut ısısı; genellikle sadece gözlem ve sıvı alımı gerektirir.'
      },
      { 
        id: '38.0', 
@@ -59,7 +66,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
        text: 'A moderate fever—ensure your child is resting and drinking plenty of water.',
        textDe: 'Mäßiges Fieber – achten Sie darauf, dass Ihr Kind ruht und viel trinkt.',
        textEs: 'Fiebre moderada: asegúrate de que tu hijo descanse y beba mucha agua.',
-       textTr: 'Orta derece ateş — çocuğunuzun dinldiğinden ve bol su içtiğinden emin olun.'
+       textTr: 'Orta derecede ateş – çocuğunuzun dinlenmesine ve bol sıvı almasına dikkat edin.'
      },
      { 
        id: '40.0', 
@@ -67,14 +74,14 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
        text: 'A high fever that needs close monitoring and may require medical advice.',
        textDe: 'Hohes Fieber, das engmaschig überwacht werden muss und ärztlichen Rat erfordern kann.',
        textEs: 'Fiebre alta que requiere un control cercano y puede necesitar consejo médico.',
-       textTr: 'Yakından izlenmesi gereken ve tıbbi tavsiye gerektirebilecek yüksek ateş.'
+       textTr: 'Yüksek ateş – lütfen dikkatle gözlemleyin. Doktor tavsiyesine ihtiyaç duyabilirsiniz.'
      },
    ];
 
   useEffect(() => {
-    const subtitle = locale === 'de' ? 'Was möchten Sie tun?' : locale === 'es' ? '¿Qué te gustaría hacer?' : locale === 'tr' ? 'Ne yapmak istersiniz?' : 'What would you like to do?';
+    const subtitle = locale === 'de' ? 'Wie hoch ist das Fieber?' : locale === 'es' ? '¿Qué tan alta es la fiebre?' : locale === 'tr' ? 'Ateşiniz ne kadar yüksek?' : 'How high is the fever?';
     setCurrentSubtitle(subtitle);
-    audioManager.narrate(subtitle, locale);
+    audioManager.playLanguageAudio('how_high_is_the_fever', locale);
     return () => {
       setCurrentSubtitle('');
       audioManager.stopNarration();
@@ -83,6 +90,9 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
 
   const handleWatchVideo = () => {
     audioManager.playSound('click');
+    audioManager.playLanguageAudio('film_icon', locale);
+    const filmSubtitle = locale === 'de' ? 'Film' : locale === 'es' ? 'Película' : locale === 'tr' ? 'Film' : 'Film';
+    setCurrentSubtitle(filmSubtitle);
     setView('video-preview');
   };
 
@@ -97,12 +107,18 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
 
   const handleChair = () => {
     audioManager.playSound('click');
+    audioManager.playLanguageAudio('chair_hourglass_icon', locale);
+    const waitSubtitle = locale === 'de' ? 'Abwarten und beobachten?' : locale === 'es' ? '¿Esperar y observar?' : locale === 'tr' ? 'Bekleyip gözlemleyelim mi?' : 'Wait and observe?';
+    setCurrentSubtitle(waitSubtitle);
     setActionDecision('wait');
     setView('home-care-choice');
   };
 
   const handleDoctor = () => {
     audioManager.playSound('click');
+    audioManager.playLanguageAudio('doctor_icon', locale);
+    const doctorSubtitle = locale === 'de' ? 'Einen Arzt in Ihrer Nähe finden?' : locale === 'es' ? '¿Encontrar un médico cerca de ti?' : locale === 'tr' ? 'Yakınınızda bir doktor bulalım mı?' : 'Find a doctor close to you?';
+    setCurrentSubtitle(doctorSubtitle);
     setActionDecision('doctor');
     setView('waiting-room');
   };
@@ -158,7 +174,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                   onClick={handleChair} 
                   className="w-20 flex flex-col items-center gap-2"
                 >
-                  <Image src="/assets/waiting_chair_brown_icon.svg" alt="Wait" width={80} height={80} className="object-contain" />
+                  <Image src="/assets/hourglass_green_icon.svg" alt="Wait" width={80} height={80} className="object-contain" />
                 </motion.button>
                 
                 <motion.button 
@@ -245,11 +261,16 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                     onClick={() => {
                       audioManager.playSound('click');
                       setSelectedTempInfo(opt);
-                      const text = locale === 'de' ? opt.textDe : 
-                                 locale === 'es' ? opt.textEs :
-                                 locale === 'tr' ? opt.textTr :
-                                 opt.text;
-                      audioManager.narrate(text, locale);
+                      const audioKey = TEMP_AUDIO_KEYS[opt.id];
+                      if (audioKey) {
+                        audioManager.playLanguageAudio(audioKey, locale);
+                      } else {
+                        const text = locale === 'de' ? opt.textDe : 
+                                   locale === 'es' ? opt.textEs :
+                                   locale === 'tr' ? opt.textTr :
+                                   opt.text;
+                        audioManager.narrate(text, locale);
+                      }
                     }}
                   >
                     <div className="absolute inset-0 bg-amber-100/0 group-hover:bg-amber-100/30 rounded-full transition-colors duration-300" />
@@ -289,7 +310,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                    onClick={handleChair} 
                    className="w-[100px]  flex items-center justify-center overflow-hidden"
                  >
-                    <Image src="/assets/waiting_chair_brown_icon.svg" alt="Wait" width={90}
+                    <Image src="/assets/hourglass_green_icon.svg" alt="Wait" width={90}
                       height={100} className="object-contain" />
                  </motion.button>
                  

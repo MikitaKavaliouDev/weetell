@@ -9,6 +9,7 @@ jest.mock('@/lib/audio', () => ({
     narrate: jest.fn(),
     stopNarration: jest.fn(),
     playSound: jest.fn(),
+    playLanguageAudio: jest.fn(),
   },
 }));
 
@@ -54,13 +55,13 @@ describe('DetailedBodySelection', () => {
     
     render(<DetailedBodySelection onNext={mockOnNext} />);
     
-    expect(screen.getByText('Tam olarak neresi?')).toBeInTheDocument();
+    expect(screen.getByText('Tam olarak nerede?')).toBeInTheDocument();
   });
 
   it('narrates subtitle on mount', () => {
     render(<DetailedBodySelection onNext={mockOnNext} />);
     
-    expect(audio.audioManager.narrate).toHaveBeenCalledWith('Where exactly?', 'en');
+    expect(audio.audioManager.playLanguageAudio).toHaveBeenCalledWith('where_exactly', 'en');
   });
 
   it('narrates German subtitle when locale is German', () => {
@@ -68,7 +69,7 @@ describe('DetailedBodySelection', () => {
     
     render(<DetailedBodySelection onNext={mockOnNext} />);
     
-    expect(audio.audioManager.narrate).toHaveBeenCalledWith('Wo genau?', 'de');
+    expect(audio.audioManager.playLanguageAudio).toHaveBeenCalledWith('where_exactly', 'de');
   });
 
   it('clears subtitle on unmount', () => {

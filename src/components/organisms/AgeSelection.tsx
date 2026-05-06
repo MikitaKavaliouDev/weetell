@@ -20,10 +20,10 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
     const subtitle =
       locale === 'de' ? 'Wie alt ist das Kind?' :
       locale === 'es' ? '¿Cuántos años tiene el niño?' :
-      locale === 'tr' ? 'Çocuk kaç yaşında?' :
+      locale === 'tr' ? 'Çocuğunuz kaç yaşında?' :
       'How old is the child?';
     setCurrentSubtitle(subtitle);
-    audioManager.narrate(subtitle, locale);
+    audioManager.playLanguageAudio('how_old_is_the_child', locale);
     return () => {
       setCurrentSubtitle('');
       audioManager.stopNarration();

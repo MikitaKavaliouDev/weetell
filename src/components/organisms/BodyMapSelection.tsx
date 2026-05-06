@@ -34,10 +34,10 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
     const subtitle =
       locale === 'de' ? 'Wo tut es weh?' :
       locale === 'es' ? '¿Dónde le duele?' :
-      locale === 'tr' ? 'Neresinde ağrıyor?' :
+      locale === 'tr' ? 'Nereniz ağrıyor?' :
       'Where does it hurt?';
     setCurrentSubtitle(subtitle);
-    audioManager.narrate(subtitle, locale as 'en' | 'de' | 'es' | 'tr' | undefined);
+    audioManager.playLanguageAudio('where_does_it_hurt', locale);
     return () => {
       setCurrentSubtitle('');
       audioManager.stopNarration();
@@ -64,10 +64,17 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
       const confirmationText =
         locale === 'de' ? `${partName} ausgewählt` :
         locale === 'es' ? `${partName} seleccionado` :
-        locale === 'tr' ? `${partName} seçildi` :
+        locale === 'tr' ? `${partName} seçildi.` :
         `${partName} selected`;
       
       setCurrentSubtitle(confirmationText);
+      // Head has dedicated mp3 audio files for en/tr - use those
+      // All other cases use TTS
+      if (partId === 'head' && (locale === 'en' || locale === 'tr')) {
+        audioManager.playLanguageAudio('head_selected', locale);
+      } else {
+        audioManager.narrate(confirmationText, locale);
+      }
       
       setTimeout(() => {
         onNext();
@@ -75,8 +82,17 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
     }
   };
 
+  const subtitle =
+    locale === 'de' ? 'Wo tut es weh?' :
+    locale === 'es' ? '¿Dónde le duele?' :
+    locale === 'tr' ? 'Nereniz ağrıyor?' :
+    'Where does it hurt?';
+
   return (
     <div className="flex flex-col items-center h-full pt-20 pb-6 px-6 w-full relative">
+      <h2 className="text-2xl font-bold text-center mb-4 text-neutral-800">
+        {subtitle}
+      </h2>
       <div className="relative w-full flex-1 flex items-center justify-center min-h-0 max-h-[600px]">
         <BodySVG 
           view={view} 

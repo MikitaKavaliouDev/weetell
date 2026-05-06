@@ -13,16 +13,15 @@ import AppHeader from '@/components/molecules/AppHeader';
 export default function HomePage() {
   const router = useRouter();
   const setLocale = useAssessmentStore((state) => state.setLocale);
+  const locale = useAssessmentStore((state) => state.locale);
 
   useEffect(() => {
-    const timers: ReturnType<typeof setTimeout>[] = [];
-    LOCALES.forEach((_, index) => {
-      const delay = (0.3 + index * 0.1) * 1000;
-      const timer = setTimeout(() => audioManager.playSound('pop'), delay);
-      timers.push(timer);
-    });
-    return () => timers.forEach(clearTimeout);
-  }, []);
+    audioManager.playMp3('/wee_audios/wee_sounds/wee_sounds_choice/WEE_TELL_LANGUAGES_MULTI_260427.mp3');
+    const timer = setTimeout(() => {
+      audioManager.playLanguageAudio('please_select_your_language', locale);
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [locale]);
 
   const handleSelect = (locale: Locale) => {
     setLocale(locale);

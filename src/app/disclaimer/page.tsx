@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useRouter } from 'next/navigation';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
@@ -14,6 +14,10 @@ export default function DisclaimerPage() {
   const locale = useAssessmentStore((state) => state.locale);
   const isSoundEnabled = useAssessmentStore((state) => state.isSoundEnabled);
 
+  useEffect(() => {
+    audioManager.playLanguageAudio('disclaimer_text', locale);
+  }, [locale]);
+
   const handleBack = () => {
     audioManager.playSound('click');
     router.push('/');
@@ -24,10 +28,6 @@ export default function DisclaimerPage() {
     sessionStorage.setItem('disclaimerAccepted', 'true');
     audioManager.setEnabled(isSoundEnabled);
     audioManager.playSound('click');
-    audioManager.narrate(
-      locale === 'de' ? 'Willkommen bei Weetell' : locale === 'es' ? 'Bienvenido a Weetell' : locale === 'tr' ? "Weetell'e Hoş Geldiniz" : locale === 'fr' ? 'Bienvenue chez Weetell' : 'Welcome to Weetell',
-      locale
-    );
     router.push('/checkup?step=age');
   };
 
@@ -50,13 +50,15 @@ export default function DisclaimerPage() {
         className="w-full max-w-sm flex flex-col items-center"
       >
         <div className="flex items-center justify-center relative w-full mb-6">
-          <Image
-            src="/assets/WEE_child_logo.svg"
-            alt="Weetell"
-            width={300}
-            height={200}
-            priority
-          />
+          <button type="button" onClick={handleBack} className="bg-transparent border-none p-0 cursor-pointer">
+            <Image
+              src="/assets/WEE_child_logo.svg"
+              alt="Weetell"
+              width={300}
+              height={200}
+              priority
+            />
+          </button>
         </div>
 
         <div
@@ -89,7 +91,9 @@ export default function DisclaimerPage() {
               </>
             ) : locale === 'tr' ? (
               <>
-                Bu eğitimsel bir araç olduğunu ve profesyonel tıbbi tavsiyenin yerine geçmediğini anlıyorum.
+                Bunun teşhis koymaya yönelik olmayan bir eğitim aracı olduğunu anlıyorum.<br />
+                <br />
+                Profesyonel tıbbi tavsiyenin yerine geçmez.
               </>
             ) : locale === 'fr' ? (
               <>

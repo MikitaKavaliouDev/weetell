@@ -10,11 +10,16 @@ interface DetailedBodySelectionProps {
   onNext: () => void;
 }
 
+const SYMPTOM_LABELS: Record<string, { en: string; de: string; es: string; tr: string }> = {
+  headache: { en: 'Headache', de: 'Kopfschmerzen', es: 'Dolor de cabeza', tr: 'Baş ağrısı.' },
+  fever: { en: 'Fever', de: 'Fieber', es: 'Fiebre', tr: 'Ateş' },
+  concussion: { en: 'Concussion', de: 'Gehirnerschütterung', es: 'Conmoción cerebral', tr: 'Sarsıntı.' },
+};
+
 const SYMPTOM_OPTIONS = [
-  { id: 'headache', icon: '/assets/headache_icon.svg', label: 'Fever' },
-  { id: 'fever', icon: '/assets/fever_thermometer_icon.svg', label: 'Fever' },
-  { id: 'concussion', icon: '/assets/concussion_icon.svg', label: 'Fever' },
-  
+  { id: 'headache', icon: '/assets/headache_icon.svg', labelKey: 'Headache' },
+  { id: 'fever', icon: '/assets/fever_thermometer_icon.svg', labelKey: 'Fever' },
+  { id: 'concussion', icon: '/assets/concussion_icon.svg', labelKey: 'Concussion' },
 ];
 
 export default function DetailedBodySelection({ onNext }: DetailedBodySelectionProps) {
@@ -27,10 +32,10 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
     const subtitle =
       locale === 'de' ? 'Wo genau?' :
       locale === 'es' ? '¿Dónde exactamente?' :
-      locale === 'tr' ? 'Tam olarak neresi?' :
+      locale === 'tr' ? 'Tam olarak nerede?' :
       'Where exactly?';
     setCurrentSubtitle(subtitle);
-    audioManager.narrate(subtitle, locale as 'en' | 'de' | 'es' | 'tr' | undefined);
+    audioManager.playLanguageAudio('where_exactly', locale);
     return () => {
       setCurrentSubtitle('');
       audioManager.stopNarration();
@@ -44,12 +49,23 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
 
   const handleSymptomSelect = (id: string) => {
     audioManager.playSound('click');
+    const audioKey = id === 'headache' ? 'headache_icon' : id === 'fever' ? 'fever_icon' : 'concussion_icon';
+    audioManager.playLanguageAudio(audioKey, locale);
     setSymptom(id); 
     onNext();
   };
 
+  const subtitle =
+    locale === 'de' ? 'Wo genau?' :
+    locale === 'es' ? '¿Dónde exactamente?' :
+    locale === 'tr' ? 'Tam olarak nerede?' :
+    'Where exactly?';
+
   return (
     <div className="flex flex-col items-center justify-center h-full w-full">
+      <h2 className="text-2xl font-bold text-center mb-4 text-neutral-800">
+        {subtitle}
+      </h2>
       <div className="relative w-full max-w-[320px] aspect-[3/4]">
         <motion.div
           animate={{ scale: showSlider ? 0.95 : 1 }}
@@ -86,7 +102,9 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
                   whileHover={{ scale: 1.1 }}
                   whileTap={{ scale: 0.9 }}
                   onHoverStart={() => {
-                      setCurrentSubtitle(opt.label);
+                      const labelData = SYMPTOM_LABELS[opt.labelKey];
+                      const label = locale === 'de' ? labelData?.de : locale === 'es' ? labelData?.es : locale === 'tr' ? labelData?.tr : labelData?.en || opt.labelKey;
+                      setCurrentSubtitle(label);
                   }}
                   onHoverEnd={() => {
                       setCurrentSubtitle('');
@@ -94,7 +112,7 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
                   onClick={() => handleSymptomSelect(opt.id)}
                   className="w-[100px] h-[100px]   flex items-center justify-center  relative"
                 >
-                  <Image src={opt.icon} alt={opt.label} width={100} height={100}  />
+                  <Image src={opt.icon} alt={opt.labelKey} width={100} height={100}  />
                 </motion.button>
               </div>
             ))}

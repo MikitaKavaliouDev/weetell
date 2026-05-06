@@ -7,6 +7,7 @@ import { ArztAuskunftLogo, MenuIcon, SearchIcon, GeneralPracticeIcon, Gynecology
 import { DOCTORS } from '@/data/doctors';
 import { Star, MapPin, ArrowLeft } from 'lucide-react';
 import { audioManager } from '@/lib/audio';
+import WeetellLogo from '@/components/molecules/WeetellLogo';
 
 export default function ResultsPage() {
   const router = useRouter();
@@ -30,6 +31,9 @@ export default function ResultsPage() {
             <div className="flex items-center gap-4">
                 <button onClick={() => router.back()} className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-100 text-neutral-500 hover:bg-slate-50 transition-colors">
                     <ArrowLeft size={20} />
+                </button>
+                <button type="button" onClick={() => { audioManager.playSound('click'); router.push('/checkup?step=age'); }} className="bg-transparent border-none p-0 cursor-pointer">
+                  <WeetellLogo />
                 </button>
                 <ArztAuskunftLogo className="h-8 w-auto" />
             </div>

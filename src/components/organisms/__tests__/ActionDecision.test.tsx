@@ -9,6 +9,7 @@ jest.mock('@/lib/audio', () => ({
     narrate: jest.fn(),
     stopNarration: jest.fn(),
     playSound: jest.fn(),
+    playLanguageAudio: jest.fn(),
   },
 }));
 

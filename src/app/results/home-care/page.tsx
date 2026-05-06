@@ -8,6 +8,7 @@ import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import VideoPlayer from '@/components/molecules/VideoPlayer';
 import { getVideoForTemperature } from '@/data/symptom-graph';
 import { audioManager } from '@/lib/audio';
+import WeetellLogo from '@/components/molecules/WeetellLogo';
 
 export default function HomeCarePage() {
   const router = useRouter();
@@ -72,6 +73,9 @@ export default function HomeCarePage() {
             className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
           >
             <ArrowLeft size={20} />
+          </button>
+          <button type="button" onClick={() => { audioManager.playSound('click'); router.push('/checkup?step=age'); }} className="bg-transparent border-none p-0 cursor-pointer">
+            <WeetellLogo className="[&_img]:brightness-0 [&_img]:invert" />
           </button>
           <h1 className="text-2xl font-bold text-white">{locale === 'de' ? 'Pflegeanleitung' : locale === 'es' ? 'Guía de Cuidado en Casa' : locale === 'tr' ? 'Ev Bakımı Rehberi' : 'Home Care Guide'}</h1>
         </div>
