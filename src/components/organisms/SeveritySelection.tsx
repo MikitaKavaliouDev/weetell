@@ -174,7 +174,14 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                   onClick={handleChair} 
                   className="w-20 flex flex-col items-center gap-2"
                 >
-                  <Image src="/assets/hourglass_green_icon.svg" alt="Wait" width={80} height={80} className="object-contain" />
+                  <Image 
+                    src="/assets/hourglass_green_icon.svg" 
+                    alt="Wait" 
+                    width={80} 
+                    height={80} 
+                    className="object-contain" 
+                    loading="eager"
+                  />
                 </motion.button>
                 
                 <motion.button 
@@ -310,8 +317,14 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                    onClick={handleChair} 
                    className="w-[100px]  flex items-center justify-center overflow-hidden"
                  >
-                    <Image src="/assets/hourglass_green_icon.svg" alt="Wait" width={90}
-                      height={100} className="object-contain" />
+                    <Image 
+                      src="/assets/hourglass_green_icon.svg" 
+                      alt="Wait" 
+                      width={90}
+                      height={100} 
+                      className="object-contain" 
+                      loading="eager"
+                    />
                  </motion.button>
                  
                   <motion.button 

@@ -76,6 +76,7 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
             src="/assets/head_chest.svg"
             alt="Detailed Body Selection"
             fill
+            sizes="320px"
             className="object-contain"
             priority
           />

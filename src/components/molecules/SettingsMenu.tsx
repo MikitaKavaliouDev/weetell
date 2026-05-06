@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { X, ArrowLeft, Home, Smartphone, Settings } from 'lucide-react';
+import { X, Home, Smartphone, Settings } from 'lucide-react';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import { motion, AnimatePresence } from 'framer-motion';
 import { MenuBurgerIcon } from '../atoms/ServiceIllustrations';
@@ -10,12 +10,11 @@ import ToggleSwitch from '../atoms/ToggleSwitch';
 import { audioManager } from '@/lib/audio';
 
 interface AppMenuProps {
-  onBack?: () => void;
   onHome?: () => void;
   onMobile?: () => void;
 }
 
-export default function SettingsMenu({ onBack, onHome, onMobile }: AppMenuProps) {
+export default function SettingsMenu({ onHome, onMobile }: AppMenuProps) {
   const [isOpen, setIsOpen] = useState(false);
   const showTextLabels = useAssessmentStore((state) => state.showTextLabels);
   const showSubtitles = useAssessmentStore((state) => state.showSubtitles);
@@ -71,11 +70,7 @@ export default function SettingsMenu({ onBack, onHome, onMobile }: AppMenuProps)
             </div>
 
             {/* Navigation Actions */}
-            <div className={`grid ${isMobile ? 'grid-cols-2' : 'grid-cols-3'} gap-3 border-b border-neutral-100 pb-6`}>
-              <button onClick={() => handleAction(onBack, 'click')} className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-neutral-50 transition-colors">
-                <ArrowLeft size={24} className="text-neutral-500" />
-                <span className="text-[10px] font-bold uppercase text-neutral-400">Back</span>
-              </button>
+            <div className={`grid ${isMobile ? 'grid-cols-1' : 'grid-cols-2'} gap-3 border-b border-neutral-100 pb-6`}>
               <button onClick={() => handleAction(onHome)} className="flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-neutral-50 transition-colors">
                 <Home size={24} className="text-neutral-500" />
                 <span className="text-[10px] font-bold uppercase text-neutral-400">Home</span>

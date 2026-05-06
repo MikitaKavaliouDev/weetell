@@ -50,6 +50,7 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
                    src="/baby.png" 
                    alt={locale === 'de' ? 'Baby 0-3 Jahre' : locale === 'es' ? 'Bebé 0-3 años' : locale === 'tr' ? 'Bebek 0-3 yaş' : 'Baby 0-3 years'} 
                    fill 
+                   sizes="(max-width: 768px) 150px, 200px"
                    className="object-contain object-bottom"
                    priority
                 />
@@ -68,6 +69,7 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
                   src="/child.png" 
                   alt={locale === 'de' ? 'Kind 3-11 Jahre' : locale === 'es' ? 'Niño 3-11 años' : locale === 'tr' ? 'Çocuk 3-11 yaş' : 'Child 3-11 years'} 
                   fill 
+                  sizes="(max-width: 768px) 180px, 220px"
                   className="object-contain object-bottom"
                   priority
                 />

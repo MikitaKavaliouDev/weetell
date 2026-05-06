@@ -93,7 +93,13 @@ export default function PharmacyPage() {
         {/* Main Illustration */}
         <div className="flex justify-center">
           <div className="w-32 h-32 bg-[#6B8E23]/10 rounded-full flex items-center justify-center relative">
-            <Image src="/assets/chemist_icon.svg" alt="Pharmacy" fill className="object-contain p-8" />
+            <Image 
+              src="/assets/chemist_icon.svg" 
+              alt="Pharmacy" 
+              fill 
+              sizes="128px"
+              className="object-contain p-8" 
+            />
           </div>
         </div>
 
