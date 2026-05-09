@@ -19,6 +19,8 @@ export default function SoundToggle() {
       audioManager.setEnabled(state);
       if (state) {
         audioManager.playSound('click');
+      } else {
+        audioManager.stopNarration();
       }
     }
   };

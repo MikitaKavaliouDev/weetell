@@ -16,15 +16,20 @@ export default function DisclaimerPage() {
 
   useEffect(() => {
     audioManager.playLanguageAudio('disclaimer_text', locale);
+    return () => {
+      audioManager.stopNarration('disclaimer-unmount');
+    };
   }, [locale]);
 
   const handleBack = () => {
+    audioManager.stopNarration('disclaimer-back');
     audioManager.playSound('click');
     router.push('/');
   };
 
   const handleContinue = () => {
     if (!accepted) return;
+    audioManager.stopNarration('disclaimer-continue');
     sessionStorage.setItem('disclaimerAccepted', 'true');
     audioManager.setEnabled(isSoundEnabled);
     audioManager.playSound('click');

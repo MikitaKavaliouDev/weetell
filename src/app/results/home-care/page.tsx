@@ -68,12 +68,6 @@ export default function HomeCarePage() {
 
       <div className="sticky top-0 bg-[#10B981] rounded-b-[40px] px-6 py-6 z-50 shadow-md">
         <div className="flex items-center gap-4 mb-4">
-          <button 
-            onClick={() => router.back()} 
-            className="w-12 h-12 bg-white/20 rounded-full flex items-center justify-center text-white hover:bg-white/30 transition-colors"
-          >
-            <ArrowLeft size={20} />
-          </button>
           <button type="button" onClick={() => { audioManager.playSound('click'); router.push('/checkup?step=age'); }} className="bg-transparent border-none p-0 cursor-pointer">
             <WeetellLogo className="[&_img]:brightness-0 [&_img]:invert" />
           </button>
@@ -158,7 +152,7 @@ export default function HomeCarePage() {
         <motion.button
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
-          onClick={() => window.location.href = 'https://www.arzt-auskunft.de/?form=fs1'}
+          onClick={() => window.location.href = 'https://www.arzt-auskunft.de/?form=fs4'}
           className="w-full mt-4 bg-white border-2 border-[#6B8E23] text-[#6B8E23] rounded-2xl py-4 flex items-center justify-center gap-3 font-semibold"
         >
           <Pill size={20} />

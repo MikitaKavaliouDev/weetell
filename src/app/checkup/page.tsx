@@ -14,6 +14,7 @@ import DetailedBodySelection from "@/components/organisms/DetailedBodySelection"
 import SeveritySelection from "@/components/organisms/SeveritySelection";
 import UrgencySelection from "@/components/organisms/UrgencySelection";
 import { useAssessmentStore } from "@/stores/useAssessmentStore";
+import { audioManager } from "@/lib/audio";
 
 const STEPS = {
   AGE: "age",
@@ -31,12 +32,16 @@ function CheckupWizard() {
   const resetAssessment = useAssessmentStore((state) => state.resetAssessment);
   const locale = useAssessmentStore((state) => state.locale);
 
+  // Stop narration is handled by individual step components in their useEffect cleanup
+
   const handleRestart = () => {
+    audioManager.stopNarration();
     resetAssessment();
     router.push("/start");
   };
 
   const handleBack = () => {
+    audioManager.stopNarration();
     switch (step) {
       case STEPS.BODY:
         setStep(STEPS.AGE);

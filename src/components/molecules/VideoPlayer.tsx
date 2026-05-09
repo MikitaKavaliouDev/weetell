@@ -65,7 +65,11 @@ export default function VideoPlayer({ src, locale = 'en', onEnded }: VideoPlayer
     if (isPlaying) {
       video.pause();
     } else {
-      video.play();
+      video.play().catch((err) => {
+        if (err.name !== 'AbortError') {
+          console.error('Video playback failed:', err);
+        }
+      });
     }
     setIsPlaying(!isPlaying);
   };

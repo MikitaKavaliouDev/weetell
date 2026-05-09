@@ -5,6 +5,7 @@ import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import { audioManager } from '@/lib/audio';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
+import { CheckCircleIcon, CrossCircleIcon } from '@/components/atoms/ActionIcons';
 
 interface DetailedBodySelectionProps {
   onNext: () => void;
@@ -27,6 +28,7 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
   const setSymptom = useAssessmentStore((state) => state.setSymptom);
   const [showSlider, setShowSlider] = useState(false);
+  const [tempSelectedSymptom, setTempSelectedSymptom] = useState<string | null>(null);
 
   useEffect(() => {
     const subtitle =
@@ -38,7 +40,7 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
     audioManager.playLanguageAudio('where_exactly', locale);
     return () => {
       setCurrentSubtitle('');
-      audioManager.stopNarration();
+      audioManager.stopNarration('detailed-body-unmount');
     };
   }, [locale, setCurrentSubtitle]);
 
@@ -51,8 +53,29 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
     audioManager.playSound('click');
     const audioKey = id === 'headache' ? 'headache_icon' : id === 'fever' ? 'fever_icon' : 'concussion_icon';
     audioManager.playLanguageAudio(audioKey, locale);
-    setSymptom(id); 
-    onNext();
+    setTempSelectedSymptom(id);
+    
+    // Update subtitle to show what was selected
+    const selectedOpt = SYMPTOM_OPTIONS.find(o => o.id === id);
+    if (selectedOpt) {
+      const labelData = SYMPTOM_LABELS[selectedOpt.labelKey];
+      const label = locale === 'de' ? labelData?.de : locale === 'es' ? labelData?.es : locale === 'tr' ? labelData?.tr : labelData?.en || selectedOpt.labelKey;
+      setCurrentSubtitle(label);
+    }
+  };
+
+  const handleConfirm = () => {
+    if (tempSelectedSymptom) {
+      audioManager.playSound('click');
+      setSymptom(tempSelectedSymptom); 
+      onNext();
+    }
+  };
+
+  const handleCancel = () => {
+    audioManager.playSound('click');
+    setTempSelectedSymptom(null);
+    setCurrentSubtitle(subtitle);
   };
 
   const subtitle =
@@ -63,9 +86,7 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
 
   return (
     <div className="flex flex-col items-center justify-center h-full w-full">
-      <h2 className="text-2xl font-bold text-center mb-4 text-neutral-800">
-        {subtitle}
-      </h2>
+
       <div className="relative w-full max-w-[320px] aspect-[3/4]">
         <motion.div
           animate={{ scale: showSlider ? 0.95 : 1 }}
@@ -124,6 +145,36 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
             >
               <div className="w-1 h-12 bg-white/40 rounded-full hover:bg-white/60 transition-colors" />
             </button>
+          </motion.div>
+        )}
+      </AnimatePresence>
+      <AnimatePresence>
+        {tempSelectedSymptom && (
+          <motion.div
+            initial={{ y: 50, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            exit={{ y: 50, opacity: 0 }}
+            className="fixed bottom-12 left-0 right-0 flex justify-center gap-12 z-[200] pb-4"
+          >
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={handleCancel}
+              className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-red-100 text-red-500"
+              aria-label="Cancel selection"
+            >
+              <CrossCircleIcon size={32} strokeWidth={2.5} />
+            </motion.button>
+
+            <motion.button
+              whileHover={{ scale: 1.1 }}
+              whileTap={{ scale: 0.9 }}
+              onClick={handleConfirm}
+              className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-green-100 text-green-500"
+              aria-label="Confirm selection"
+            >
+              <CheckCircleIcon size={32} strokeWidth={2.5} />
+            </motion.button>
           </motion.div>
         )}
       </AnimatePresence>

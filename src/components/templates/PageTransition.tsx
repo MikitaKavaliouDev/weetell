@@ -21,6 +21,8 @@ function FrozenRouter(props: { children: React.ReactNode }) {
 export default function PageTransition({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
+  // Narration management is handled by individual page components
+
   return (
     <AnimatePresence mode="wait">
       <motion.div

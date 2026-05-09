@@ -29,9 +29,6 @@ export default function ResultsPage() {
         {/* Header */}
         <header className="flex justify-between items-center mb-6">
             <div className="flex items-center gap-4">
-                <button onClick={() => router.back()} className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-sm border border-slate-100 text-neutral-500 hover:bg-slate-50 transition-colors">
-                    <ArrowLeft size={20} />
-                </button>
                 <button type="button" onClick={() => { audioManager.playSound('click'); router.push('/checkup?step=age'); }} className="bg-transparent border-none p-0 cursor-pointer">
                   <WeetellLogo />
                 </button>

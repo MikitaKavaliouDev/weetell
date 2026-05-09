@@ -36,8 +36,11 @@ export default function SettingsMenu({ onHome, onMobile }: AppMenuProps) {
   const handleToggleSound = () => {
     toggleSound();
     // Synchronize with audio manager (using the inverse of current state since toggle just happened/is happening)
-    audioManager.setEnabled(!isSoundEnabled);
-    if (!isSoundEnabled) {
+    const newEnabled = !isSoundEnabled;
+    audioManager.setEnabled(newEnabled);
+    if (!newEnabled) {
+      audioManager.stopNarration();
+    } else {
       audioManager.playSound('click');
     }
   };

@@ -6,6 +6,7 @@ import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import BodySVG from '@/components/molecules/BodySVG';
 import { Rotate3D, Crosshair } from 'lucide-react';
 import { audioManager } from '@/lib/audio';
+import { CheckCircleIcon, CrossCircleIcon } from '@/components/atoms/ActionIcons';
 
 interface BodyMapSelectionProps {
   onNext: () => void;
@@ -24,6 +25,7 @@ const BODY_PART_NAMES: Record<string, { en: string; de: string; es: string; tr: 
 export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
   const [view, setView] = useState<'front' | 'back'>('front');
   const [selectedPartId, setSelectedPartId] = useState<string | null>(null);
+  const [tempSelectedPart, setTempSelectedPart] = useState<string | null>(null);
   
   const setBodyPart = useAssessmentStore((state) => state.setBodyPart);
   const ageGroup = useAssessmentStore((state) => state.ageGroup);
@@ -40,7 +42,7 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
     audioManager.playLanguageAudio('where_does_it_hurt', locale);
     return () => {
       setCurrentSubtitle('');
-      audioManager.stopNarration();
+      audioManager.stopNarration('body-map-unmount');
     };
   }, [locale, setCurrentSubtitle]);
 
@@ -48,13 +50,13 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
     audioManager.playSound('click');
     
     // Toggle off if clicking the same part
-    if (selectedPartId === partId) {
+    if (tempSelectedPart === partId) {
+      setTempSelectedPart(null);
       setSelectedPartId(null);
-      setBodyPart(null);
-      setCurrentSubtitle('');
+      setCurrentSubtitle(subtitle);
     } else {
+      setTempSelectedPart(partId);
       setSelectedPartId(partId);
-      setBodyPart(partId);
       
       const partName =
         locale === 'de' ? BODY_PART_NAMES[partId]?.de :
@@ -75,11 +77,22 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
       } else {
         audioManager.narrate(confirmationText, locale);
       }
-      
-      setTimeout(() => {
-        onNext();
-      }, 500);
     }
+  };
+
+  const handleConfirm = () => {
+    if (tempSelectedPart) {
+      audioManager.playSound('click');
+      setBodyPart(tempSelectedPart);
+      onNext();
+    }
+  };
+
+  const handleCancel = () => {
+    audioManager.playSound('click');
+    setTempSelectedPart(null);
+    setSelectedPartId(null);
+    setCurrentSubtitle(subtitle);
   };
 
   const subtitle =
@@ -90,9 +103,7 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
 
   return (
     <div className="flex flex-col items-center h-full pt-20 pb-6 px-6 w-full relative">
-      <h2 className="text-2xl font-bold text-center mb-4 text-neutral-800">
-        {subtitle}
-      </h2>
+
       <div className="relative w-full flex-1 flex items-center justify-center min-h-0 max-h-[600px]">
         <BodySVG 
           view={view} 
@@ -116,6 +127,34 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
           </motion.button>
         </div>
       </div>
+
+      {tempSelectedPart && (
+        <div className="fixed bottom-32 left-0 right-0 flex justify-center gap-12 z-[200] pb-4">
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={handleCancel}
+            className=" rounded-full flex items-center justify-center"
+            aria-label="Cancel selection"
+          >
+            <CrossCircleIcon size={50} strokeWidth={2.5} />
+          </motion.button>
+
+          <motion.button
+            initial={{ scale: 0, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            whileHover={{ scale: 1.1 }}
+            whileTap={{ scale: 0.9 }}
+            onClick={handleConfirm}
+            className="rounded-full flex items-center justify-center"
+            aria-label="Confirm selection"
+          >
+            <CheckCircleIcon size={50} strokeWidth={2.5} />
+          </motion.button>
+        </div>
+      )}
 
       </div>
   );

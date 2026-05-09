@@ -35,9 +35,6 @@ export default function ServicePage() {
        {/* Header */}
        <header className="sticky top-0 bg-white/95 backdrop-blur-sm flex justify-between items-center py-4 mb-12 z-50">
            <div className="flex items-center gap-4">
-               <button onClick={() => router.back()} className="p-2 text-neutral-500 hover:text-neutral-800 transition-colors">
-                   <ArrowLeft size={32} strokeWidth={2.5} />
-               </button>
                <button type="button" onClick={() => { audioManager.playSound('click'); router.push('/checkup?step=age'); }} className="bg-transparent border-none p-0 cursor-pointer">
                  <WeetellLogo />
                </button>

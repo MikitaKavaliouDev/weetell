@@ -102,9 +102,7 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
 
   return (
     <div className="flex flex-col items-center justify-center h-full pt-4 pb-8 px-6">
-      <h2 className="text-2xl font-bold text-center mb-6 text-neutral-800">
-        {titleText}
-      </h2>
+
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}

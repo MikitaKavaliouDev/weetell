@@ -84,7 +84,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
     audioManager.playLanguageAudio('how_high_is_the_fever', locale);
     return () => {
       setCurrentSubtitle('');
-      audioManager.stopNarration();
+      audioManager.stopNarration('severity-selection-unmount');
     };
   }, [locale, setCurrentSubtitle]);
 

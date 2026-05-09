@@ -26,7 +26,7 @@ export default function AgeSelection({ onNext }: AgeSelectionProps) {
     audioManager.playLanguageAudio('how_old_is_the_child', locale);
     return () => {
       setCurrentSubtitle('');
-      audioManager.stopNarration();
+      audioManager.stopNarration('age-selection-unmount');
     };
   }, [locale, setCurrentSubtitle]);
 

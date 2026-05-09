@@ -20,7 +20,10 @@ export default function HomePage() {
     const timer = setTimeout(() => {
       audioManager.playLanguageAudio('please_select_your_language', locale);
     }, 800);
-    return () => clearTimeout(timer);
+    return () => {
+      clearTimeout(timer);
+      audioManager.stopNarration();
+    };
   }, [locale]);
 
   const handleSelect = (locale: Locale) => {

@@ -146,9 +146,25 @@ const LANGUAGE_AUDIO_FILES: Record<string, Partial<Record<Locale, string>>> = {
 class AudioManager {
   private enabled: boolean = true;
   private currentLocale: Locale = 'en';
+  private audio: HTMLAudioElement | null = null;
+  private effectsAudio: HTMLAudioElement | null = null;
+  private playPromise: Promise<void> | null = null;
+
+  constructor() {
+    if (typeof window !== 'undefined') {
+      this.audio = new Audio();
+      this.audio.volume = 0.7;
+      
+      this.effectsAudio = new Audio();
+      this.effectsAudio.volume = 0.4; // Effects slightly quieter
+    }
+  }
 
   setEnabled(enabled: boolean) {
     this.enabled = enabled;
+    if (!enabled) {
+      this.stopNarration();
+    }
   }
 
   setLocale(locale: Locale) {
@@ -158,16 +174,42 @@ class AudioManager {
   /**
    * Play an mp3 file from a URL path.
    */
-  playMp3(url: string): void {
-    if (!this.enabled || !url) return;
+  playMp3(url: string, reason: string = 'direct-play'): void {
+    if (!this.enabled || !url || !this.audio) {
+      console.log(`Audio disabled or no URL/audio instance (${reason})`);
+      return;
+    }
+
+    console.log(`Attempting to play (${reason}):`, url.split('/').pop());
+
+    // If we have a pending play promise, wait for it or catch it
+    // But we need to play the NEW sound immediately.
+    // The most reliable way is to pause the existing one and catch the error.
+    this.stopNarration(reason);
+
     try {
-      const audio = new Audio(url);
-      audio.volume = 0.7;
-      audio.play().catch(() => {
-        // Autoplay blocked - silently fail
-      });
+      this.audio.src = url;
+      this.audio.currentTime = 0;
+      
+      this.playPromise = this.audio.play();
+      
+      if (this.playPromise !== undefined) {
+        this.playPromise
+          .then(() => {
+            console.log('Playback started successfully:', url);
+          })
+          .catch((err) => {
+            if (err.name === 'AbortError') {
+              console.log('Playback aborted (intentional):', url);
+            } else if (err.name === 'NotAllowedError') {
+              console.warn('Autoplay blocked by browser. User interaction required.');
+            } else {
+              console.warn('Audio playback failed:', err);
+            }
+          });
+      }
     } catch (e) {
-      console.warn('Audio playback failed:', e);
+      console.warn('Audio setup failed:', e);
     }
   }
 
@@ -187,15 +229,16 @@ class AudioManager {
 
     const dir = LOCALE_DIR[loc] || LOCALE_DIR['en'];
     const path = `/wee_audios/wee_language_audio/${dir}/${filename}.mp3`;
-    this.playMp3(path);
+    this.playMp3(path, `lang-${key}`);
   }
 
   narrate(text: string, locale?: Locale) {
     if (!this.enabled) return;
 
-    if ('speechSynthesis' in window) {
-      window.speechSynthesis.cancel();
+    // Stop and reset all current audio (mp3 and TTS)
+    this.stopNarration('new-tts');
 
+    if ('speechSynthesis' in window) {
       const utterance = new SpeechSynthesisUtterance(text);
       utterance.lang = locale || this.currentLocale;
       utterance.rate = 0.9;
@@ -211,16 +254,45 @@ class AudioManager {
     }
   }
 
-  stopNarration() {
-    if ('speechSynthesis' in window) {
+  stopNarration(reason: string = 'unknown') {
+    if (this.audio && this.audio.src) {
+      console.log(`Stopping narration (${reason}):`, this.audio.src.split('/').pop());
+    }
+    
+    // Stop speechSynthesis
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
       window.speechSynthesis.cancel();
     }
+
+    // Stop current HTMLAudioElement
+    if (this.audio) {
+      try {
+        this.audio.pause();
+        this.audio.currentTime = 0;
+      } catch (e) {
+        // Ignore errors during pause
+      }
+    }
+    this.playPromise = null;
   }
 
   playSound(type: SoundType) {
-    if (!this.enabled) return;
+    if (!this.enabled || !this.effectsAudio) return;
 
-    this.playMp3('/wee_audios/wee_sounds/wee_sounds_choice/WEE_TELL_CLICK_NAVIGATION_03_260504.mp3');
+    // Use a separate one-shot for sound effects to avoid interrupting narration
+    const url = '/wee_audios/wee_sounds/wee_sounds_choice/WEE_TELL_CLICK_NAVIGATION_03_260504.mp3';
+    
+    try {
+      this.effectsAudio.src = url;
+      this.effectsAudio.currentTime = 0;
+      this.effectsAudio.play().catch((err) => {
+        if (err.name !== 'AbortError') {
+          console.warn('Sound effect failed:', err);
+        }
+      });
+    } catch (e) {
+      console.warn('Sound effect setup failed:', e);
+    }
   }
 }
 
