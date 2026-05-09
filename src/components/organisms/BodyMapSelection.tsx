@@ -6,7 +6,7 @@ import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import BodySVG from '@/components/molecules/BodySVG';
 import { Rotate3D, Crosshair } from 'lucide-react';
 import { audioManager } from '@/lib/audio';
-import { CheckCircleIcon, CrossCircleIcon } from '@/components/atoms/ActionIcons';
+import SelectionControls from '@/components/molecules/SelectionControls';
 
 interface BodyMapSelectionProps {
   onNext: () => void;
@@ -128,33 +128,13 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
         </div>
       </div>
 
-      {tempSelectedPart && (
-        <div className="fixed bottom-32 left-0 right-0 flex justify-center gap-12 z-[200] pb-4">
-          <motion.button
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={handleCancel}
-            className=" rounded-full flex items-center justify-center"
-            aria-label="Cancel selection"
-          >
-            <CrossCircleIcon size={50} strokeWidth={2.5} />
-          </motion.button>
-
-          <motion.button
-            initial={{ scale: 0, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            whileHover={{ scale: 1.1 }}
-            whileTap={{ scale: 0.9 }}
-            onClick={handleConfirm}
-            className="rounded-full flex items-center justify-center"
-            aria-label="Confirm selection"
-          >
-            <CheckCircleIcon size={50} strokeWidth={2.5} />
-          </motion.button>
-        </div>
-      )}
+      <SelectionControls
+        isVisible={!!tempSelectedPart}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+        bottomOffset="bottom-32"
+        iconSize={50}
+      />
 
       </div>
   );

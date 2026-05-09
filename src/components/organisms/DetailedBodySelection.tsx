@@ -5,7 +5,7 @@ import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import { audioManager } from '@/lib/audio';
 import { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { CheckCircleIcon, CrossCircleIcon } from '@/components/atoms/ActionIcons';
+import SelectionControls from '@/components/molecules/SelectionControls';
 
 interface DetailedBodySelectionProps {
   onNext: () => void;
@@ -148,36 +148,13 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
           </motion.div>
         )}
       </AnimatePresence>
-      <AnimatePresence>
-        {tempSelectedSymptom && (
-          <motion.div
-            initial={{ y: 50, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: 50, opacity: 0 }}
-            className="fixed bottom-12 left-0 right-0 flex justify-center gap-12 z-[200] pb-4"
-          >
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={handleCancel}
-              className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-red-100 text-red-500"
-              aria-label="Cancel selection"
-            >
-              <CrossCircleIcon size={32} strokeWidth={2.5} />
-            </motion.button>
-
-            <motion.button
-              whileHover={{ scale: 1.1 }}
-              whileTap={{ scale: 0.9 }}
-              onClick={handleConfirm}
-              className="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-lg border-2 border-green-100 text-green-500"
-              aria-label="Confirm selection"
-            >
-              <CheckCircleIcon size={32} strokeWidth={2.5} />
-            </motion.button>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      <SelectionControls
+        isVisible={!!tempSelectedSymptom}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+        bottomOffset="bottom-12"
+        iconSize={32}
+      />
     </div>
   );
 }
