@@ -12,16 +12,13 @@ import QRCodeModal from "@/components/molecules/QRCodeModal";
 import BodyMapSelection from "@/components/organisms/BodyMapSelection";
 import DetailedBodySelection from "@/components/organisms/DetailedBodySelection";
 import SeveritySelection from "@/components/organisms/SeveritySelection";
-import UrgencySelection from "@/components/organisms/UrgencySelection";
 import { useAssessmentStore } from "@/stores/useAssessmentStore";
 import { audioManager } from "@/lib/audio";
-
 const STEPS = {
   AGE: "age",
   BODY: "body",
   DETAILED: "detailed",
   SEVERITY: "severity",
-  URGENCY: "urgency",
   RESULTS: "results",
 };
 
@@ -52,11 +49,8 @@ function CheckupWizard() {
       case STEPS.SEVERITY:
         setStep(STEPS.DETAILED);
         break;
-      case STEPS.URGENCY:
-        setStep(STEPS.SEVERITY);
-        break;
       case STEPS.RESULTS:
-        setStep(STEPS.URGENCY);
+        setStep(STEPS.SEVERITY);
         break;
       case STEPS.AGE:
       default:
@@ -80,9 +74,7 @@ function CheckupWizard() {
       case STEPS.DETAILED:
         return <DetailedBodySelection onNext={() => setStep(STEPS.SEVERITY)} />;
       case STEPS.SEVERITY:
-        return <SeveritySelection onNext={() => setStep(STEPS.URGENCY)} />;
-      case STEPS.URGENCY:
-        return <UrgencySelection onNext={() => setStep(STEPS.RESULTS)} />;
+        return <SeveritySelection onNext={() => setStep(STEPS.RESULTS)} />;
       case STEPS.RESULTS:
         return (
           <div className="flex justify-center p-10">
