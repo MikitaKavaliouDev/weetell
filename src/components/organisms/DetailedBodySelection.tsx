@@ -27,6 +27,7 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
   const locale = useAssessmentStore((state) => state.locale);
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
   const setSymptom = useAssessmentStore((state) => state.setSymptom);
+  const setMenuOpen = useAssessmentStore((state) => state.setMenuOpen);
   const [showSlider, setShowSlider] = useState(false);
   const [tempSelectedSymptom, setTempSelectedSymptom] = useState<string | null>(null);
 
@@ -46,14 +47,17 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
 
   const handleForeheadClick = () => {
     audioManager.playSound('click');
+    setMenuOpen(false);
     setShowSlider(true);
   };
 
   const handleSymptomSelect = (id: string) => {
     audioManager.playSound('click');
+    setMenuOpen(false);
     const audioKey = id === 'headache' ? 'headache_icon' : id === 'fever' ? 'fever_icon' : 'concussion_icon';
     audioManager.playLanguageAudio(audioKey, locale);
     setTempSelectedSymptom(id);
+    setShowSlider(false); // Hide slider when symptom is selected to avoid overlap with controls
     
     // Update subtitle to show what was selected
     const selectedOpt = SYMPTOM_OPTIONS.find(o => o.id === id);
@@ -75,6 +79,7 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
   const handleCancel = () => {
     audioManager.playSound('click');
     setTempSelectedSymptom(null);
+    setShowSlider(true); // Show slider again so user can pick another
     setCurrentSubtitle(subtitle);
   };
 
@@ -153,7 +158,7 @@ export default function DetailedBodySelection({ onNext }: DetailedBodySelectionP
         onConfirm={handleConfirm}
         onCancel={handleCancel}
         bottomOffset="bottom-12"
-        iconSize={32}
+        iconSize={50}
       />
     </div>
   );

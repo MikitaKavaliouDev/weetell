@@ -22,6 +22,7 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
   const locale = useAssessmentStore((state) => state.locale);
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
   const showTextLabels = useAssessmentStore((state) => state.showTextLabels);
+  const setMenuOpen = useAssessmentStore((state) => state.setMenuOpen);
 
   const urgencyLevel = getUrgencyForTemperature(bodyPart || 'head', ageGroup || 'child', symptom || 'fever', severity || 37.5);
 
@@ -87,6 +88,7 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
 
   const handleProceed = () => {
     audioManager.playSound('click');
+    setMenuOpen(false);
     onNext();
     // External navigation happens in production via button; onNext enables test compatibility
     // window.location.href = 'https://www.arzt-auskunft.de/?form=fs1';
@@ -94,6 +96,7 @@ export default function UrgencyRecommendation({ onNext }: UrgencyRecommendationP
 
   const handleFindDoctor = () => {
     audioManager.playSound('click');
+    setMenuOpen(false);
     onNext();
     // window.location.href = 'https://www.arzt-auskunft.de/?form=fs1';
   };

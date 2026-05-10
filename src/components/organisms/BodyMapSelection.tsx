@@ -28,6 +28,7 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
   const [tempSelectedPart, setTempSelectedPart] = useState<string | null>(null);
   
   const setBodyPart = useAssessmentStore((state) => state.setBodyPart);
+  const setMenuOpen = useAssessmentStore((state) => state.setMenuOpen);
   const ageGroup = useAssessmentStore((state) => state.ageGroup);
   const locale = useAssessmentStore((state) => state.locale);
   const setCurrentSubtitle = useAssessmentStore((state) => state.setCurrentSubtitle);
@@ -48,6 +49,7 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
 
   const handlePartClick = (partId: string) => {
     audioManager.playSound('click');
+    setMenuOpen(false);
     
     // Toggle off if clicking the same part
     if (tempSelectedPart === partId) {
@@ -102,7 +104,7 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
     'Where does it hurt?';
 
   return (
-    <div className="flex flex-col items-center h-full pt-20 pb-6 px-6 w-full relative">
+    <div className="flex flex-col items-center h-full pt-8 pb-6 px-6 w-full relative">
 
       <div className="relative w-full flex-1 flex items-center justify-center min-h-0 max-h-[600px]">
         <BodySVG 

@@ -18,6 +18,7 @@ interface SeveritySelectionProps {
 export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
   const router = useRouter();
   const setActionDecision = useAssessmentStore((state) => state.setActionDecision);
+  const setMenuOpen = useAssessmentStore((state) => state.setMenuOpen);
   const bodyPart = useAssessmentStore((state) => state.bodyPart);
   const symptom = useAssessmentStore((state) => state.symptom);
   const ageGroup = useAssessmentStore((state) => state.ageGroup);
@@ -90,6 +91,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
 
   const handleWatchVideo = () => {
     audioManager.playSound('click');
+    setMenuOpen(false);
     audioManager.playLanguageAudio('film_icon', locale);
     const filmSubtitle = locale === 'de' ? 'Film' : locale === 'es' ? 'Película' : locale === 'tr' ? 'Film' : 'Film';
     setCurrentSubtitle(filmSubtitle);
@@ -98,6 +100,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
 
   const handleStartVideo = () => {
     audioManager.playSound('click');
+    setMenuOpen(false);
     setView('video-playing');
   };
 
@@ -107,6 +110,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
 
   const handleChair = () => {
     audioManager.playSound('click');
+    setMenuOpen(false);
     audioManager.playLanguageAudio('chair_hourglass_icon', locale);
     const waitSubtitle = locale === 'de' ? 'Abwarten und beobachten?' : locale === 'es' ? '¿Esperar y observar?' : locale === 'tr' ? 'Bekleyip gözlemleyelim mi?' : 'Wait and observe?';
     setCurrentSubtitle(waitSubtitle);
@@ -116,6 +120,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
 
   const handleDoctor = () => {
     audioManager.playSound('click');
+    setMenuOpen(false);
     audioManager.playLanguageAudio('doctor_icon', locale);
     const doctorSubtitle = locale === 'de' ? 'Einen Arzt in Ihrer Nähe finden?' : locale === 'es' ? '¿Encontrar un médico cerca de ti?' : locale === 'tr' ? 'Yakınınızda bir doktor bulalım mı?' : 'Find a doctor close to you?';
     setCurrentSubtitle(doctorSubtitle);

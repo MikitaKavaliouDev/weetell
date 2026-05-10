@@ -15,7 +15,8 @@ interface AppMenuProps {
 }
 
 export default function SettingsMenu({ onHome, onMobile }: AppMenuProps) {
-  const [isOpen, setIsOpen] = useState(false);
+  const isOpen = useAssessmentStore((state) => state.isMenuOpen);
+  const setMenuOpen = useAssessmentStore((state) => state.setMenuOpen);
   const showTextLabels = useAssessmentStore((state) => state.showTextLabels);
   const showSubtitles = useAssessmentStore((state) => state.showSubtitles);
   const isSoundEnabled = useAssessmentStore((state) => state.isSoundEnabled);
@@ -29,7 +30,7 @@ export default function SettingsMenu({ onHome, onMobile }: AppMenuProps) {
     if (action) {
       audioManager.playSound(sound);
       action();
-      setIsOpen(false);
+      setMenuOpen(false);
     }
   };
 
@@ -49,7 +50,7 @@ export default function SettingsMenu({ onHome, onMobile }: AppMenuProps) {
     <div className="relative z-[100] overflow-visible">
       <button onClick={() => {
         audioManager.playSound('click');
-        setIsOpen(true);
+        setMenuOpen(true);
       }} className="p-2 transition-transform active:scale-90">
         <MenuBurgerIcon className="w-8 h-8" />
       </button>
@@ -66,7 +67,7 @@ export default function SettingsMenu({ onHome, onMobile }: AppMenuProps) {
               <h3 className="font-bold text-neutral-800 text-lg">Menu</h3>
               <button onClick={() => {
                 audioManager.playSound('click');
-                setIsOpen(false);
+                setMenuOpen(false);
               }} className="text-neutral-400 hover:text-neutral-600">
                 <X size={24} />
               </button>
