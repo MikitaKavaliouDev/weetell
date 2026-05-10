@@ -119,7 +119,7 @@ export default function BodySVG({ view, ageGroup, selectedPart, onPartClick }: B
             key={zone.id}
             d={zone.d}
             onClick={() => onPartClick(zone.id)}
-            fill={isSelected ? '#3b82f6' : 'transparent'}
+            fill="#3b82f6"
             stroke="none"
             initial={false}
             animate={{ 
@@ -127,7 +127,6 @@ export default function BodySVG({ view, ageGroup, selectedPart, onPartClick }: B
             }}
             whileHover={{ 
               opacity: 0.2,
-              fill: '#3b82f6',
               cursor: 'pointer'
             }}
             transition={{ duration: 0.2 }}

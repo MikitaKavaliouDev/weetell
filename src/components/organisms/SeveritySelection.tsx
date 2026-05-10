@@ -405,7 +405,7 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
               <motion.button
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                onClick={() => window.location.href = 'https://www.arzt-auskunft.de/?form=fs1'}
+                onClick={() => window.location.href = 'https://www.arzt-auskunft.de/?form=fs4'}
                 className="w-1/2 max-w-40 aspect-square flex items-center justify-center"
               >
                 <Image

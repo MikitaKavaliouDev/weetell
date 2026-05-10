@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import BodySVG from '@/components/molecules/BodySVG';
 import { Rotate3D, Crosshair } from 'lucide-react';
@@ -115,28 +115,44 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
         />
       </div>
 
-      <div className="fixed bottom-12 left-0 w-full bg-white/60 backdrop-blur-md z-40 border-t border-gray-100/50">
-        <div className="max-w-2xl mx-auto flex flex-col items-center">
-          <motion.button
-            layout
-            onClick={() => setView(view === 'front' ? 'back' : 'front')}
-            className="flex items-center gap-2 px-6 py-3 bg-[#C5A880] text-white rounded-full font-semibold shadow-md"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <Rotate3D className="w-5 h-5" />
-            {locale === 'de' ? (view === 'front' ? 'Rücken zeigen' : 'Vorne zeigen') : locale === 'es' ? (view === 'front' ? 'Mostrar Espalda' : 'Mostrar Frente') : locale === 'tr' ? (view === 'front' ? 'Sırtı Göster' : 'Önü Göster') : (view === 'front' ? 'Show Back' : 'Show Front')}
-          </motion.button>
-        </div>
-      </div>
 
-      <SelectionControls
-        isVisible={!!tempSelectedPart}
-        onConfirm={handleConfirm}
-        onCancel={handleCancel}
-        bottomOffset="bottom-32"
-        iconSize={50}
-      />
+
+      <AnimatePresence mode="wait">
+        {!tempSelectedPart ? (
+          <motion.div 
+            key="view-toggle"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: 20 }}
+            className="fixed bottom-12 left-0 w-full z-40"
+          >
+            <div className="max-w-2xl mx-auto flex flex-col items-center">
+              <motion.button
+                layout
+                onClick={() => {
+                  audioManager.playSound('click');
+                  setView(view === 'front' ? 'back' : 'front');
+                }}
+                className="flex items-center gap-2 px-6 py-3 bg-[#C5A880] text-white rounded-full font-semibold shadow-md"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                <Rotate3D className="w-5 h-5" />
+                {locale === 'de' ? (view === 'front' ? 'Rücken zeigen' : 'Vorne zeigen') : locale === 'es' ? (view === 'front' ? 'Mostrar Espalda' : 'Mostrar Frente') : locale === 'tr' ? (view === 'front' ? 'Sırtı Göster' : 'Önü Göster') : (view === 'front' ? 'Show Back' : 'Show Front')}
+              </motion.button>
+            </div>
+          </motion.div>
+        ) : (
+          <SelectionControls
+            key="selection-actions"
+            isVisible={true}
+            onConfirm={handleConfirm}
+            onCancel={handleCancel}
+            bottomOffset="bottom-12"
+            iconSize={50}
+          />
+        )}
+      </AnimatePresence>
 
       </div>
   );
