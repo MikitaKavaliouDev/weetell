@@ -72,9 +72,9 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
      { 
        id: '40.0', 
        icon: '/assets/fever_pic_assets/fourty_degres.png',
-       text: 'A high fever that needs close monitoring and may require medical advice.',
-       textDe: 'Hohes Fieber, das engmaschig überwacht werden muss und ärztlichen Rat erfordern kann.',
-       textEs: 'Fiebre alta que requiere un control cercano y puede necesitar consejo médico.',
+       text: 'High fever – please monitor closely. Medical advice may be necessary.',
+       textDe: 'Hohes Fieber - bitte gut beobachten. Es kann sein, dass du ärztlichen Rat brauchst.',
+       textEs: 'Fiebre alta – por favor, observe de cerca. Puede ser necesario consejo médico.',
        textTr: 'Yüksek ateş – lütfen dikkatle gözlemleyin. Doktor tavsiyesine ihtiyaç duyabilirsiniz.'
      },
    ];
