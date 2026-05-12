@@ -10,6 +10,7 @@ import { NuqsAdapter } from 'nuqs/adapters/next/app'
 import SubtitleOverlay from '@/components/molecules/SubtitleOverlay';
 import SoundToggle from '@/components/molecules/SoundToggle';
 import { DisclaimerGuard } from '@/components/DisclaimerGuard';
+import { RefreshRedirect } from '@/components/RefreshRedirect';
 
 export default function RootLayout({
   children,
@@ -22,7 +23,7 @@ export default function RootLayout({
         {/* Visual medical disclaimer conditionally rendered */}
        
         
-        <NuqsAdapter><DisclaimerGuard>{children}</DisclaimerGuard></NuqsAdapter>
+        <NuqsAdapter><DisclaimerGuard><RefreshRedirect>{children}</RefreshRedirect></DisclaimerGuard></NuqsAdapter>
         
         {/* Foundational layout for deaf/hard-of-hearing text subtitle support */}
         <SubtitleOverlay />

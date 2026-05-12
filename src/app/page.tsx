@@ -17,14 +17,20 @@ export default function HomePage() {
 
   useEffect(() => {
     audioManager.playMp3('/wee_audios/wee_sounds/wee_sounds_choice/WEE_TELL_LANGUAGES_MULTI_260427.mp3');
+
+    // Play pop sound on every page load (refresh or back-navigation)
+    const timer = setTimeout(() => {
+      audioManager.playSound('pop');
+    }, 800);
+
     return () => {
+      clearTimeout(timer);
       audioManager.stopNarration();
     };
   }, []);
 
   const handleSelect = (locale: Locale) => {
     setLocale(locale);
-    audioManager.playSound('pop');
     router.push('/disclaimer');
   };
 
@@ -81,7 +87,6 @@ export default function HomePage() {
                 transition={{ delay: 0.3 + index * 0.1, type: 'spring' }}
                 whileHover={{ scale: 1.1 }}
                 whileTap={{ scale: 0.95 }}
-                onAnimationComplete={() => audioManager.playSound('pop')}
                 className="absolute w-20 h-20 flex items-center justify-center cursor-pointer z-10 overflow-hidden"
                 style={{
                   top: pos.top,
