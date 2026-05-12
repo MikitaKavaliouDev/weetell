@@ -3,7 +3,7 @@
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { MapPin, Check } from 'lucide-react';
+import { ArrowLeft, MapPin, Check } from 'lucide-react';
 import { useAssessmentStore } from '@/stores/useAssessmentStore';
 import { useEffect } from 'react';
 import { audioManager } from '@/lib/audio';
@@ -84,7 +84,14 @@ export default function ConsultPage() {
     <div className="min-h-screen bg-white flex flex-col p-6">
       {/* Header */}
       <header className="sticky top-0 bg-white/95 backdrop-blur-sm flex justify-between items-center py-4 mb-6 z-50">
-        <WeetellLogo onClick={logoBack} />
+        <button
+            onClick={() => { audioManager.playSound('click'); audioManager.stopNarration(); router.push('/checkup?step=severity'); }}
+            className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-neutral-100 transition-colors text-neutral-800 shrink-0"
+            aria-label="Back"
+          >
+            <ArrowLeft size={24} />
+          </button>
+          <WeetellLogo onClick={logoBack} />
         <h1 className="text-2xl font-bold text-neutral-800 flex-1 ml-4">
           {locale === 'de' ? 'Arztberatung' : locale === 'es' ? 'Consulta Médica' : locale === 'tr' ? 'Doktor Danışmanlığı' : 'Doctor Consultation'}
         </h1>

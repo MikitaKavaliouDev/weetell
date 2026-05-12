@@ -72,10 +72,16 @@ export default function BodyMapSelection({ onNext }: BodyMapSelectionProps) {
         `${partName} selected`;
       
       setCurrentSubtitle(confirmationText);
-      // Head has dedicated mp3 audio files for en/tr - use those
-      // All other cases use TTS
-      if (partId === 'head' && (locale === 'en' || locale === 'tr')) {
-        audioManager.playLanguageAudio('head_selected', locale);
+      // Use dedicated mp3 audio files for body parts that have them, TTS for others
+      const AUDIO_KEYS: Record<string, string> = {
+        head: 'head_selected',
+        arms: 'arms_selected',
+        legs: 'legs_selected',
+        skin: 'skin_selected',
+      };
+      const audioKey = AUDIO_KEYS[partId];
+      if (audioKey) {
+        audioManager.playLanguageAudio(audioKey, locale);
       } else {
         audioManager.narrate(confirmationText, locale);
       }

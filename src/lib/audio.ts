@@ -40,6 +40,22 @@ const LANGUAGE_AUDIO_FILES: Record<string, Partial<Record<Locale, string>>> = {
   head_selected: {
     en: 'English_head_selected',
     tr: 'Turkish_head_selected',
+    de: 'GERMAN_kopf_ausgeweahlt',
+  },
+  arms_selected: {
+    en: 'English_arms_selected',
+    tr: 'Turkish_kollar_secildi',
+    de: 'GERMAN_arme_ausgeweahlt',
+  },
+  legs_selected: {
+    en: 'English_legs_selected',
+    tr: 'Turkish_bacaklar_secildi',
+    de: 'GERMAN_beine_ausgeweahlt',
+  },
+  skin_selected: {
+    en: 'English_skin_selected',
+    tr: 'Turkish_deri_secildi',
+    de: 'GERMAN_haut_ausgeweahlt',
   },
   where_exactly: {
     en: 'English_where_exactly',
@@ -280,8 +296,20 @@ class AudioManager {
     if (!this.enabled || !this.effectsAudio) return;
 
     // Use a separate one-shot for sound effects to avoid interrupting narration
-    const url = '/wee_audios/wee_sounds/wee_sounds_choice/WEE_TELL_CLICK_NAVIGATION_03_260504.mp3';
-    
+    const baseDir = '/wee_audios/wee_sounds/wee_sounds_choice/';
+    let url: string;
+
+    if (type === 'pop') {
+      const popFiles = [
+        'WEE_TELL_POPP_01_260427.mp3',
+        'WEE_TELL_POPP_02_260427.mp3',
+        'WEE_TELL_POPP_03_260427.mp3',
+      ];
+      url = baseDir + popFiles[Math.floor(Math.random() * popFiles.length)];
+    } else {
+      url = baseDir + 'WEE_TELL_CLICK_NAVIGATION_03_260504.mp3';
+    }
+
     try {
       this.effectsAudio.src = url;
       this.effectsAudio.currentTime = 0;

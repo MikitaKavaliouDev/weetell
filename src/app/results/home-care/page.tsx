@@ -68,6 +68,13 @@ export default function HomeCarePage() {
 
       <div className="sticky top-0 bg-[#10B981] rounded-b-[40px] px-6 py-6 z-50 shadow-md">
         <div className="flex items-center gap-4 mb-4">
+          <button
+            onClick={() => { audioManager.playSound('click'); audioManager.stopNarration(); router.push('/checkup?step=severity'); }}
+            className="flex items-center justify-center w-10 h-10 rounded-full hover:bg-white/20 transition-colors text-white shrink-0"
+            aria-label="Back"
+          >
+            <ArrowLeft size={24} />
+          </button>
           <button type="button" onClick={() => { audioManager.playSound('click'); router.push('/checkup?step=age'); }} className="bg-transparent border-none p-0 cursor-pointer">
             <WeetellLogo className="[&_img]:brightness-0 [&_img]:invert" />
           </button>

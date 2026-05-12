@@ -6,7 +6,7 @@ interface IconProps extends React.SVGProps<SVGSVGElement> {
   strokeWidth?: number;
 }
 
-export const CheckCircleIcon = ({ size = 24, color = "currentColor", strokeWidth = 2, ...props }: IconProps) => (
+export const CheckCircleIcon = ({ size = 24, color = "currentColor", strokeWidth = 1, ...props }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}
@@ -24,7 +24,7 @@ export const CheckCircleIcon = ({ size = 24, color = "currentColor", strokeWidth
   </svg>
 );
 
-export const CrossCircleIcon = ({ size = 24, color = "currentColor", strokeWidth = 2, ...props }: IconProps) => (
+export const CrossCircleIcon = ({ size = 24, color = "currentColor", strokeWidth = 1, ...props }: IconProps) => (
   <svg
     xmlns="http://www.w3.org/2000/svg"
     width={size}

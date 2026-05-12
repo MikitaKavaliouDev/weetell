@@ -55,7 +55,7 @@ export const SelectionControls = ({
             className="w-auto h-auto rounded-full flex items-center justify-center pointer-events-auto "
             aria-label={cancelLabel}
           >
-            <CrossCircleIcon size={iconSize} strokeWidth={2.5} />
+            <CrossCircleIcon size={iconSize} strokeWidth={1.5} />
           </motion.button>
 
           <motion.button
@@ -67,7 +67,7 @@ export const SelectionControls = ({
             className="w-auto h-auto rounded-full flex items-center justify-center pointer-events-auto "
             aria-label={confirmLabel}
           >
-            <CheckCircleIcon size={iconSize} strokeWidth={2.5} />
+            <CheckCircleIcon size={iconSize} strokeWidth={1.5} />
           </motion.button>
         </motion.div>
       )}
