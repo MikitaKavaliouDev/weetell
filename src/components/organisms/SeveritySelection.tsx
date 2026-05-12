@@ -10,6 +10,7 @@ import { audioManager } from '@/lib/audio';
 import { SYMPTOM_GRAPH, getVideoForTemperature } from '@/data/symptom-graph';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
+import SelectionControls from '../molecules/SelectionControls';
 
 interface SeveritySelectionProps {
   onNext: () => void;
@@ -157,6 +158,9 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
             className="flex-1 w-full flex flex-col items-center justify-center"
           >
             <motion.button
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.5 }}
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
               onClick={handleStartVideo}
@@ -174,6 +178,9 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
             <div className="fixed bottom-12 left-0 w-full bg-white/60 backdrop-blur-md z-40 border-t border-gray-100/50">
               <div className="flex justify-center gap-8 max-w-2xl mx-auto">
                 <motion.button 
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.5 }}
                   whileHover={{ scale: 1.1 }} 
                   whileTap={{ scale: 0.95 }} 
                   onClick={handleChair} 
@@ -190,6 +197,9 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                 </motion.button>
                 
                 <motion.button 
+                  initial={{ scale: 0, opacity: 0 }}
+                  animate={{ scale: 1, opacity: 1 }}
+                  transition={{ delay: 0.5 }}
                   whileHover={{ scale: 1.1 }} 
                   whileTap={{ scale: 0.95 }} 
                   onClick={handleDoctor} 
@@ -302,6 +312,9 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
             <div className="fixed bottom-12 left-0 w-full  bg-white/60 backdrop-blur-md z-40 border-t border-gray-100/50">
                 <div className="flex justify-center gap-6 max-w-2xl mx-auto">
                   <motion.button
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.5 }}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.95 }}
                     onClick={handleWatchVideo}
@@ -317,6 +330,9 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                   </motion.button>
                  
                  <motion.button 
+                   initial={{ scale: 0, opacity: 0 }}
+                   animate={{ scale: 1, opacity: 1 }}
+                   transition={{ delay: 0.5 }}
                    whileHover={{ scale: 1.1 }} 
                    whileTap={{ scale: 0.95 }} 
                    onClick={handleChair} 
@@ -333,6 +349,9 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                  </motion.button>
                  
                   <motion.button 
+                    initial={{ scale: 0, opacity: 0 }}
+                    animate={{ scale: 1, opacity: 1 }}
+                    transition={{ delay: 0.5 }}
                     whileHover={{ scale: 1.1 }} 
                     whileTap={{ scale: 0.95 }} 
                     onClick={handleDoctor} 
@@ -377,6 +396,14 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                 className="w-[100px] h-[100px] flex items-center justify-center cursor-pointer"
               />
             </motion.div>
+
+            <SelectionControls
+              isVisible={true}
+              onConfirm={onNext}
+              onCancel={() => setView('selection')}
+              bottomOffset="bottom-12"
+              iconSize={60}
+            />
           </motion.div>
         ) : view === 'home-care-choice' ? (
           <motion.div
@@ -430,6 +457,14 @@ export default function SeveritySelection({ onNext }: SeveritySelectionProps) {
                 className="w-[100px] h-[100px] flex items-center justify-center cursor-pointer"
               />
             </motion.div>
+
+            <SelectionControls
+              isVisible={true}
+              onConfirm={onNext}
+              onCancel={() => setView('selection')}
+              bottomOffset="bottom-12"
+              iconSize={60}
+            />
           </motion.div>
         ) : null}
         

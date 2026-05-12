@@ -13,6 +13,8 @@ interface SelectionControlsProps {
   cancelLabel?: string;
   bottomOffset?: string; // e.g. "bottom-32" or "bottom-12"
   iconSize?: number;
+  color?: string;
+  delay?: number;
 }
 
 /**
@@ -26,7 +28,9 @@ export const SelectionControls = ({
   confirmLabel = "Confirm selection",
   cancelLabel = "Cancel selection",
   bottomOffset = "bottom-32",
-  iconSize = 50
+  iconSize = 50,
+  color = "#FFC52F", // wee-yellow
+  delay = 0.5
 }: SelectionControlsProps) => {
   const setMenuOpen = useAssessmentStore((state) => state.setMenuOpen);
 
@@ -49,25 +53,27 @@ export const SelectionControls = ({
           <motion.button
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={onCancel}
             className="w-auto h-auto rounded-full flex items-center justify-center pointer-events-auto "
             aria-label={cancelLabel}
           >
-            <CrossCircleIcon size={iconSize} strokeWidth={1.5} />
+            <CrossCircleIcon size={iconSize} strokeWidth={1.5} color={color} />
           </motion.button>
 
           <motion.button
             initial={{ scale: 0, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay }}
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             onClick={onConfirm}
             className="w-auto h-auto rounded-full flex items-center justify-center pointer-events-auto "
             aria-label={confirmLabel}
           >
-            <CheckCircleIcon size={iconSize} strokeWidth={1.5} />
+            <CheckCircleIcon size={iconSize} strokeWidth={1.5} color={color} />
           </motion.button>
         </motion.div>
       )}
