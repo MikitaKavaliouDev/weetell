@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
@@ -14,8 +14,11 @@ export default function HomePage() {
   const router = useRouter();
   const setLocale = useAssessmentStore((state) => state.setLocale);
   const locale = useAssessmentStore((state) => state.locale);
+  const [hasStarted, setHasStarted] = useState(false);
 
   useEffect(() => {
+    if (!hasStarted) return;
+
     audioManager.playMp3('/wee_audios/wee_sounds/wee_sounds_choice/WEE_TELL_LANGUAGES_MULTI_260427.mp3');
 
     // Play pop sound on every page load (refresh or back-navigation)
@@ -27,11 +30,17 @@ export default function HomePage() {
       clearTimeout(timer);
       audioManager.stopNarration();
     };
-  }, []);
+  }, [hasStarted]);
 
   const handleSelect = (locale: Locale) => {
     setLocale(locale);
     router.push('/disclaimer');
+  };
+
+  const handleStart = () => {
+    if (!hasStarted) {
+      setHasStarted(true);
+    }
   };
 
   const flagAssets: Record<Locale, string> = {
@@ -56,13 +65,16 @@ export default function HomePage() {
       <AppHeader />
 
       {/* Main Content */}
-      <div className="flex-1 flex flex-col items-center justify-center relative">
+      <div 
+        className={`flex-1 flex flex-col items-center justify-center relative ${!hasStarted ? 'cursor-pointer' : ''}`}
+        onClick={handleStart}
+      >
         <div className="relative w-full max-w-sm aspect-square flex items-center justify-center">
           {/* The Globe */}
           <motion.div
             initial={{ scale: 0.8, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            transition={{ duration: 0.5 }}
+            animate={hasStarted ? { scale: 1, opacity: 1 } : { scale: [0.95, 1.05, 0.95], opacity: 1 }}
+            transition={hasStarted ? { duration: 0.5 } : { repeat: Infinity, duration: 2, ease: "easeInOut" }}
             className="z-10"
           >
             <Image
@@ -75,13 +87,16 @@ export default function HomePage() {
           </motion.div>
 
           {/* Language Bubbles */}
-          {LOCALES.map((locale, index) => {
+          {hasStarted && LOCALES.map((locale, index) => {
             const pos = positions[index % positions.length];
 
             return (
               <motion.button
                 key={locale.id}
-                onClick={() => handleSelect(locale.id)}
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSelect(locale.id);
+                }}
                 initial={{ opacity: 0, scale: 0 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ delay: 0.3 + index * 0.1, type: 'spring' }}
